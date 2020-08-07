@@ -1,29 +1,18 @@
-# README #
+# DMSContainer Official Samples
 
-This README would normally document whatever steps are necessary to get your application up and running.
+![](https://img.shields.io/badge/DMSContainer-Microservices made simpler-blue) ![](https://img.shields.io/badge/DMSContainer Samples License-Apache 2.0-green)
 
-### What is this repository for? ###
+This repository contains all the officially supported samples used by [bit Time Professionals](http://www.bittimeprofessionals.it) teachers during the advanced DMSContainer trainings.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+### What is this repository for?
+
+* In class exercises
+* Self training and private test
+* See how the things actually works in DMSContainer
+* A reference to follow the [official DMSContainer documentation](http://dmscontainer.bittimeprofessionals.com)
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* Just clone the repository and you can use the samples on your running DMSContainer instance
+* If you want to try the power of DMSContainer [ask for a free trial licence](mailto:professionals@bittime.it?subject=Free%20DMSContainer%20Trial%20License)
 
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
