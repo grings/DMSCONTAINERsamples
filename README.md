@@ -1,6 +1,6 @@
 # DMSContainer Official Samples
 
-![](https://img.shields.io/badge/DMSContainer-Microservices made simpler-blue) ![](https://img.shields.io/badge/DMSContainer Samples License-Apache 2.0-green)
+![](https://img.shields.io/badge/DMSContainer-Microservices%20made%20simpler-blue) ![](https://img.shields.io/badge/DMSContainer%20Samples%20License-Apache%202.0-green)
 
 This repository contains all the officially supported samples used by [bit Time Professionals](http://www.bittimeprofessionals.it) teachers during the advanced DMSContainer trainings.
 
