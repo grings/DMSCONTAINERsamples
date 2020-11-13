@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="icon" type="image/png" sizes="96x96" href="./img/favicon.png">
+        <title>DMSContainer Chat App</title>
+        <script type="module" src="./eventstreamsrpc.js"></script>
+        <script type="module" src="./index.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <!-- <div class="bg"></div> -->
+        <h2 class="title">
+            <img height="70px" src="./img/dmscontainer_logo.png"><br/>
+            Chat App <br>
+            <small>
+                Connected with: <strong id="username"></strong>
+            </small> 
+        </h2>
+
+        <div id="real-chat" class="chat-body">
+            <ul id="message-list">
+            </ul>
+        </div>
+        <form id="chatForm" class="chat-input">
+            <input type="text" name="message" style="width: 25%;">
+            <input id="sender" type="text" name="sender" 
+            style="display: none;"
+                value="">
+            <input type="submit" name="submit">
+        </form>
+    </body>
+
+</html>
