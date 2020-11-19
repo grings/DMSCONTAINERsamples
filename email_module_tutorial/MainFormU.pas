@@ -176,7 +176,8 @@ begin
     lJMsg.S['msgbody'] := 'This is a text body! The message has been sent at ' + DateTimeToStr(Now);
     lJMsg.S['msgbodyhtml'] := 'This is an HTML body! The message has been sent at ' + DateTimeToStr(Now);
     lJMsg.S['msgsubject'] := 'DMSContainer \\ This is the subject';
-    lJMsg.S['msgtolist'] := 'd.teti@bittime.it';
+    //lJMsg.S['msgtolist'] := 'd.teti@bittime.it';
+    lJMsg.S['msgtolist'] := 'd.depino@saxos.it';
     // lJMsg.S['msgcclist'] := 'email1@domain.com;email2@domain.com etc';
     // lJMsg.S['msgbcclist'] := 'email1@domain.com;email2@domain.com etc';
 

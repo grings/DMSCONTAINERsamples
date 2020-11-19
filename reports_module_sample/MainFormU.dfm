@@ -32,7 +32,6 @@ object MainForm: TMainForm
       item
         Width = 200
       end>
-    ExplicitWidth = 1261
   end
   object Panel1: TPanel
     Left = 188
@@ -42,7 +41,6 @@ object MainForm: TMainForm
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 1073
     object RzPageControl1: TPageControl
       Left = 0
       Top = 0
@@ -52,10 +50,8 @@ object MainForm: TMainForm
       Align = alClient
       TabOrder = 0
       TabWidth = 120
-      ExplicitWidth = 1073
       object tsData: TTabSheet
         Caption = 'Data'
-        ExplicitWidth = 1065
         object DBGrid1: TDBGrid
           Left = 0
           Top = 0
@@ -73,7 +69,6 @@ object MainForm: TMainForm
       end
       object tsPDFViewer: TTabSheet
         Caption = 'Report'
-        ExplicitWidth = 1065
         object Panel4: TPanel
           Left = 0
           Top = 41
@@ -83,7 +78,6 @@ object MainForm: TMainForm
           BevelOuter = bvNone
           Caption = 'Panel4'
           TabOrder = 0
-          ExplicitWidth = 1065
         end
         object Panel5: TPanel
           Left = 0
@@ -93,7 +87,6 @@ object MainForm: TMainForm
           Align = alTop
           BevelOuter = bvNone
           TabOrder = 1
-          ExplicitWidth = 1065
           object btnNext: TButton
             AlignWithMargins = True
             Left = 927
@@ -104,7 +97,6 @@ object MainForm: TMainForm
             Caption = '>>'
             TabOrder = 0
             OnClick = btnNextClick
-            ExplicitLeft = 906
           end
           object btnPrev: TButton
             AlignWithMargins = True
@@ -116,7 +108,6 @@ object MainForm: TMainForm
             Caption = '<<'
             TabOrder = 1
             OnClick = btnPrevClick
-            ExplicitLeft = 825
           end
           object btnScale: TButton
             AlignWithMargins = True
@@ -128,7 +119,6 @@ object MainForm: TMainForm
             Caption = 'Scale'
             TabOrder = 2
             OnClick = btnScaleClick
-            ExplicitLeft = 568
           end
           object btnPrint: TButton
             AlignWithMargins = True
@@ -140,7 +130,6 @@ object MainForm: TMainForm
             Caption = 'X'
             TabOrder = 3
             OnClick = btnPrintClick
-            ExplicitLeft = 520
           end
           object ScrollBar1: TScrollBar
             AlignWithMargins = True
@@ -158,7 +147,6 @@ object MainForm: TMainForm
             Position = 20
             TabOrder = 4
             OnChange = ScrollBar1Change
-            ExplicitWidth = 464
           end
           object btnLast: TButton
             AlignWithMargins = True
@@ -170,7 +158,6 @@ object MainForm: TMainForm
             Caption = '>|'
             TabOrder = 5
             OnClick = btnLastClick
-            ExplicitLeft = 987
           end
           object btnFirst: TButton
             AlignWithMargins = True
@@ -182,7 +169,6 @@ object MainForm: TMainForm
             Caption = '|<'
             TabOrder = 6
             OnClick = btnFirstClick
-            ExplicitLeft = 744
           end
         end
       end
@@ -196,7 +182,6 @@ object MainForm: TMainForm
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitWidth = 1261
     object btnReport1: TButton
       AlignWithMargins = True
       Left = 3
@@ -304,7 +289,6 @@ object MainForm: TMainForm
       TabOrder = 8
       WordWrap = True
       OnClick = btnOffLineInvoceClick
-      ExplicitTop = 0
     end
   end
   object Panel3: TPanel
@@ -351,7 +335,6 @@ object MainForm: TMainForm
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 4
-    ExplicitWidth = 1261
     object Image1: TImage
       Left = 953
       Top = 0
@@ -965,7 +948,7 @@ object MainForm: TMainForm
     Left = 280
     Top = 224
     Content = {
-      414442530F00CE2DA10E0000FF00010001FF02FF03040016000000460044004D
+      414442530F000000A10E0000FF00010001FF02FF03040016000000460044004D
       0065006D005400610062006C006500310005000A0000005400610062006C0065
       00060000000000070000080032000000090000FF0AFF0B04000E000000430055
       00530054005F004E004F0005000E00000043005500530054005F004E004F000C
@@ -1193,7 +1176,7 @@ object MainForm: TMainForm
     Left = 280
     Top = 280
     Content = {
-      414442530F00CE2DFF050000FF00010001FF02FF0304001C0000006400730043
+      414442530F000000FF050000FF00010001FF02FF0304001C0000006400730043
       007500730074006F006D0065007200730042006900670005000A000000540061
       0062006C006500060000000000070000080032000000090000FF0AFF0B04000E
       00000043005500530054005F004E004F0005000E00000043005500530054005F

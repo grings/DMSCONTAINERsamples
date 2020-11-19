@@ -339,10 +339,7 @@ end;
 procedure TMainForm.btnOffLineInvoceClick(Sender: TObject);
 var
   lJSON: TJsonObject;
-  I: Integer;
   lReportFileName: string;
-  lCustomerList: TJsonArray;
-  lInvoceRows: TJsonArray;
 begin
   ResetFolder;
   lReportFileName := Folder('output_pdf.zip');

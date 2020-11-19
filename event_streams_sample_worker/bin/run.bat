@@ -1,0 +1,10 @@
+start EventStreamsWorker.exe user_queue1
+start EventStreamsWorker.exe user_queue1
+start EventStreamsWorker.exe user_queue1
+start EventStreamsWorker.exe user_queue1
+start EventStreamsWorker.exe user_queue1
+start EventStreamsWorker.exe user_queue2
+start EventStreamsWorker.exe user_queue2
+start EventStreamsWorker.exe user_queue2
+start EventStreamsWorker.exe user_queue2
+start EventStreamsWorker.exe user_queue2

@@ -95,7 +95,6 @@ object MainForm: TMainForm
       TabOrder = 1
       WordWrap = True
       OnClick = btnRawJSONClick
-      ExplicitLeft = 933
     end
   end
   object Panel6: TPanel
@@ -613,7 +612,8 @@ object MainForm: TMainForm
       Font.Style = []
       ParentFont = False
       Layout = tlCenter
-      ExplicitLeft = 7
+      ExplicitWidth = 380
+      ExplicitHeight = 56
     end
   end
   object DataSource1: TDataSource
@@ -718,7 +718,7 @@ object MainForm: TMainForm
     Left = 56
     Top = 264
     Content = {
-      414442530F007426A10E0000FF00010001FF02FF03040016000000460044004D
+      414442530F00692EA10E0000FF00010001FF02FF03040016000000460044004D
       0065006D005400610062006C006500310005000A0000005400610062006C0065
       00060000000000070000080032000000090000FF0AFF0B04000E000000430055
       00530054005F004E004F0005000E00000043005500530054005F004E004F000C

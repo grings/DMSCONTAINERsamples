@@ -28,6 +28,7 @@ var
   shellfldritems: variant;
   ZipFileV, TargetFldrV: variant;
 begin
+  Result := False;
   shellobj := CreateOleObject('Shell.Application');
 
   ZipFileV := zipfile;

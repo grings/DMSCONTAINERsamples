@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{9D19CE98-DA6E-4970-AFB5-139E8D3D4D66}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="event_streams_sample_worker\EventStreamsWorker.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="event_stream_monitor\EventStreamsMonitor.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="EventStreamsWorker">
+        <MSBuild Projects="event_streams_sample_worker\EventStreamsWorker.dproj"/>
+    </Target>
+    <Target Name="EventStreamsWorker:Clean">
+        <MSBuild Projects="event_streams_sample_worker\EventStreamsWorker.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="EventStreamsWorker:Make">
+        <MSBuild Projects="event_streams_sample_worker\EventStreamsWorker.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="EventStreamsMonitor">
+        <MSBuild Projects="event_stream_monitor\EventStreamsMonitor.dproj"/>
+    </Target>
+    <Target Name="EventStreamsMonitor:Clean">
+        <MSBuild Projects="event_stream_monitor\EventStreamsMonitor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="EventStreamsMonitor:Make">
+        <MSBuild Projects="event_stream_monitor\EventStreamsMonitor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="EventStreamsWorker;EventStreamsMonitor"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="EventStreamsWorker:Clean;EventStreamsMonitor:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="EventStreamsWorker:Make;EventStreamsMonitor:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
