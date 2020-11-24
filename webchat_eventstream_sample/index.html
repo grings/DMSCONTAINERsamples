@@ -19,60 +19,86 @@
   </head>
 
   <body class="grey lighten-4">
-    <div id="fullheight" class="container">
-      <div class="title">
-        <h5 style="width: 90%;text-align: left;">
-          Chat example
-        </h5>
-        <small style="width:50%">
-          Powered by <img class="responsive-img" src="./img/dmscontainer_logo.png">
-        </small>
+    <nav class="z-depth-0">
+      <div class="nav-wrapper container">
+        <span class="left">
+          Chat Example
+        </span>
+        <a class="right img-top"
+          href="http://dmscontainer.bittimeprofessionals.com">
+          <img class="responsive-img"
+            src="./img/dmscontainer_logo.png">
+        </a>
+        <a class="right" href="http://dmscontainer.bittimeprofessionals.com"
+          style="margin-right:15px">
+          Powered by
+        </a>
       </div>
-
-      <div id="frame">
-        <div class="contact-profile">
-          <img src="./avatars/adam.png" alt="" />
-          <p style="margin-top:0px;display: inline;">
-            Connected with user: <strong id="username"></strong>
-          </p>
-          <div class="social-media">
-            <a class="social" href="http://www.bittimeprofessionals.it"
-              target="_blank">
-              <i class="fa fa-lg fa-facebook" aria-hidden="true"></i>
-            </a>
-            <a class="social" href="http://www.bittimeprofessionals.it"
-              target="_blank">
-              <i class="fa fa-lg fa-twitter" aria-hidden="true"></i>
-            </a>
-            <a class="social" href="http://www.bittimeprofessionals.it"
-              target="_blank">
-              <i class="fa fa-lg fa-instagram" aria-hidden="true"></i>
-            </a>
-          </div>
-        </div>
-        <div id="real-chat" class="chat-body">
-          <ul id="message-list">
-          </ul>
-        </div>
-        <form id="chatForm" class="chat-input">
-          <div class="message-input">
-            <div class="wrap">
-              <input id="sender-input" class="input-message" type="text"
-                name="message"
-                placeholder="Write a message...">
-              <input id="sender" type="text" name="sender"
-                style="display: none;"
-                value="">
-              <button class="submit" id="button-sender">
-                <i class="fa fa-paper-plane"
-                  aria-hidden="true"></i>
-              </button>
+    </nav>
+    <div class="container">
+      <div class="row padding-0">
+        <div class="col s12 padding-0">
+          <div class="card darken-1">
+            <div class="card-content">
+              <div class="contact-profile">
+                <div class="col s9 truncate padding-0">
+                  <img src="./avatars/adam.png" alt="" />
+                  <p class="truncate" style="margin-top:0px;display: inline;">
+                    User: <strong id="username"></strong>
+                  </p>
+                </div>
+                <div class="col s3 padding-0">
+                  <div class="social-media">
+                    <a class="social"
+                      href="http://www.bittimeprofessionals.it"
+                      target="_blank">
+                      <i class="fa fa-lg fa-facebook" aria-hidden="true"></i>
+                    </a>
+                    <a class="social"
+                      href="http://www.bittimeprofessionals.it"
+                      target="_blank">
+                      <i class="fa fa-lg fa-twitter" aria-hidden="true"></i>
+                    </a>
+                    <a class="social"
+                      href="http://www.bittimeprofessionals.it"
+                      target="_blank">
+                      <i class="fa fa-lg fa-instagram" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="col s12">
+                <div id="real-chat" class="chat-body">
+                  <ul id="message-list">
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card-action padding-0">
+              <form id="chatForm" class="chat-input">
+                <div class="message-input">
+                  <div class="wrap">
+                    <input id="sender-input" class="input-message" type="text"
+                      name="message"
+                      placeholder="Write a message...">
+                    <input id="sender" type="text" name="sender"
+                      style="display: none;"
+                      value="">
+                    <button id="button-sender" class="btn waves-effect
+                      waves-light" type="submit"
+                      name="action" disabled>
+                      <i class="fa fa-paper-plane"
+                        aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
 
-    </body>
+  </body>
 
-  </html>
+</html>
