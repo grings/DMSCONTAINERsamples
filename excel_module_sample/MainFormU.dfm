@@ -21,7 +21,6 @@ object MainForm: TMainForm
     Width = 1240
     Height = 19
     Panels = <>
-    ExplicitWidth = 1093
   end
   object Panel1: TPanel
     Left = 0
@@ -31,13 +30,12 @@ object MainForm: TMainForm
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 1093
     object RzPageControl1: TPageControl
       Left = 0
       Top = 0
       Width = 1240
       Height = 425
-      ActivePage = tsData
+      ActivePage = TabSheet1
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -47,10 +45,8 @@ object MainForm: TMainForm
       ParentFont = False
       TabOrder = 0
       TabWidth = 320
-      ExplicitWidth = 1093
       object tsData: TTabSheet
         Caption = 'Simple Data'
-        ExplicitWidth = 1085
         object DBGrid1: TDBGrid
           Left = 0
           Top = 0
@@ -68,7 +64,6 @@ object MainForm: TMainForm
       end
       object TabSheet1: TTabSheet
         Caption = 'All Data Types'
-        ExplicitWidth = 1085
         object DBGrid2: TDBGrid
           Left = 0
           Top = 0
@@ -137,7 +132,6 @@ object MainForm: TMainForm
       end
       object TabSheet2: TTabSheet
         Caption = 'All Data Types With Formatting'
-        ExplicitWidth = 1085
         object DBGrid3: TDBGrid
           Left = 0
           Top = 0
@@ -214,7 +208,6 @@ object MainForm: TMainForm
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitWidth = 1093
     object btnSimpleWorksheet: TButton
       AlignWithMargins = True
       Left = 3
@@ -226,7 +219,6 @@ object MainForm: TMainForm
       TabOrder = 0
       WordWrap = True
       OnClick = btnSimpleWorksheetClick
-      ExplicitTop = 0
     end
     object btnAllTypes: TButton
       AlignWithMargins = True
@@ -287,8 +279,6 @@ object MainForm: TMainForm
       TabOrder = 5
       WordWrap = True
       OnClick = btnRawJSONClick
-      ExplicitLeft = 1029
-      ExplicitTop = 19
     end
   end
   object Panel6: TPanel
@@ -299,7 +289,6 @@ object MainForm: TMainForm
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 3
-    ExplicitWidth = 1093
     object Image1: TImage
       Left = 911
       Top = 0
@@ -913,7 +902,7 @@ object MainForm: TMainForm
     Left = 56
     Top = 264
     Content = {
-      414442530F00402BA10E0000FF00010001FF02FF03040016000000460044004D
+      414442530F001C01A10E0000FF00010001FF02FF03040016000000460044004D
       0065006D005400610062006C006500310005000A0000005400610062006C0065
       00060000000000070000080032000000090000FF0AFF0B04000E000000430055
       00530054005F004E004F0005000E00000043005500530054005F004E004F000C
@@ -1122,7 +1111,7 @@ object MainForm: TMainForm
     Left = 144
     Top = 264
     Content = {
-      414442530F00402BC3040000FF00010001FF02FF030400140000006400730041
+      414442530F001C01C3040000FF00010001FF02FF030400140000006400730041
       006C006C005400790070006500730005000A0000005400610062006C00650006
       0000000000070000080032000000090000FF0AFF0B04001200000046005F0049
       004E005400450047004500520005001200000046005F0049004E005400450047
@@ -1301,7 +1290,7 @@ object MainForm: TMainForm
     Left = 232
     Top = 264
     Content = {
-      414442530F00402BC3040000FF00010001FF02FF030400140000006400730041
+      414442530F001C01C3040000FF00010001FF02FF030400140000006400730041
       006C006C005400790070006500730005000A0000005400610062006C00650006
       0000000000070000080032000000090000FF0AFF0B04001200000046005F0049
       004E005400450047004500520005001200000046005F0049004E005400450047

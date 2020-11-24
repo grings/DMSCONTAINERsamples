@@ -119,6 +119,7 @@ type
     function GetJSONDataMulti(const aDataSet: TDataSet): TJDOJSONObject;
     procedure GenerateReport(const aModelFileName: String; const aFormat: String; aJSONData: TJDOJSONObject;
       const aOutputFileName: String);
+
     procedure RefreshList;
   public
     { Public declarations }
@@ -134,6 +135,7 @@ const
   MODEL07 = 'reports\Report07.docx';
   MODEL08 = 'reports\Report08.docx';
   MODEL09 = 'reports\Report09.docx';
+  MODEL10 = 'reports\Report10.docx';
 
 var
   MainForm: TMainForm;
@@ -338,14 +340,23 @@ end;
 
 procedure TMainForm.btnOffLineInvoceClick(Sender: TObject);
 var
-  lJSON: TJsonObject;
+  lJSON: TJDOJSONObject;
   lReportFileName: string;
+  lMemDataSet:TFDMemTable;
 begin
   ResetFolder;
   lReportFileName := Folder('output_pdf.zip');
-  lJSON := TJsonObject.ParseFromFile(Folder('invoice_offline_data.json')) as TJsonObject;
-  GenerateReport(Folder(MODEL09), 'pdf', lJSON, lReportFileName);
-  RefreshList;
+  lMemDataSet := TFDMemTable.Create(self);
+  try
+    lMemDataSet.LoadFromFile(Folder('invoice_offline_data.json'));
+    lJSON := TJDOJSONObject.Create;
+    lJSON.O['meta'].S['title'] := 'Offline Invoices';
+    lJSON.A['items'].add(lMemDataSet.AsJDOJSONArray());
+    GenerateReport(Folder(MODEL09), 'pdf', lJSON, lReportFileName);
+    RefreshList;
+  finally
+    lMemDataSet.Free;
+  end;
 end;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -398,6 +409,8 @@ procedure TMainForm.GenerateReport(const aModelFileName: String; const aFormat: 
 const aOutputFileName: String);
 var
   lJTemplateData: TJDOJSONObject;
+  lReportData: TJDOJSONObject;
+  lReportDataList:Tstrings;
   lJResp: TJsonObject;
   lArchive: I7zInArchive;
 begin

@@ -143,7 +143,8 @@ uses
   MVCFramework.JSONRPC,
   System.TypInfo,
   FontAwesomeU,
-  FontAwesomeCodes;
+  FontAwesomeCodes,
+  System.DateUtils;
 
 {$R *.dfm}
 
@@ -465,6 +466,7 @@ end;
 procedure TMainForm.LoadAllTypes;
 var
   I: Integer;
+  lDateTimeUTC: TDateTime;
 begin
   dsAllTypes.Close;
   dsAllFormattedFields.Close;
@@ -475,15 +477,17 @@ begin
   try
     for I := 1 to 5000 do
     begin
+      lDateTimeUTC := TTimeZone.Local.ToLocalTime(EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1)
+                      + EncodeTime(I mod 24, I mod 60, I mod 60, 0));
       dsAllTypes.AppendRecord([I, Random(I * 10000) / 10, Random(I * 10000) / 10, Random(100000) / 1000,
         EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1), EncodeTime(I mod 24, I mod 60, I mod 60, 0),
-        EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1) + EncodeTime(I mod 24, I mod 60, I mod 60, 0),
-        EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1) + EncodeTime(I mod 24, I mod 60, I mod 60, 0),
+        lDateTimeUTC,
+        lDateTimeUTC,
         Random(10) < 5, Format('=Sum(A%d,B%d)', [I + 1, I + 1])]);
       dsAllFormattedFields.AppendRecord([I, Random(I * 10000) / 10, Random(I * 10000) / 10, Random(100000) / 1000,
         EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1), EncodeTime(I mod 24, I mod 60, I mod 60, 0),
-        EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1) + EncodeTime(I mod 24, I mod 60, I mod 60, 0),
-        EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1) + EncodeTime(I mod 24, I mod 60, I mod 60, 0),
+        lDateTimeUTC,
+        lDateTimeUTC,
         Random(10) < 5, Format('=Sum(A%d,B%d)', [I + 1, I + 1])]);
     end;
     dsAllTypes.First;
