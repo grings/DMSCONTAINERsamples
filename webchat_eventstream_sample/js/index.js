@@ -36,15 +36,24 @@ let userPhoto = {
   'You': 'adam.png'
 }
 
+let messageList = [];
+
 document.addEventListener("DOMContentLoaded", function (e) {
-  // Name can't be blank
   let user = ""
-  while (user == "") {
+
+  // Recupare i dati dal sessionStorage
+  user = sessionStorage.getItem('chatuser');
+  console.log("chatuser",user)
+
+  while (user == "" || user == null) {
+    // Name can't be blank
     user = prompt("Please enter your name")
+    // Salva i dati nel sessionStorage
+    sessionStorage.setItem('chatuser', user);
   }
   document.querySelector("#sender").value = user
   document.querySelector("#username").innerHTML = user
-  superToken = getToken().then(() => {
+  getToken().then(() => {
     setTimeout(() => {
       dmsGetMessage('__last__');
     }, 1000);
@@ -59,6 +68,17 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
 })
 
+// cache size limit function
+function limitMessageSize() {
+  if (messageList.length > 30) {
+    // cancellare li e rimuovere dalla lista il primo messaggio
+    const oldMessage = document.querySelector(`[data-id="${messageList[0].messageid}"]`);
+    oldMessage.remove();
+    messageList.shift();
+  }
+
+}
+
 function getProxy() {
   return new EventStreamsRPCProxy(eventStreamsRPCUrl);
 }
@@ -66,6 +86,7 @@ function getProxy() {
 function getToken() {
   let proxy = getProxy();
   return proxy.login('user_admin', 'pwd1')
+    // return proxy.login('public_chat', 'q1w2e3r4T!')
     .then(function (res) {
       superToken = res.token;
     });
@@ -93,15 +114,27 @@ function postMessage(form) {
     sender: form.sender.value,
     message: form.message.value
   };
+  form.message.value = "";
+
+  var btn = document.getElementById('button-sender');
+  var input = document.getElementById('sender-input');
+  btn.setAttribute('disabled', true);
+  input.setAttribute('disabled', true);
+
   proxy.enqueueMessage(superToken, queueNameTest, queueMessageTest)
     .then(function () {
-      form.message.value = "";
+      var btn = document.getElementById('button-sender');
+      var input = document.getElementById('sender-input');
+      btn.removeAttribute('disabled');
+      input.removeAttribute('disabled');
+      input.focus();
     });
 }
 
 function renderMessage(message) {
   if (lastID != message.messageid) {
     lastID = message.messageid;
+    messageList.push(message);
     const list = document.querySelector("#message-list");
     var li = document.createElement('li')
 
@@ -109,16 +142,19 @@ function renderMessage(message) {
     let classe = "";
     if (message.message.sender == sender) {
       sender = "You"
-      classe = "replies";
+      classe = "replies msgdms";
     } else {
       sender = message.message.sender
-      classe = "sent";
+      classe = "sent msgdms";
     }
     li.setAttribute("data-id", message.messageid)
     li.setAttribute("class", classe)
 
     list.appendChild(li);
     li.innerHTML = makeLi(message.message, sender);
+
+    limitMessageSize();
+
     var objDiv = document.getElementById("real-chat");
     objDiv.scrollTop = objDiv.scrollHeight;
   }
