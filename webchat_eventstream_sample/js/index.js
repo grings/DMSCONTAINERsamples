@@ -122,7 +122,7 @@ function postMessage(form) {
   let proxy = getProxy();
   let queueMessageTest = {
     sender: form.sender.value,
-    message: form.message.value
+    message: htmlEntities(form.message.value)
   };
   form.message.value = "";
 
@@ -199,4 +199,8 @@ function setButtonDisabled() {
 function setButtonEnable() {
   let btn = document.getElementById('button-sender');
   btn.removeAttribute('disabled');
+}
+
+function htmlEntities(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }

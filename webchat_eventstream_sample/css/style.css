@@ -24,27 +24,20 @@ nav {
 
 .title {
     display: flex;
-    /* width: 75%; */
     margin: auto;
-    /* max-width: 1000px; */
 }
 
 .chat-body {
     width: 100%;
     margin: auto;
     margin-top: 10px;
-    /* max-height: 400px; */
-    height: 65vh;
-    /* height: 400px; */
+    /* height: 65vh; */
     overflow-y: auto;
 }
 
 .chat-input {
-    /* width: 85%;
-    margin: auto;*/
     text-align: right;
-    /* height:7%; */
-    height: 45px;
+    height: 3rem;
 }
 
 .left-message {
@@ -255,7 +248,7 @@ body {
         min-height: 64vh;
     }
     .chat-body {
-        height: 44vh;
+        /* height: 44vh; */
     }
 }
 
@@ -265,7 +258,7 @@ body {
         min-height: 68vh;
     }
     .chat-body {
-        height: 47vh;
+        /* height: 47vh; */
     }
 }
 
@@ -275,6 +268,6 @@ body {
         min-height: 68vh;
     }
     .chat-body {
-        height: 47vh;
+        /* height: 47vh; */
     }
 }
