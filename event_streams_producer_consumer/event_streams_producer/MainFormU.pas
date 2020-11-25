@@ -124,6 +124,7 @@ function TMainForm.MakeProducer(const MessagesCount: Integer;
   const Token, QueueName, MessageText: String): TProc;
 var
   lJObj: TJsonObject;
+  lJArr: TJsonArray;
 begin
   lJObj := TJsonObject.Parse(MessageText) as TJsonObject;
   try
@@ -139,15 +140,21 @@ begin
       lProxy := TEventStreamsRPCProxy.Create(ENDPOINT);
       try
         lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-        lJObj := TJsonObject.Parse(MessageText) as TJsonObject;
+
+        lJArr := TJsonArray.Create;
         try
+          //var lItem := TJsonObject.Parse(MessageText) as TJsonObject;
           for var I := 1 to MessagesCount do
           begin
-            lJObj.I['msg_number'] := I;
-            lProxy.EnqueueMessage(Token, QueueName, lJObj.Clone);
+            lJObj := TJsonObject.Create;
+            lJArr.Add(lJObj);
+            lJObj.S['queue'] := QueueName;
+            lJObj.O['message'] := TJsonObject.Parse(MessageText) as TJsonObject;
+            lJObj.O['message'].I['msg_number'] := I;
           end;
+          lProxy.EnqueueMultipleMessages(Token, lJArr.Clone);
         finally
-          lJObj.Free;
+          lJArr.Free;
         end;
       finally
         lProxy.Free;
@@ -178,7 +185,8 @@ end;
 
 procedure TMainForm.Timer1Timer(Sender: TObject);
 begin
-  var lRes := TTask.WaitForAny(fRunningTasks, TTimeSpan.FromMilliseconds(100));
+  var
+  lRes := TTask.WaitForAny(fRunningTasks, TTimeSpan.FromMilliseconds(100));
   if lRes > -1 then
   begin
     Caption := 'Terminated ID: ' + fRunningTasks[lRes].Id.ToString;

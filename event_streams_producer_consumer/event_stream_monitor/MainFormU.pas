@@ -50,7 +50,7 @@ uses
 {$R *.dfm}
 
 const
-  WORKER_THREAD_COUNT = 48;
+  WORKER_THREAD_COUNT = 1; //48;
 
 procedure TMainForm.btnStartClick(Sender: TObject);
 var

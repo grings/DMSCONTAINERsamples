@@ -34,7 +34,6 @@ object MainForm: TMainForm
     ScrollBars = ssNone
     TabOrder = 0
     OnDrawCell = sgDrawCell
-    ExplicitWidth = 812
   end
   object Panel1: TPanel
     Left = 0
@@ -44,7 +43,6 @@ object MainForm: TMainForm
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 818
     object Label1: TLabel
       Left = 0
       Top = 0
@@ -73,7 +71,6 @@ object MainForm: TMainForm
       Caption = '&Start'
       TabOrder = 0
       OnClick = btnStartClick
-      ExplicitLeft = 713
     end
   end
   object Timer1: TTimer

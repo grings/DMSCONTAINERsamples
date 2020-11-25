@@ -63,7 +63,7 @@ begin
     while TInterlocked.Read(GShutDown) = 0 do
     begin
       try
-        lJObj := lProxy.DequeueMessage(lToken, fChannelQueue, lLastMgsID, 5);
+        lJObj := lProxy.DequeueMultipleMessage(lToken, fChannelQueue, lLastMgsID, 10, 5);
       except
         on E: Exception do
         begin
@@ -78,9 +78,9 @@ begin
       try
         if not lJObj.B['timeout'] then
         begin
-          Log.Debug(lJObj.ToJSON(), fIndex.ToString.PadLeft(4, '0'));
-          Inc(lMsgCount);
-          lLastMgsID := lJObj.S['messageid'];
+          //Log.Debug(lJObj.ToJSON(), fIndex.ToString.PadLeft(4, '0'));
+          Inc(lMsgCount, lJObj.A['data'].Count);
+          lLastMgsID := lJObj.A['data'][lJObj.A['data'].Count-1].ObjectValue.S['messageid'];
           lText := lMsgCount.ToString + '|' + lLastMgsID;
           lItem := TPair<Integer, String>.Create(fIndex, lText);
           if fQueue.PushItem(lItem) <> TWaitResult.wrSignaled then

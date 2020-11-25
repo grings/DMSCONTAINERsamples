@@ -112,8 +112,8 @@ begin
         while TTask.CurrentTask.Status <> TTaskStatus.Canceled do
         begin
           try
-            lJSON := lProxy.DequeueMessage(Token, QueueName,
-              lLastKnownID, 5000);
+            lJSON := lProxy.DequeueMultipleMessage(Token, QueueName,
+              lLastKnownID, 1, 5000);
             try
               if TTask.CurrentTask.Status = TTaskStatus.Canceled then
               begin
@@ -125,7 +125,7 @@ begin
               end
               else
               begin
-                lLastKnownID := lJSON.S['messageid'];
+                lLastKnownID := lJSON.A['data'][0].ObjectValue.S['messageid'];
                 Log(lJSON.ToJSON(true));
               end;
             finally

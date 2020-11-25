@@ -38,7 +38,6 @@ object MainForm: TMainForm
       ParentFont = False
       TabOrder = 0
       OnClick = Button1Click
-      ExplicitTop = 2
     end
     object Button2: TButton
       AlignWithMargins = True
@@ -90,7 +89,6 @@ object MainForm: TMainForm
       ParentFont = False
       TabOrder = 3
       OnClick = Button4Click
-      ExplicitTop = 2
     end
   end
   object Panel2: TPanel
