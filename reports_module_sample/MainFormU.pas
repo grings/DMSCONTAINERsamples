@@ -113,11 +113,12 @@ type
     procedure ResetFolder;
     function Folder(aFolder: String): String;
     function GetEndPoint: String;
-    procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;
-      var Accepted: Boolean);
+    procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
+      const Certificate: TCertificate; var Accepted: Boolean);
     function GetJSONData: TJDOJSONObject;
     function GetJSONDataMulti(const aDataSet: TDataSet): TJDOJSONObject;
-    procedure GenerateReport(const aModelFileName: String; const aFormat: String; aJSONData: TJDOJSONObject;
+    procedure GenerateReport(const aModelFileName: String;
+      const aFormat: String; aJSONData: TJDOJSONObject;
       const aOutputFileName: String);
 
     procedure RefreshList;
@@ -135,13 +136,12 @@ const
   MODEL07 = 'reports\Report07.docx';
   MODEL08 = 'reports\Report08.docx';
   MODEL09 = 'reports\Report09.docx';
-  MODEL10 = 'reports\Report10.docx';
 
 var
   MainForm: TMainForm;
 
 const
-  SERVERNAME = 'localhost'; // } '172.31.3.225';
+  SERVERNAME = 'localhost';
 
 implementation
 
@@ -162,7 +162,6 @@ uses
 
 {$R *.dfm}
 
-
 function TMainForm.Folder(aFolder: String): String;
 begin
   Result := TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), aFolder);
@@ -180,7 +179,8 @@ begin
   begin
     Printer.BeginDoc;
     try
-      fPDFViewer.CurrentPage.Draw(Printer.Canvas.Handle, 0, 0, Printer.PageWidth, Printer.PageHeight, prNormal,
+      fPDFViewer.CurrentPage.Draw(Printer.Canvas.Handle, 0, 0,
+        Printer.PageWidth, Printer.PageHeight, prNormal,
         [proAnnotations, proPrinting]);
     finally
       Printer.EndDoc;
@@ -205,7 +205,8 @@ var
 begin
   ResetFolder;
   lReportFileName := Folder('output_pdf.zip');
-  GenerateReport(Folder(MODEL02), 'pdf', GetJSONDataMulti(dsCustomers), lReportFileName);
+  GenerateReport(Folder(MODEL02), 'pdf', GetJSONDataMulti(dsCustomers),
+    lReportFileName);
   lArchive := CreateInArchive(CLSID_CFormatZip);
   lArchive.OpenFile(lReportFileName);
   TDirectory.CreateDirectory(Folder('output_pdf'));
@@ -228,7 +229,8 @@ var
 begin
   ResetFolder;
   lReportFileName := Folder('output_pdf.zip');
-  GenerateReport(Folder(MODEL03), 'pdf', GetJSONDataMulti(dsCustomers), lReportFileName);
+  GenerateReport(Folder(MODEL03), 'pdf', GetJSONDataMulti(dsCustomers),
+    lReportFileName);
   RefreshList;
 end;
 
@@ -238,8 +240,10 @@ var
 begin
   ResetFolder;
   lReportFileName := Folder('output_html.zip');
-  GenerateReport(Folder(MODEL04), 'html', GetJSONDataMulti(dsCustomers), lReportFileName);
-  ShellExecute(0, PChar('open'), PChar(Folder('output_html\0.html')), nil, nil, SW_SHOWMAXIMIZED);
+  GenerateReport(Folder(MODEL04), 'html', GetJSONDataMulti(dsCustomers),
+    lReportFileName);
+  ShellExecute(0, PChar('open'), PChar(Folder('output_html\0.html')), nil, nil,
+    SW_SHOWMAXIMIZED);
 end;
 
 procedure TMainForm.btnBigClick(Sender: TObject);
@@ -263,7 +267,8 @@ begin
     dsCustomers.EnableControls;
   end;
 
-  GenerateReport(Folder(MODEL07), 'pdf', GetJSONDataMulti(dsCustomersBig), lReportFileName);
+  GenerateReport(Folder(MODEL07), 'pdf', GetJSONDataMulti(dsCustomersBig),
+    lReportFileName);
   lArchive := CreateInArchive(CLSID_CFormatZip);
   lArchive.OpenFile(lReportFileName);
   TDirectory.CreateDirectory(Folder('output_pdf'));
@@ -277,7 +282,8 @@ var
 begin
   ResetFolder;
   lReportFileName := Folder('output_pdf.zip');
-  GenerateReport(Folder(MODEL06), 'pdf', GetJSONDataMulti(dsCustomers), lReportFileName);
+  GenerateReport(Folder(MODEL06), 'pdf', GetJSONDataMulti(dsCustomers),
+    lReportFileName);
   RefreshList;
 end;
 
@@ -293,8 +299,10 @@ var
 begin
   ResetFolder;
   lReportFileName := Folder('output_html.zip');
-  GenerateReport(Folder(MODEL05), 'html', GetJSONDataMulti(dsCustomers), lReportFileName);
-  ShellExecute(0, PChar('open'), PChar(Folder('output_html\0.html')), nil, nil, SW_SHOWMAXIMIZED);
+  GenerateReport(Folder(MODEL05), 'html', GetJSONDataMulti(dsCustomers),
+    lReportFileName);
+  ShellExecute(0, PChar('open'), PChar(Folder('output_html\0.html')), nil, nil,
+    SW_SHOWMAXIMIZED);
 end;
 
 procedure TMainForm.btnInvocesClick(Sender: TObject);
@@ -314,13 +322,25 @@ begin
   begin
     lInvoceRows := lCustomerList.Items[I].ObjectValue.A['rows'];
     if Random(10) > 3 then
-      lInvoceRows.Add(TJsonObject.Parse(Format('{"product":"Pizza Margherita","price":10.00,"quantity":%d}',[1 + Random(10)])) as TJsonObject);
+      lInvoceRows.Add
+        (TJsonObject.Parse
+        (Format('{"product":"Pizza Margherita","price":10.00,"quantity":%d}',
+        [1 + Random(10)])) as TJsonObject);
     if Random(10) > 3 then
-      lInvoceRows.Add(TJsonObject.Parse(Format('{"product":"Spaghetti Carbonara","price":12.00,"quantity":%d}',[1 + Random(10)])) as TJsonObject);
+      lInvoceRows.Add
+        (TJsonObject.Parse
+        (Format('{"product":"Spaghetti Carbonara","price":12.00,"quantity":%d}',
+        [1 + Random(10)])) as TJsonObject);
     if Random(10) > 3 then
-      lInvoceRows.Add(TJsonObject.Parse(Format('{"product":"Bucatini Amatriciana","price":11.00,"quantity":%d}',[1 + Random(4)])) as TJsonObject);
+      lInvoceRows.Add
+        (TJsonObject.Parse
+        (Format('{"product":"Bucatini Amatriciana","price":11.00,"quantity":%d}',
+        [1 + Random(4)])) as TJsonObject);
     if Random(10) > 3 then
-      lInvoceRows.Add(TJsonObject.Parse(Format('{"product":"Tiramisù","price":5.00,"quantity":%d}',[1 + Random(4)])) as TJsonObject);
+      lInvoceRows.Add
+        (TJsonObject.Parse
+        (Format('{"product":"Tiramisù","price":5.00,"quantity":%d}',
+        [1 + Random(4)])) as TJsonObject);
   end;
   GenerateReport(Folder(MODEL08), 'pdf', lJSON, lReportFileName);
   RefreshList;
@@ -342,7 +362,7 @@ procedure TMainForm.btnOffLineInvoceClick(Sender: TObject);
 var
   lJSON: TJDOJSONObject;
   lReportFileName: string;
-  lMemDataSet:TFDMemTable;
+  lMemDataSet: TFDMemTable;
 begin
   ResetFolder;
   lReportFileName := Folder('output_pdf.zip');
@@ -351,7 +371,7 @@ begin
     lMemDataSet.LoadFromFile(Folder('invoice_offline_data.json'));
     lJSON := TJDOJSONObject.Create;
     lJSON.O['meta'].S['title'] := 'Offline Invoices';
-    lJSON.A['items'].add(lMemDataSet.AsJDOJSONArray());
+    lJSON.A['items'].Add(lMemDataSet.AsJDOJSONArray());
     GenerateReport(Folder(MODEL09), 'pdf', lJSON, lReportFileName);
     RefreshList;
   finally
@@ -372,10 +392,11 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  dsCustomers.LoadFromFile(TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), 'customers.json'), sfJSON);
-  InstallFont(Self);
+  dsCustomers.LoadFromFile(TPath.Combine(TPath.GetDirectoryName(ParamStr(0)),
+    'customers.json'), sfJSON);
+  InstallFont(self);
   PDFiumDllDir := TPath.GetDirectoryName(ParamStr(0));
-  fPDFViewer := TPdfControl.Create(Self);
+  fPDFViewer := TPdfControl.Create(self);
   fPDFViewer.Align := alClient;
   fPDFViewer.Parent := Panel4;
   fPDFViewer.SendToBack; // put the control behind the buttons
@@ -405,18 +426,18 @@ begin
   btnHTMLCustomers.Caption := fa_html5 + ' ' + btnHTMLCustomers.Caption;
 end;
 
-procedure TMainForm.GenerateReport(const aModelFileName: String; const aFormat: String; aJSONData: TJDOJSONObject;
+procedure TMainForm.GenerateReport(const aModelFileName: String;
+const aFormat: String; aJSONData: TJDOJSONObject;
 const aOutputFileName: String);
 var
   lJTemplateData: TJDOJSONObject;
-  lReportData: TJDOJSONObject;
-  lReportDataList:Tstrings;
   lJResp: TJsonObject;
   lArchive: I7zInArchive;
 begin
   lJTemplateData := TJDOJSONObject.Create;
   lJTemplateData.S['template_data'] := FileToBase64String(aModelFileName);
-  lJResp := fProxy.GenerateMultipleReport('mytoken', lJTemplateData, aJSONData, aFormat);
+  lJResp := fProxy.GenerateMultipleReport('mytoken', lJTemplateData,
+    aJSONData, aFormat);
   try
     if not lJResp.IsNull('error') then
     begin
@@ -468,13 +489,15 @@ end;
 
 procedure TMainForm.ListBox1DblClick(Sender: TObject);
 begin
-  fPDFViewer.LoadFromFile(TPath.Combine(Folder('output_pdf'), ListBox1.Items[ListBox1.ItemIndex]), '', dloNormal);
+  fPDFViewer.LoadFromFile(TPath.Combine(Folder('output_pdf'),
+    ListBox1.Items[ListBox1.ItemIndex]), '', dloNormal);
   fPDFViewer.ZoomPercentage := 100;
   UpdateGUI;
   RzPageControl1.ActivePage := tsPDFViewer;
 end;
 
-procedure TMainForm.OnValidateCert(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;
+procedure TMainForm.OnValidateCert(const Sender: TObject;
+const ARequest: TURLRequest; const Certificate: TCertificate;
 var Accepted: Boolean);
 begin
   Accepted := true;
@@ -521,14 +544,15 @@ end;
 procedure TMainForm.UpdateGUI;
 begin
   ScrollBar1.Position := fPDFViewer.ZoomPercentage;
-  btnScale.Caption := 'Scale ' + GetEnumName(TypeInfo(TPdfControlScaleMode), Ord(fPDFViewer.ScaleMode));
+  btnScale.Caption := 'Scale ' + GetEnumName(TypeInfo(TPdfControlScaleMode),
+    Ord(fPDFViewer.ScaleMode));
   btnPrev.Enabled := fPDFViewer.PageIndex > 0;
   btnNext.Enabled := fPDFViewer.PageIndex < (fPDFViewer.PageCount - 1);
-  btnLast.Enabled := (fPDFViewer.PageCount > 0) and (fPDFViewer.PageIndex <> (fPDFViewer.PageCount - 1));
+  btnLast.Enabled := (fPDFViewer.PageCount > 0) and
+    (fPDFViewer.PageIndex <> (fPDFViewer.PageCount - 1));
   btnFirst.Enabled := fPDFViewer.PageIndex <> 0;
-  StatusBar1.Panels[0].Text := Format('Page %d of %d', [
-    fPDFViewer.PageIndex + 1,
-    fPDFViewer.PageCount]);
+  StatusBar1.Panels[0].Text := Format('Page %d of %d',
+    [fPDFViewer.PageIndex + 1, fPDFViewer.PageCount]);
 end;
 
 end.
