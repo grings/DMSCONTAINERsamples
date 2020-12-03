@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{4FB48CB0-4FE1-4C69-AAF1-23117AD71AFD}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="dms_job_calculator.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl_client\calculator_vcl_client.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="dms_job_calculator">
+        <MSBuild Projects="dms_job_calculator.dproj"/>
+    </Target>
+    <Target Name="dms_job_calculator:Clean">
+        <MSBuild Projects="dms_job_calculator.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dms_job_calculator:Make">
+        <MSBuild Projects="dms_job_calculator.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="calculator_vcl_client">
+        <MSBuild Projects="vcl_client\calculator_vcl_client.dproj"/>
+    </Target>
+    <Target Name="calculator_vcl_client:Clean">
+        <MSBuild Projects="vcl_client\calculator_vcl_client.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="calculator_vcl_client:Make">
+        <MSBuild Projects="vcl_client\calculator_vcl_client.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="dms_job_calculator;calculator_vcl_client"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="dms_job_calculator:Clean;calculator_vcl_client:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="dms_job_calculator:Make;calculator_vcl_client:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

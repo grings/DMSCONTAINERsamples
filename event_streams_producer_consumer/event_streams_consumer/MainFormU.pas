@@ -104,6 +104,7 @@ begin
       lProxy: TEventStreamsRPCProxy;
       lJSON: TJsonObject;
       lLastKnownID: String;
+    I: Integer;
     begin
       lProxy := TEventStreamsRPCProxy.Create(ENDPOINT);
       try
@@ -113,7 +114,7 @@ begin
         begin
           try
             lJSON := lProxy.DequeueMultipleMessage(Token, QueueName,
-              lLastKnownID, 1, 5000);
+              lLastKnownID, 10, 10);
             try
               if TTask.CurrentTask.Status = TTaskStatus.Canceled then
               begin
@@ -125,8 +126,11 @@ begin
               end
               else
               begin
-                lLastKnownID := lJSON.A['data'][0].ObjectValue.S['messageid'];
-                Log(lJSON.ToJSON(true));
+                for I := 0 to lJSON.A['data'].Count-1 do
+                begin
+                  lLastKnownID := lJSON.A['data'][I].ObjectValue.S['messageid'];
+                  Log(lJSON.A['data'][I].ObjectValue.ToJSON(true));
+                end;
               end;
             finally
               lJSON.Free;

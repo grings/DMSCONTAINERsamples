@@ -25,17 +25,14 @@ type
     procedure Timer1Timer(Sender: TObject);
     procedure FormResize(Sender: TObject);
   private
-    fCellFontSize: Integer;
+    fCellFontSize, fLastGoodFontSize: Integer;
     fTotalMessageCount : Integer;
     fProxy: TEventStreamsRPCProxy;
     fToken: string;
     fTasks: TArray<TConsumerThread>;
     fQueue: TThreadedQueue<TPair<Integer, String>>;
     procedure UpdateCell(const Index: Integer; const Value: string);
-//    function MakeProc(const Index: Integer; const Value: string): TProc;
-    { Private declarations }
   public
-    { Public declarations }
   end;
 
 var
@@ -50,7 +47,7 @@ uses
 {$R *.dfm}
 
 const
-  WORKER_THREAD_COUNT = 1; //48;
+  WORKER_THREAD_COUNT = 48;
 
 procedure TMainForm.btnStartClick(Sender: TObject);
 var
@@ -111,6 +108,7 @@ begin
   sg.DefaultColWidth := sg.ClientWidth div 8;
   sg.DefaultRowHeight := sg.ClientHeight div 6;
   fCellFontSize := sg.ClientHeight div 12;
+  fLastGoodFontSize := fCellFontSize;
 end;
 
 function Brighten(AColor: TColor; ALuminanceToAdd: Word): TColor;
@@ -153,10 +151,15 @@ begin
   lRect.Inflate(-1, -1);
   sg.Canvas.FillRect(lRect);
   lRect.Inflate(-3, -3);
-  sg.Canvas.Font.Size := fCellFontSize;
+
+  sg.Canvas.Font.Size := fLastGoodFontSize;
+  while sg.Canvas.TextWidth(lMsgCount) >= lRect.Width  do
+  begin
+    Dec(fLastGoodFontSize, 1);
+    sg.Canvas.Font.Size := fLastGoodFontSize;
+  end;
   sg.Canvas.Font.Color := InvertColor(sg.Canvas.Brush.Color);
   DrawTextCentered(sg.Canvas, lRect, lMsgCount);
-  // sg.Canvas.TextRect(lRect, lMsgCount, [tfCenter, tfSingleLine]);
 end;
 
 procedure TMainForm.Timer1Timer(Sender: TObject);

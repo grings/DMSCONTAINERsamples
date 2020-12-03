@@ -66,7 +66,7 @@ begin
         lToken := GetToken;
       end;
 
-      lJObj := fProxy.DequeueMessage(lToken, fQueueName, lLastMgsID, 60);
+      lJObj := fProxy.DequeueMultipleMessage(lToken, fQueueName, lLastMgsID, 1, 60);
       try
         Log.Debug(lJObj.ToJSON(), 'es');
         if not lJObj.B['timeout'] then

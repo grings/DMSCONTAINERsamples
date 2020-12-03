@@ -6,9 +6,6 @@
         <Projects Include="event_streams_sample_worker\EventStreamsWorker.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="event_stream_monitor\EventStreamsMonitor.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -26,23 +23,14 @@
     <Target Name="EventStreamsWorker:Make">
         <MSBuild Projects="event_streams_sample_worker\EventStreamsWorker.dproj" Targets="Make"/>
     </Target>
-    <Target Name="EventStreamsMonitor">
-        <MSBuild Projects="event_stream_monitor\EventStreamsMonitor.dproj"/>
-    </Target>
-    <Target Name="EventStreamsMonitor:Clean">
-        <MSBuild Projects="event_stream_monitor\EventStreamsMonitor.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="EventStreamsMonitor:Make">
-        <MSBuild Projects="event_stream_monitor\EventStreamsMonitor.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="EventStreamsWorker;EventStreamsMonitor"/>
+        <CallTarget Targets="EventStreamsWorker"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="EventStreamsWorker:Clean;EventStreamsMonitor:Clean"/>
+        <CallTarget Targets="EventStreamsWorker:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="EventStreamsWorker:Make;EventStreamsMonitor:Make"/>
+        <CallTarget Targets="EventStreamsWorker:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
