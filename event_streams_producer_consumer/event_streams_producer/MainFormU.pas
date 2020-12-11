@@ -109,7 +109,7 @@ var
 begin
   if MinutesBetween(Now, fLastTokenTimeStamp) > 5 then
   begin
-    lJObj := fProxy.Login('user_admin', 'pwd1');
+    lJObj := fProxy.Login('user_event', 'pwd1');
     try
       fToken := lJObj.S['token'];
       fLastTokenTimeStamp := Now;

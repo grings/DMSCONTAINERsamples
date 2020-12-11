@@ -52,6 +52,11 @@ type
 var
   MainForm: TMainForm;
 
+const
+  DMS_SERVER_URL = 'https://localhost';
+  DMS_USERNAME = 'user_event';
+  DMS_PWD = 'pwd1';
+
 implementation
 
 {$R *.dfm}
@@ -70,10 +75,10 @@ var
   lProxy: TEventStreamsRPCProxy;
   lToken: string;
 begin
-  lProxy := TEventStreamsRPCProxy.Create('https://localhost/eventstreamsrpc');
+  lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
   try
     lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lJObj := lProxy.Login('user_queue', 'pwd1');
+    lJObj := lProxy.Login(DMS_USERNAME, DMS_PWD);
     try
       lToken := lJObj.S['token'];
     finally
@@ -99,10 +104,10 @@ var
 begin
   if MessageDlg('Are you sure?', mtConfirmation, mbYesNo, 0) <> mrYes then
     Exit;
-  lProxy := TEventStreamsRPCProxy.Create('https://localhost/eventstreamsrpc');
+  lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
   try
     lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lJObj := lProxy.Login('user_admin', 'pwd1');
+    lJObj := lProxy.Login(DMS_USERNAME, DMS_PWD);
     try
       lToken := lJObj.S['token'];
     finally
@@ -131,10 +136,10 @@ var
   lProxy: TEventStreamsRPCProxy;
   lToken: string;
 begin
-  lProxy := TEventStreamsRPCProxy.Create('https://localhost/eventstreamsrpc');
+  lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
   try
     lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lJObj := lProxy.Login('user_queue', 'pwd1');
+    lJObj := lProxy.Login(DMS_USERNAME, DMS_PWD);
     try
       lToken := lJObj.S['token'];
     finally
@@ -166,10 +171,10 @@ var
   lProxy: TEventStreamsRPCProxy;
   lToken: string;
 begin
-  lProxy := TEventStreamsRPCProxy.Create('https://localhost/eventstreamsrpc');
+  lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
   try
     lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lJObj := lProxy.Login('user_queue', 'pwd1');
+    lJObj := lProxy.Login(DMS_USERNAME, DMS_PWD);
     try
       lToken := lJObj.S['token'];
     finally
@@ -199,15 +204,10 @@ var
   lToken: string;
   lJMessage: TJsonObject;
 begin
-  lProxy := TEventStreamsRPCProxy.Create('https://localhost/eventstreamsrpc');
+  lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
   try
     lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-//    lProxy.RPCExecutor.ConfigureHTTPClient(
-//      procedure(Client: THTTPClient)
-//      begin
-//        Client.ResponseTimeout := MaxInt;
-//      end);
-    lJObj := lProxy.Login('user_queue', 'pwd1');
+    lJObj := lProxy.Login(DMS_USERNAME, DMS_PWD);
     try
       lToken := lJObj.S['token'];
     finally
@@ -273,7 +273,7 @@ begin
 end;
 
 procedure TMainForm.OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
-const Certificate: TCertificate; var Accepted: Boolean);
+  const Certificate: TCertificate; var Accepted: Boolean);
 begin
   Accepted := True;
 end;

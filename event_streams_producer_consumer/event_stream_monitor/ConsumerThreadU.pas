@@ -105,7 +105,7 @@ begin
   Result := '';
   lJObjLogin := nil;
   try
-    lJObjLogin := Proxy.Login('user_admin', 'pwd1');
+    lJObjLogin := Proxy.Login('user_event', 'pwd1');
   except
   end;
   try

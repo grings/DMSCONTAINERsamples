@@ -13,8 +13,8 @@ type
     fQueueName: string;
   protected
     fProxy: TEventStreamsRPCProxy;
-    procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;
-      var Accepted: Boolean);
+    procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
+      const Certificate: TCertificate; var Accepted: Boolean);
     function GetToken: string;
   public
     constructor Create(const UserName, Password, QueueName: string);
@@ -51,6 +51,7 @@ var
   lJObj: TJsonObject;
   lToken: string;
   lLastMgsID: string;
+  I: Integer;
 begin
   SaveColors;
   fProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
@@ -66,14 +67,17 @@ begin
         lToken := GetToken;
       end;
 
-      lJObj := fProxy.DequeueMultipleMessage(lToken, fQueueName, lLastMgsID, 1, 60);
+      lJObj := fProxy.DequeueMultipleMessage(lToken, fQueueName, lLastMgsID, 10, 60);
       try
         Log.Debug(lJObj.ToJSON(), 'es');
         if not lJObj.B['timeout'] then
         begin
           TextColor(Yellow);
-          Writeln(lJObj.ToJSON);
-          lLastMgsID := lJObj.S['messageid'];
+          for I := 0 to lJObj.A['data'].Count - 1 do
+          begin
+            Writeln(lJObj.A['data'].O[I].ToJSON());
+            lLastMgsID := lJObj.A['data'].O[I].S['messageid'];
+          end;
         end
         else
         begin
@@ -103,7 +107,7 @@ begin
   begin
     try
       TextColor(White);
-      write('Connecting to server...');
+      write('Connecting... ');
       lJObj := fProxy.Login(fUserName, fPassword);
       try
         Result := lJObj.S['token'];
@@ -124,9 +128,8 @@ begin
   end;
 end;
 
-procedure TWorker.OnValidateCert(const Sender: TObject;
-  const ARequest: TURLRequest; const Certificate: TCertificate;
-  var Accepted: Boolean);
+procedure TWorker.OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
+  const Certificate: TCertificate; var Accepted: Boolean);
 begin
   Accepted := True;
 end;

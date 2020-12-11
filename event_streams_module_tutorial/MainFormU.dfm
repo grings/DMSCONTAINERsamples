@@ -88,7 +88,6 @@ object MainForm: TMainForm
     Font.Style = []
     ParentFont = False
     TabOrder = 4
-    ExplicitWidth = 778
   end
   object EditLastKnownID: TEdit
     Left = 8
@@ -106,7 +105,6 @@ object MainForm: TMainForm
     Caption = 'Delete Queue'
     TabOrder = 6
     OnClick = btnDelQueueClick
-    ExplicitLeft = 715
   end
   object Panel1: TPanel
     Left = 0
@@ -117,7 +115,6 @@ object MainForm: TMainForm
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 7
-    ExplicitWidth = 794
     object Label3: TLabel
       Left = 9
       Top = 10
@@ -163,7 +160,6 @@ object MainForm: TMainForm
     NumbersOnly = True
     TabOrder = 8
     Text = '10'
-    ExplicitLeft = 715
   end
   object btnCount: TButton
     Left = 652
@@ -174,7 +170,6 @@ object MainForm: TMainForm
     Caption = 'Queue Size'
     TabOrder = 9
     OnClick = btnCountClick
-    ExplicitLeft = 715
   end
   object chkUpdateKID: TCheckBox
     Left = 398

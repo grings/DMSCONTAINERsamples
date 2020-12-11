@@ -70,6 +70,10 @@ object MainForm: TMainForm
       end
       object tsPDFViewer: TTabSheet
         Caption = 'Report'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Panel4: TPanel
           Left = 0
           Top = 41

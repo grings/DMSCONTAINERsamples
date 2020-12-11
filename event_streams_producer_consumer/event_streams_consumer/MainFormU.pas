@@ -76,7 +76,7 @@ var
 begin
   fProxy := TEventStreamsRPCProxy.Create(ENDPOINT);
   fProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-  lJObj := fProxy.Login('user_admin', 'pwd1');
+  lJObj := fProxy.Login('user_event', 'pwd1');
   try
     fToken := lJObj.S['token'];
   finally

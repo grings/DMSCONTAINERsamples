@@ -40,4 +40,12 @@ object MainForm: TMainForm
     TabOrder = 2
     OnClick = btnSendBulkMessagesClick
   end
+  object chkIsTest: TCheckBox
+    Left = 232
+    Top = 36
+    Width = 97
+    Height = 17
+    Caption = 'IsTest'
+    TabOrder = 3
+  end
 end

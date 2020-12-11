@@ -21,6 +21,7 @@ type
     btnSendSimpleEmail: TButton;
     btnSendEmailWithAttachments: TButton;
     btnSendBulkMessages: TButton;
+    chkIsTest: TCheckBox;
     procedure btnSendSimpleEmailClick(Sender: TObject);
     procedure btnSendEmailWithAttachmentsClick(Sender: TObject);
     procedure btnSendBulkMessagesClick(Sender: TObject);
@@ -43,7 +44,6 @@ var
 implementation
 
 {$R *.dfm}
-
 
 uses
   EmailRPCProxy,
@@ -79,10 +79,9 @@ begin
     try
       lMetaMessage.S['msgsubject'] :=
         '{{meta.title}} - This message is for {{data.first_name}} {{data.last_name}}';
-      lMetaMessage.S['msgbodyhtml'] :=
-        '<h3>Dear {{data.title}} {{data.first_name}} </h3>' +
-        '<p>We are really glad to send this email to you, and we really appreciate a kind reply</p>' +
-        '<p>This email is sent to {{data.title}}{{data.first_name}}{{data.last_name}}</p>';
+      lMetaMessage.S['msgbodyhtml'] := '<h3>Dear {{data.title}} {{data.first_name}} </h3>' +
+        '<p>We are really glad to send this email to you, and we really appreciate a kind reply</p>'
+        + '<p>This email is sent to {{data.title}}{{data.first_name}}{{data.last_name}}</p>';
 
       FillWithAttachments(lMetaMessage);
 
@@ -135,8 +134,7 @@ begin
 
     lJResp := lDMS.BulkSendMessages(lToken, lMetaMessage, lMessageData);
     try
-      ShowMessage('Server Response: ' + sLineBreak +
-        lJResp.ToJSON(false));
+      ShowMessage('Server Response: ' + sLineBreak + lJResp.ToJSON(false));
     finally
       lJResp.Free;
     end;
@@ -173,25 +171,27 @@ begin
 
     // let's prepare the message to send
     lJMsg := TJSONObject.Create;
-    lJMsg.S['msgbody'] := 'This is a text body! The message has been sent at ' + DateTimeToStr(Now);
-    lJMsg.S['msgbodyhtml'] := 'This is an HTML body! The message has been sent at ' + DateTimeToStr(Now);
-    lJMsg.S['msgsubject'] := 'DMSContainer \\ This is the subject';
-    //lJMsg.S['msgtolist'] := 'd.teti@bittime.it';
-    lJMsg.S['msgtolist'] := 'd.depino@saxos.it';
-    // lJMsg.S['msgcclist'] := 'email1@domain.com;email2@domain.com etc';
-    // lJMsg.S['msgbcclist'] := 'email1@domain.com;email2@domain.com etc';
-
-
-
-    // Sending attachments can be slow, let's send one by one...
-
-    // The first step is to create the message.
-    // This message will not actually sent before the completition
-    lJResp := lDMS.CreateMessage(lToken, lJMsg);
     try
-      lMessageID := lJResp.I['messageid'];
+      lJMsg.S['msgbody'] := 'This is a text body! The message has been sent at ' +
+        DateTimeToStr(Now);
+      lJMsg.S['msgbodyhtml'] := 'This is an HTML body! The message has been sent at ' +
+        DateTimeToStr(Now);
+      lJMsg.S['msgsubject'] := 'DMSContainer \\ This is the subject';
+      lJMsg.S['msgtolist'] := 'd.teti@bittime.it';
+      lJMsg.S['msgcclist'] := 'd.teti@bittime.it;daniele@bittime.it';
+
+      // Sending attachments can be slow, let's send one by one...
+
+      // The first step is to create the message.
+      // This message will not actually sent before the completition
+      lJResp := lDMS.CreateMessage(lToken, lJMsg.Clone);
+      try
+        lMessageID := lJResp.I['messageid'];
+      finally
+        lJResp.Free;
+      end;
     finally
-      lJResp.Free;
+      lJMsg.Free;
     end;
 
     // let's add all the attachments
@@ -247,9 +247,11 @@ begin
     // let's prepare the message to send
     lJMsg := TJSONObject.Create;
     lJMsg.S['msgbody'] := 'This is a text body! The message has been sent at ' + DateTimeToStr(Now);
-    lJMsg.S['msgbodyhtml'] := 'This is an HTML body! The message has been sent at ' + DateTimeToStr(Now);
+    lJMsg.S['msgbodyhtml'] := 'This is an HTML body! The message has been sent at ' +
+      DateTimeToStr(Now);
     lJMsg.S['msgsubject'] := 'DMSContainer \\ This is the subject';
     lJMsg.S['msgtolist'] := 'd.teti@bittime.it';
+    lJMsg.B['istest'] := chkIsTest.Checked;
     // lJMsg.S['msgcclist'] := 'email1@domain.com;email2@domain.com etc';
     // lJMsg.S['msgbcclist'] := 'email1@domain.com;email2@domain.com etc';
 
@@ -289,9 +291,8 @@ begin
   lJSON.B['istemplate'] := false;
 end;
 
-procedure TMainForm.ValidateCertificateEvent(const Sender: TObject;
-  const ARequest: TURLRequest; const Certificate: TCertificate;
-  var Accepted: Boolean);
+procedure TMainForm.ValidateCertificateEvent(const Sender: TObject; const ARequest: TURLRequest;
+  const Certificate: TCertificate; var Accepted: Boolean);
 begin
   Accepted := true;
 end;

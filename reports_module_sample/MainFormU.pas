@@ -109,6 +109,7 @@ type
   private
     fPDFViewer: TPdfControl;
     fProxy: TReportsRPCProxy;
+    fToken: string;
     procedure UpdateGUI;
     procedure ResetFolder;
     function Folder(aFolder: String): String;
@@ -117,9 +118,8 @@ type
       const Certificate: TCertificate; var Accepted: Boolean);
     function GetJSONData: TJDOJSONObject;
     function GetJSONDataMulti(const aDataSet: TDataSet): TJDOJSONObject;
-    procedure GenerateReport(const aModelFileName: String;
-      const aFormat: String; aJSONData: TJDOJSONObject;
-      const aOutputFileName: String);
+    procedure GenerateReport(const aModelFileName: String; const aFormat: String;
+      aJSONData: TJDOJSONObject; const aOutputFileName: String);
 
     procedure RefreshList;
   public
@@ -179,9 +179,8 @@ begin
   begin
     Printer.BeginDoc;
     try
-      fPDFViewer.CurrentPage.Draw(Printer.Canvas.Handle, 0, 0,
-        Printer.PageWidth, Printer.PageHeight, prNormal,
-        [proAnnotations, proPrinting]);
+      fPDFViewer.CurrentPage.Draw(Printer.Canvas.Handle, 0, 0, Printer.PageWidth,
+        Printer.PageHeight, prNormal, [proAnnotations, proPrinting]);
     finally
       Printer.EndDoc;
     end;
@@ -205,8 +204,7 @@ var
 begin
   ResetFolder;
   lReportFileName := Folder('output_pdf.zip');
-  GenerateReport(Folder(MODEL02), 'pdf', GetJSONDataMulti(dsCustomers),
-    lReportFileName);
+  GenerateReport(Folder(MODEL02), 'pdf', GetJSONDataMulti(dsCustomers), lReportFileName);
   lArchive := CreateInArchive(CLSID_CFormatZip);
   lArchive.OpenFile(lReportFileName);
   TDirectory.CreateDirectory(Folder('output_pdf'));
@@ -229,8 +227,7 @@ var
 begin
   ResetFolder;
   lReportFileName := Folder('output_pdf.zip');
-  GenerateReport(Folder(MODEL03), 'pdf', GetJSONDataMulti(dsCustomers),
-    lReportFileName);
+  GenerateReport(Folder(MODEL03), 'pdf', GetJSONDataMulti(dsCustomers), lReportFileName);
   RefreshList;
 end;
 
@@ -240,10 +237,8 @@ var
 begin
   ResetFolder;
   lReportFileName := Folder('output_html.zip');
-  GenerateReport(Folder(MODEL04), 'html', GetJSONDataMulti(dsCustomers),
-    lReportFileName);
-  ShellExecute(0, PChar('open'), PChar(Folder('output_html\0.html')), nil, nil,
-    SW_SHOWMAXIMIZED);
+  GenerateReport(Folder(MODEL04), 'html', GetJSONDataMulti(dsCustomers), lReportFileName);
+  ShellExecute(0, PChar('open'), PChar(Folder('output_html\0.html')), nil, nil, SW_SHOWMAXIMIZED);
 end;
 
 procedure TMainForm.btnBigClick(Sender: TObject);
@@ -267,8 +262,7 @@ begin
     dsCustomers.EnableControls;
   end;
 
-  GenerateReport(Folder(MODEL07), 'pdf', GetJSONDataMulti(dsCustomersBig),
-    lReportFileName);
+  GenerateReport(Folder(MODEL07), 'pdf', GetJSONDataMulti(dsCustomersBig), lReportFileName);
   lArchive := CreateInArchive(CLSID_CFormatZip);
   lArchive.OpenFile(lReportFileName);
   TDirectory.CreateDirectory(Folder('output_pdf'));
@@ -282,8 +276,7 @@ var
 begin
   ResetFolder;
   lReportFileName := Folder('output_pdf.zip');
-  GenerateReport(Folder(MODEL06), 'pdf', GetJSONDataMulti(dsCustomers),
-    lReportFileName);
+  GenerateReport(Folder(MODEL06), 'pdf', GetJSONDataMulti(dsCustomers), lReportFileName);
   RefreshList;
 end;
 
@@ -299,10 +292,8 @@ var
 begin
   ResetFolder;
   lReportFileName := Folder('output_html.zip');
-  GenerateReport(Folder(MODEL05), 'html', GetJSONDataMulti(dsCustomers),
-    lReportFileName);
-  ShellExecute(0, PChar('open'), PChar(Folder('output_html\0.html')), nil, nil,
-    SW_SHOWMAXIMIZED);
+  GenerateReport(Folder(MODEL05), 'html', GetJSONDataMulti(dsCustomers), lReportFileName);
+  ShellExecute(0, PChar('open'), PChar(Folder('output_html\0.html')), nil, nil, SW_SHOWMAXIMIZED);
 end;
 
 procedure TMainForm.btnInvocesClick(Sender: TObject);
@@ -323,23 +314,18 @@ begin
     lInvoceRows := lCustomerList.Items[I].ObjectValue.A['rows'];
     if Random(10) > 3 then
       lInvoceRows.Add
-        (TJsonObject.Parse
-        (Format('{"product":"Pizza Margherita","price":10.00,"quantity":%d}',
+        (TJsonObject.Parse(Format('{"product":"Pizza Margherita","price":10.00,"quantity":%d}',
         [1 + Random(10)])) as TJsonObject);
     if Random(10) > 3 then
       lInvoceRows.Add
-        (TJsonObject.Parse
-        (Format('{"product":"Spaghetti Carbonara","price":12.00,"quantity":%d}',
+        (TJsonObject.Parse(Format('{"product":"Spaghetti Carbonara","price":12.00,"quantity":%d}',
         [1 + Random(10)])) as TJsonObject);
     if Random(10) > 3 then
       lInvoceRows.Add
-        (TJsonObject.Parse
-        (Format('{"product":"Bucatini Amatriciana","price":11.00,"quantity":%d}',
+        (TJsonObject.Parse(Format('{"product":"Bucatini Amatriciana","price":11.00,"quantity":%d}',
         [1 + Random(4)])) as TJsonObject);
     if Random(10) > 3 then
-      lInvoceRows.Add
-        (TJsonObject.Parse
-        (Format('{"product":"Tiramisù","price":5.00,"quantity":%d}',
+      lInvoceRows.Add(TJsonObject.Parse(Format('{"product":"Tiramisù","price":5.00,"quantity":%d}',
         [1 + Random(4)])) as TJsonObject);
   end;
   GenerateReport(Folder(MODEL08), 'pdf', lJSON, lReportFileName);
@@ -391,6 +377,8 @@ begin
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
+var
+  lJSON: TJsonObject;
 begin
   dsCustomers.LoadFromFile(TPath.Combine(TPath.GetDirectoryName(ParamStr(0)),
     'customers.json'), sfJSON);
@@ -413,6 +401,12 @@ begin
     begin
       Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
     end);
+  lJSON := fProxy.Login('user_admin', 'pwd1');
+  try
+    fToken := lJSON.S['token'];
+  finally
+    lJSON.Free;
+  end;
   RefreshList;
   btnFirst.Caption := fa_arrow_left;
   btnLast.Caption := fa_arrow_right;
@@ -426,9 +420,8 @@ begin
   btnHTMLCustomers.Caption := fa_html5 + ' ' + btnHTMLCustomers.Caption;
 end;
 
-procedure TMainForm.GenerateReport(const aModelFileName: String;
-const aFormat: String; aJSONData: TJDOJSONObject;
-const aOutputFileName: String);
+procedure TMainForm.GenerateReport(const aModelFileName: String; const aFormat: String;
+aJSONData: TJDOJSONObject; const aOutputFileName: String);
 var
   lJTemplateData: TJDOJSONObject;
   lJResp: TJsonObject;
@@ -436,8 +429,7 @@ var
 begin
   lJTemplateData := TJDOJSONObject.Create;
   lJTemplateData.S['template_data'] := FileToBase64String(aModelFileName);
-  lJResp := fProxy.GenerateMultipleReport('mytoken', lJTemplateData,
-    aJSONData, aFormat);
+  lJResp := fProxy.GenerateMultipleReport(fToken, lJTemplateData, aJSONData, aFormat);
   try
     if not lJResp.IsNull('error') then
     begin
@@ -489,16 +481,15 @@ end;
 
 procedure TMainForm.ListBox1DblClick(Sender: TObject);
 begin
-  fPDFViewer.LoadFromFile(TPath.Combine(Folder('output_pdf'),
-    ListBox1.Items[ListBox1.ItemIndex]), '', dloNormal);
+  fPDFViewer.LoadFromFile(TPath.Combine(Folder('output_pdf'), ListBox1.Items[ListBox1.ItemIndex]),
+    '', dloNormal);
   fPDFViewer.ZoomPercentage := 100;
   UpdateGUI;
   RzPageControl1.ActivePage := tsPDFViewer;
 end;
 
-procedure TMainForm.OnValidateCert(const Sender: TObject;
-const ARequest: TURLRequest; const Certificate: TCertificate;
-var Accepted: Boolean);
+procedure TMainForm.OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
+const Certificate: TCertificate; var Accepted: Boolean);
 begin
   Accepted := true;
 end;

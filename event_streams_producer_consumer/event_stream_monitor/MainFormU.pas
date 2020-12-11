@@ -58,7 +58,7 @@ var
   lValues: TArray<string>;
 begin
   btnStart.Enabled := False;
-  lValues := ['user_queue', 'pwd1', 'queue.test1'];
+  lValues := ['user_event', 'pwd1', 'queue.test1'];
   if not InputQuery('DMSContainer :: EventStreams Monitor',
     ['UserName', 'Password', 'Queue Name'], lValues) then
   begin
