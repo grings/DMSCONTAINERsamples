@@ -31,10 +31,17 @@ package dms_job_quickstartJOBRPC;
   To create a new Job:
   - Rename project with your job's name using this pattern
     "dms_job_<YourJobName.bpl>"
-  - Rename unit with your job's name using this pattern
+
+  - Rename unit  Jobs.QuickStartJOBRPC.Job with your job's name using this pattern
     "Jobs.<YourJobName>.Job.pas"
-  - Rename TQuickStartJob as T<YourJobName>Job
-  - Implement override and implement DoExecute event
+  - Rename TQuickStartJOBRPC_Job   as T<YourJobName>_Job
+  - Implement and override DoExecute event in TQuickStartJOBRPC_Job
+
+  - Rename unit   Job.QuickStartJOBRPC.RPC with your job's name using this pattern
+    "Jobs.<YourJobName>.rpc.pas"
+  - Rename TJobQuickStartJOBRPC_RPC as T<YourRpcJobName>_RPC
+  - Implements your own rpc methods
+
 
   - Add your job item to JobManager.conf in conf folder.
   Change jobname and rpcclass and rpcuri.
@@ -49,7 +56,7 @@ package dms_job_quickstartJOBRPC;
 	 "rpcuri":"/quickstartjobrpc"
  }
 
- To call this metodo you need to make a Request using POST VERB
+ To call this method you need to make a Request using POST VERB
  at url https://<YourDMSServerUrl>/<rpcuri>
  with body in JSONRPC format to call your RPCClass method. Eg.
 

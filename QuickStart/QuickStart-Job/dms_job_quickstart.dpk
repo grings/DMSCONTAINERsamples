@@ -34,8 +34,7 @@ package dms_job_quickstart;
   - Rename unit with your job's name using this pattern
     "Jobs.<YourJobName>.Job.pas"
   - Rename TQuickStartJob as T<YourJobName>Job
-  - Implement override and implement DoExecute event
-
+  - Override and implement DoExecute event
   - Add your job item to JobManager.conf in conf folder.
   Change jobname and jobclass.
 
