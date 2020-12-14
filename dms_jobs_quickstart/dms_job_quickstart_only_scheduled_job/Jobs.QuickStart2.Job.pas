@@ -5,7 +5,7 @@ interface
 uses DMSCommonsU, DMSCustomJob, DMSLoggingU;
 
 type
-  TQuickStartJob = class(TCustomJob)
+  TQuickStart2Job = class(TCustomJob)
   protected
     procedure DoExecute; override;
   end;
@@ -15,7 +15,7 @@ implementation
 uses
   System.SysUtils;
 
-procedure TQuickStartJob.DoExecute;
+procedure TQuickStart2Job.DoExecute;
 begin
   { write your own job code here }
   Log.Info('Hello! I''m going to play something amazing!!', JobName);
@@ -25,6 +25,6 @@ end;
 initialization
 
 Randomize;
-TQuickStartJob.ClassName;
+TQuickStart2Job.ClassName;
 
 end.

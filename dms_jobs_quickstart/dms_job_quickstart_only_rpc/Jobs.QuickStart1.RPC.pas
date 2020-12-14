@@ -7,7 +7,7 @@ uses DMSCustomRPC;
 
 Type
 
-  TJobQuickStartRPC = class(TCustomRPC)
+  TJobQuickStart1RPC = class(TCustomRPC)
   public
     function Echo(const value: string): string;
   end;
@@ -16,13 +16,13 @@ implementation
 
 
 
-function TJobQuickStartRPC.Echo(const value: string): string;
+function TJobQuickStart1RPC.Echo(const value: string): string;
 begin
   result := value;
 end;
 
 initialization
 
-TJobQuickStartRPC.ClassName;
+TJobQuickStart1RPC.ClassName;
 
 end.

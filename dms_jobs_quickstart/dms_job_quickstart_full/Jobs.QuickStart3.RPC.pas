@@ -6,7 +6,7 @@ interface
 uses DMSCustomRPC;
 
 type
-  TJobQuickStartRPC = class(TCustomRPC)
+  TJobQuickStart3RPC = class(TCustomRPC)
   public
     function Reverse(const value: string): string;
   end;
@@ -15,13 +15,13 @@ implementation
 
 uses StrUtils;
 
-function TJobQuickStartRPC.Reverse(const value: string): string;
+function TJobQuickStart3RPC.Reverse(const value: string): string;
 begin
   Result := ReverseString(value);
 end;
 
 initialization
 
-TJobQuickStartRPC.ClassName;
+TJobQuickStart3RPC.ClassName;
 
 end.
