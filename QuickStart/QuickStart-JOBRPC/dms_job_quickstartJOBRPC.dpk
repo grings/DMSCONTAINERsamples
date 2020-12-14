@@ -27,6 +27,37 @@ package dms_job_quickstartJOBRPC;
 {$ENDIF IMPLICITBUILDING}
 {$IMPLICITBUILD ON}
 
+(*
+  To create a new Job:
+  - Rename project with your job's name using this pattern
+    "dms_job_<YourJobName.bpl>"
+  - Rename unit with your job's name using this pattern
+    "Jobs.<YourJobName>.Job.pas"
+  - Rename TQuickStartJob as T<YourJobName>Job
+  - Implement override and implement DoExecute event
+
+  - Add your job item to JobManager.conf in conf folder.
+  Change jobname and rpcclass and rpcuri.
+
+ {
+ 	 "enabled": true,
+	 "jobname": "QuickStartJOBRPC",
+   "schedule": "* * * * * *",
+   "jobtype":"class",
+   "jobclass":"Jobs.QuickStartJOBRPC.Job.TQuickStartJOBRPC_Job",
+	 "rpcclass":"Job.QuickStartJOBRPC.RPC.TJobQuickStartJOBRPC_RPC",
+	 "rpcuri":"/quickstartjobrpc"
+ }
+
+ To call this metodo you need to make a Request using POST VERB
+ at url https://<YourDMSServerUrl>/<rpcuri>
+ with body in JSONRPC format to call your RPCClass method. Eg.
+
+ {"jsonrpc": "2.0", "method": "reverse", "params": ["test"], "id": 1}
+
+
+*)
+
 requires
   rtl,
   dmvcframeworkRT,

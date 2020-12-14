@@ -42,6 +42,7 @@ package dms_job_quickstart_rpc;
   {
 			"enabled": true,
 			"jobname": "QuickStartRPC",
+ 			"jobtype":"class",
 			"rpcclass":"Job.QuickStart.RPC.TJobQuickStartRPC",
 			"rpcuri":"/quickstartrpc"
     }
