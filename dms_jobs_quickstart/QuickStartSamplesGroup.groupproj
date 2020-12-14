@@ -1,0 +1,60 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{B3FFA1CD-2DFB-455C-B8D6-938BDA6B296F}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="dms_job_quickstart_only_rpc\dms_job_quickstart_only_rpc.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="dms_job_quickstart_only_scheduled_job\dms_job_quickstart_only_scheduled_job.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="dms_job_quickstart_full\dms_job_quickstart_full.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="dms_job_quickstart_only_rpc">
+        <MSBuild Projects="dms_job_quickstart_only_rpc\dms_job_quickstart_only_rpc.dproj"/>
+    </Target>
+    <Target Name="dms_job_quickstart_only_rpc:Clean">
+        <MSBuild Projects="dms_job_quickstart_only_rpc\dms_job_quickstart_only_rpc.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dms_job_quickstart_only_rpc:Make">
+        <MSBuild Projects="dms_job_quickstart_only_rpc\dms_job_quickstart_only_rpc.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dms_job_quickstart_only_scheduled_job">
+        <MSBuild Projects="dms_job_quickstart_only_scheduled_job\dms_job_quickstart_only_scheduled_job.dproj"/>
+    </Target>
+    <Target Name="dms_job_quickstart_only_scheduled_job:Clean">
+        <MSBuild Projects="dms_job_quickstart_only_scheduled_job\dms_job_quickstart_only_scheduled_job.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dms_job_quickstart_only_scheduled_job:Make">
+        <MSBuild Projects="dms_job_quickstart_only_scheduled_job\dms_job_quickstart_only_scheduled_job.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dms_job_quickstart_full">
+        <MSBuild Projects="dms_job_quickstart_full\dms_job_quickstart_full.dproj"/>
+    </Target>
+    <Target Name="dms_job_quickstart_full:Clean">
+        <MSBuild Projects="dms_job_quickstart_full\dms_job_quickstart_full.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dms_job_quickstart_full:Make">
+        <MSBuild Projects="dms_job_quickstart_full\dms_job_quickstart_full.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="dms_job_quickstart_only_rpc;dms_job_quickstart_only_scheduled_job;dms_job_quickstart_full"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="dms_job_quickstart_only_rpc:Clean;dms_job_quickstart_only_scheduled_job:Clean;dms_job_quickstart_full:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="dms_job_quickstart_only_rpc:Make;dms_job_quickstart_only_scheduled_job:Make;dms_job_quickstart_full:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

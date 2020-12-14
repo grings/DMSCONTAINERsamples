@@ -1,8 +1,6 @@
-unit Jobs.QuickStart.Job;
+unit Jobs.QuickStart2.Job;
 
 interface
-
-
 
 uses DMSCommonsU, DMSCustomJob, DMSLoggingU;
 
