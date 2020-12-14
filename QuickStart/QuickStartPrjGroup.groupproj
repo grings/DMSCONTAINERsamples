@@ -1,0 +1,60 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{B3FFA1CD-2DFB-455C-B8D6-938BDA6B296F}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="QuickStart-JSONRPC\dms_job_quickstart_rpc.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="QuickStart-JOBRPC\dms_job_quickstartJOBRPC.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="QuickStart-Job\dms_job_quickstart.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="dms_job_quickstart_rpc">
+        <MSBuild Projects="QuickStart-JSONRPC\dms_job_quickstart_rpc.dproj"/>
+    </Target>
+    <Target Name="dms_job_quickstart_rpc:Clean">
+        <MSBuild Projects="QuickStart-JSONRPC\dms_job_quickstart_rpc.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dms_job_quickstart_rpc:Make">
+        <MSBuild Projects="QuickStart-JSONRPC\dms_job_quickstart_rpc.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dms_job_quickstartJOBRPC">
+        <MSBuild Projects="QuickStart-JOBRPC\dms_job_quickstartJOBRPC.dproj"/>
+    </Target>
+    <Target Name="dms_job_quickstartJOBRPC:Clean">
+        <MSBuild Projects="QuickStart-JOBRPC\dms_job_quickstartJOBRPC.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dms_job_quickstartJOBRPC:Make">
+        <MSBuild Projects="QuickStart-JOBRPC\dms_job_quickstartJOBRPC.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dms_job_quickstart">
+        <MSBuild Projects="QuickStart-Job\dms_job_quickstart.dproj"/>
+    </Target>
+    <Target Name="dms_job_quickstart:Clean">
+        <MSBuild Projects="QuickStart-Job\dms_job_quickstart.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dms_job_quickstart:Make">
+        <MSBuild Projects="QuickStart-Job\dms_job_quickstart.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="dms_job_quickstart_rpc;dms_job_quickstartJOBRPC;dms_job_quickstart"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="dms_job_quickstart_rpc:Clean;dms_job_quickstartJOBRPC:Clean;dms_job_quickstart:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="dms_job_quickstart_rpc:Make;dms_job_quickstartJOBRPC:Make;dms_job_quickstart:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
