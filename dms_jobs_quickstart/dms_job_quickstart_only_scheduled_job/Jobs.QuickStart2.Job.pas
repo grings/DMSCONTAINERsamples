@@ -24,7 +24,7 @@ end;
 
 initialization
 
-Randomize;
+
 TQuickStart2Job.ClassName;
 
 end.
