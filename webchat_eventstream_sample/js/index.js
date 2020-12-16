@@ -43,7 +43,7 @@ let loginElt = document.getElementById('chatuser');
 
 let notification = new Audio('audio/notification.mp3');
 
-let today = new Date("2020-12-15");
+let today = new Date();
 let alredyToday = 0;
 
 inputElt.addEventListener("input", function () {
