@@ -1,3 +1,39 @@
+.hidden {
+    display:none;
+}
+
+.show {
+    animation: 1s fadeIn;
+    animation-fill-mode: forwards;
+    visibility: hidden;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+.date-span {
+    background-color: #aadaff;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.date-li {
+    text-align:center;
+}
+
+.message-time {
+    color: black;
+    font-size: 0.7em;
+    float: right;
+}
+
 img.responsive-img, video.responsive-video {
     max-height: 55px;
 }
@@ -40,7 +76,7 @@ nav {
     height: 3rem;
     position: absolute;
     bottom: 0;
-    width:100%;
+    width: 100%;
 }
 
 .left-message {

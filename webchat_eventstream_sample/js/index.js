@@ -3,7 +3,7 @@ import { EventStreamsRPCProxy } from './eventstreamsrpc.js';
 let lastID = 0;
 let superToken = "";
 let queueNameTest = "chat";
-let eventStreamsRPCUrl = 'https://localhost:443/eventstreamsrpc';
+let eventStreamsRPCUrl = appConfig.URL;
 
 let colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#00B3E6',
   '#E6B333', '#3366E6', '#999966', '#B34D4D',
@@ -39,6 +39,12 @@ let userPhoto = {
 let messageList = [];
 
 let inputElt = document.getElementById('sender-input');
+let loginElt = document.getElementById('chatuser');
+
+let notification = new Audio('audio/notification.mp3');
+
+let today = new Date("2020-12-15");
+let alredyToday = 0;
 
 inputElt.addEventListener("input", function () {
   if (this.value == '') {
@@ -48,26 +54,33 @@ inputElt.addEventListener("input", function () {
   }
 })
 
+loginElt.addEventListener("input", function () {
+  if (this.value == '') {
+    setLoginBtnDisabled();
+  } else {
+    setLoginBtnEnabled();
+  }
+})
+
 document.addEventListener("DOMContentLoaded", function (e) {
   let user = ""
 
   // Recupare i dati dal sessionStorage
   user = sessionStorage.getItem('chatuser');
-  console.log("chatuser", user)
 
-  while (user == "" || user == null) {
-    // Name can't be blank
-    user = prompt("Please enter your name")
-    // Salva i dati nel sessionStorage
-    sessionStorage.setItem('chatuser', user);
+  const formLogin = document.querySelector("#loginForm");
+  if (user == "" || user == null) {
+    formLogin.addEventListener("submit", function (e) {
+      e.preventDefault()
+      user = e.target.chatuser.value;
+      sessionStorage.setItem('chatuser', user);
+
+      enableChat(user);
+    })
+  } else {
+    enableChat(user);
   }
-  document.querySelector("#sender").value = user
-  document.querySelector("#username").innerHTML = user
-  getToken().then(() => {
-    setTimeout(() => {
-      dmsGetMessage('__last__');
-    }, 1000);
-  });
+
   // Timeout con chiamata
   // Nel dmsGetMessage, se torna qualcosa che non è timout true, allora rischedula dmsGetMessage
   const form = document.querySelector("#chatForm")
@@ -95,7 +108,7 @@ function getProxy() {
 
 function getToken() {
   let proxy = getProxy();
-  return proxy.login('user_admin', 'pwd1')
+  return proxy.login(appConfig.USER, appConfig.PWD)
     // return proxy.login('public_chat', 'q1w2e3r4T!')
     .then(function (res) {
       superToken = res.token;
@@ -108,6 +121,10 @@ function dmsGetMessage(lastKnownMsgID) {
   // Solo la prima volta deve chiedere il last, le altre volte deve chiedere l'id salvato
   proxy.dequeueMessage(superToken, queueNameTest, lastKnownMsgID, 5)
     .then(function (messages) {
+      if (messages.data) {
+        messages = messages.data;
+      }
+      
       if (!messages.timeout) {
         renderMessage(messages)
       }
@@ -143,6 +160,7 @@ function postMessage(form) {
 }
 
 function renderMessage(message) {
+  message = message[0];
   if (lastID != message.messageid) {
     lastID = message.messageid;
     messageList.push(message);
@@ -151,18 +169,33 @@ function renderMessage(message) {
 
     let sender = document.querySelector("#sender").value
     let classe = "";
+
     if (message.message.sender == sender) {
       sender = "You"
       classe = "replies msgdms";
     } else {
       sender = message.message.sender
       classe = "sent msgdms";
+      notification.play();
     }
+
+    let msgDate = new Date(message.createdatutc).toDateString();
+
+    if (new Date(today).toDateString() < msgDate) {
+      today = msgDate;
+      msgDate = new Date(msgDate).toISOString().slice(0, 10).replace(/-/g, "/");
+      makeDateSpan(msgDate);
+    } else if(!alredyToday) {
+      msgDate = "TODAY";
+      makeDateSpan(msgDate);
+      alredyToday = 1;
+    }
+
     li.setAttribute("data-id", message.messageid)
     li.setAttribute("class", classe)
 
     list.appendChild(li);
-    li.innerHTML = makeLi(message.message, sender);
+    li.innerHTML = makeLi(message.message, sender, message.createdatutc);
 
     limitMessageSize();
 
@@ -171,7 +204,7 @@ function renderMessage(message) {
   }
 }
 
-function makeLi(message, sender) {
+function makeLi(message, sender, datetime) {
   // Random color
   if (!userColor[message.sender]) {
     userColor[message.sender] = colorArray[Math.floor(Math.random() * colorArray.length)]
@@ -184,11 +217,13 @@ function makeLi(message, sender) {
   }
   let currentUserPhoto = userPhoto[sender];
 
+  let messageDate = new Date(datetime).toLocaleTimeString();
+
   return `
     <img src="./avatars/${currentUserPhoto}" alt=""/>
     <p>
     <small><strong style='color:${currentUserColor}'>${sender}</strong></small><br/>
-    ${message.message}</p>`
+    ${message.message}<br/><smal class="message-time">${messageDate}</small></p>`
 }
 
 function setButtonDisabled() {
@@ -201,6 +236,46 @@ function setButtonEnable() {
   btn.removeAttribute('disabled');
 }
 
+// Login Methods
+function setLoginBtnDisabled() {
+  let btn = document.getElementById('btn_login');
+  btn.setAttribute('disabled', true);
+}
+
+function setLoginBtnEnabled() {
+  let btn = document.getElementById('btn_login');
+  btn.removeAttribute('disabled');
+}
+
+function enableChat(user) {
+  var logindiv = document.querySelector("#login-div");
+  logindiv.classList.add("hidden");
+  var nav = document.querySelector("#nav");
+  nav.classList.remove("hidden");
+  nav.classList.add("show");
+  var maindiv = document.querySelector("#maindiv");
+  maindiv.classList.remove("hidden");
+  maindiv.classList.add("show");
+
+  document.querySelector("#sender").value = user
+  document.querySelector("#username").innerHTML = user
+  getToken().then(() => {
+    setTimeout(() => {
+      dmsGetMessage('__last__');
+    }, 1000);
+  });
+}
+
+function makeDateSpan(date) {
+  const list = document.querySelector("#message-list");
+  var li = document.createElement('li')
+
+  li.setAttribute("class", "date-li")
+
+  list.appendChild(li);
+  li.innerHTML = `<span class='date-span'>${date}</span>`;
+}
+
 function htmlEntities(str) {
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
