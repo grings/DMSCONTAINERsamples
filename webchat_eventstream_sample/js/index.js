@@ -108,8 +108,12 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
 })
 
-function enterRoom(room) {
-  console.log("Entering room:", room);
+function getLastHour() {
+  var d = new Date();
+
+  d.setHours(d.getHours() - 1);
+
+  return d.toISOString();
 }
 
 // cache size limit function
@@ -140,7 +144,7 @@ function getToken() {
 function dmsGetMessage(lastKnownMsgID) {
   let proxy = getProxy();
   // Solo la prima volta deve chiedere il last, le altre volte deve chiedere l'id salvato
-  proxy.dequeueMessage(superToken, queueNameTest, lastKnownMsgID, 5)
+  proxy.getNextMessageByTimestamp(superToken, queueNameTest, lastKnownMsgID, true)
     .then(function (messages) {
       if (messages.data) {
         messages = messages.data;
@@ -185,7 +189,6 @@ function queueList() {
 
   proxy.getQueuesInfo(superToken, "chat")
     .then(function (res) {
-      console.log("queue list", res);
       // Disegna queue
       const list = document.querySelector("#queue-list");
       const listMobile = document.querySelector("#slide-out");
@@ -205,7 +208,7 @@ function queueList() {
           // Mobile anche
           var lim = document.createElement('li')
 
-          lim.setAttribute("data-id", queue.queue_name)
+          lim.setAttribute("data-id", queue.queue_name+'-m')
           lim.setAttribute("class", "contact")
 
           listMobile.appendChild(lim);
@@ -219,8 +222,8 @@ function queueList() {
 
 function renderMessage(message) {
   message = message[0];
-  if (lastID != message.messageid) {
-    lastID = message.messageid;
+  if (lastID != message.createdatutc) {
+    lastID = message.createdatutc;
     messageList.push(message);
     const list = document.querySelector("#message-list");
     var li = document.createElement('li')
@@ -336,6 +339,7 @@ function enableChat(user) {
       if (queueNameTest != evt.target.innerHTML) {
 
         alredyToday = 0;
+        // DESKTOP
         // Rimozione della classe active al precedente div
         let previousChat = document.querySelector(`[data-id="${queueNameTest}"]`);
         previousChat.classList.remove("active")
@@ -343,6 +347,17 @@ function enableChat(user) {
         // Impostare la classe active al div scelto
         let currentChat = document.querySelector(`[data-id="${evt.target.innerHTML}"]`);
         currentChat.classList.add("active");
+        // END DESKTOP
+
+        // MOBILE
+        // Rimozione della classe active al precedente div
+        let previousChatM = document.querySelector(`[data-id="${queueNameTest}-m"]`);
+        previousChatM.classList.remove("active")
+
+        // Impostare la classe active al div scelto
+        let currentChatM = document.querySelector(`[data-id="${evt.target.innerHTML}-m"]`);
+        currentChatM.classList.add("active");
+        // END MOBILE
 
         // cancellare la chat corrente dall'html
         queueNameTest = evt.target.innerHTML;
@@ -353,7 +368,7 @@ function enableChat(user) {
         document.querySelector("#chatname").innerHTML = queueNameTest;
 
         // Richiere il __last__ della chat richiesta
-        dmsGetMessage('__last__');
+        dmsGetMessage(getLastHour());
 
       }
 
@@ -366,10 +381,8 @@ function enableChat(user) {
       console.log(evt.target.innerHTML);
 
       if (queueNameTest != evt.target.innerHTML) {
-        var instance = M.Sidenav.getInstance(document.querySelectorAll('.sidenav')[0]);
-        instance.close();
-
         alredyToday = 0;
+        // DESKTOP
         // Rimozione della classe active al precedente div
         let previousChat = document.querySelector(`[data-id="${queueNameTest}"]`);
         previousChat.classList.remove("active")
@@ -377,6 +390,17 @@ function enableChat(user) {
         // Impostare la classe active al div scelto
         let currentChat = document.querySelector(`[data-id="${evt.target.innerHTML}"]`);
         currentChat.classList.add("active");
+        // END DESKTOP
+
+        // MOBILE
+        // Rimozione della classe active al precedente div
+        let previousChatM = document.querySelector(`[data-id="${queueNameTest}-m"]`);
+        previousChatM.classList.remove("active")
+
+        // Impostare la classe active al div scelto
+        let currentChatM = document.querySelector(`[data-id="${evt.target.innerHTML}-m"]`);
+        currentChatM.classList.add("active");
+        // END MOBILE
 
         // cancellare la chat corrente dall'html
         queueNameTest = evt.target.innerHTML;
@@ -387,8 +411,10 @@ function enableChat(user) {
         document.querySelector("#chatname").innerHTML = queueNameTest;
 
         // Richiere il __last__ della chat richiesta
-        dmsGetMessage('__last__');
+        dmsGetMessage(getLastHour());
 
+        var instance = M.Sidenav.getInstance(document.querySelectorAll('.sidenav')[0]);
+        instance.close();
       }
 
     }
@@ -397,7 +423,7 @@ function enableChat(user) {
   getToken().then(() => {
     setTimeout(() => {
       queueList();
-      dmsGetMessage('__last__');
+      dmsGetMessage(getLastHour());
     }, 1000);
   });
 }
