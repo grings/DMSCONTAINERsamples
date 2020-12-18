@@ -188,10 +188,12 @@ function queueList() {
       console.log("queue list", res);
       // Disegna queue
       const list = document.querySelector("#queue-list");
+      const listMobile = document.querySelector("#slide-out");
 
       res.queue_names.forEach(queue => {
         if (queue.queue_name != 'chat') {
 
+          // Desktop
           var li = document.createElement('li')
 
           li.setAttribute("data-id", queue.queue_name)
@@ -201,6 +203,13 @@ function queueList() {
           li.innerHTML = `<div class="wrap"><div class="meta">${queue.queue_name}</div></div>`;
 
           // Mobile anche
+          var lim = document.createElement('li')
+
+          lim.setAttribute("data-id", queue.queue_name)
+          lim.setAttribute("class", "contact")
+
+          listMobile.appendChild(lim);
+          lim.innerHTML = `<div class="wrap"><div class="meta">${queue.queue_name}</div></div>`;
         }
       });
 
@@ -317,12 +326,48 @@ function enableChat(user) {
   cbox.checked = (enableSound === 'true');
 
   const queuelist = document.querySelector("#queue-list");
+  const queuelistMobile = document.querySelector("#slide-out");
 
+  // DESKTOP
   queuelist.addEventListener("click", (evt) => {
     if (evt.target.tagName === 'DIV' || evt.target.tagName === 'P') {
       console.log(evt.target.innerHTML);
 
       if (queueNameTest != evt.target.innerHTML) {
+
+        alredyToday = 0;
+        // Rimozione della classe active al precedente div
+        let previousChat = document.querySelector(`[data-id="${queueNameTest}"]`);
+        previousChat.classList.remove("active")
+
+        // Impostare la classe active al div scelto
+        let currentChat = document.querySelector(`[data-id="${evt.target.innerHTML}"]`);
+        currentChat.classList.add("active");
+
+        // cancellare la chat corrente dall'html
+        queueNameTest = evt.target.innerHTML;
+        const list = document.querySelector("#message-list");
+        list.innerHTML = "";
+
+        // Cambiare il nome della chat corrente
+        document.querySelector("#chatname").innerHTML = queueNameTest;
+
+        // Richiere il __last__ della chat richiesta
+        dmsGetMessage('__last__');
+
+      }
+
+    }
+  });
+
+  // MOBILE
+  queuelistMobile.addEventListener("click", (evt) => {
+    if (evt.target.tagName === 'DIV' || evt.target.tagName === 'P') {
+      console.log(evt.target.innerHTML);
+
+      if (queueNameTest != evt.target.innerHTML) {
+        var instance = M.Sidenav.getInstance(document.querySelectorAll('.sidenav')[0]);
+        instance.close();
 
         alredyToday = 0;
         // Rimozione della classe active al precedente div
