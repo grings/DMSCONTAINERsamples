@@ -40,11 +40,14 @@ let messageList = [];
 
 let inputElt = document.getElementById('sender-input');
 let loginElt = document.getElementById('chatuser');
+let soundBtn = document.getElementById('sound-btn');
 
 let notification = new Audio('audio/notification.mp3');
 
 let today = new Date();
 let alredyToday = 0;
+
+let enableSound = sessionStorage.getItem('sound') != undefined ? sessionStorage.getItem('sound') : true;
 
 inputElt.addEventListener("input", function () {
   if (this.value == '') {
@@ -62,7 +65,21 @@ loginElt.addEventListener("input", function () {
   }
 })
 
+soundBtn.addEventListener("change", function (evt) {
+  sessionStorage.setItem('sound', evt.target.checked);
+  enableSound = sessionStorage.getItem('sound');
+})
+
 document.addEventListener("DOMContentLoaded", function (e) {
+  var elems = document.querySelectorAll('.sidenav');
+  let options = {
+    menuWidth: 300, // Default is 300
+    edge: 'left', // Choose the horizontal origin
+    closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+    draggable: true // Choose whether you can drag to open on touch screens
+  }
+  var instances = M.Sidenav.init(elems, options);
+
   let user = ""
 
   // Recupare i dati dal sessionStorage
@@ -90,6 +107,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
   })
 
 })
+
+function enterRoom(room) {
+  console.log("Entering room:", room);
+}
 
 // cache size limit function
 function limitMessageSize() {
@@ -124,7 +145,7 @@ function dmsGetMessage(lastKnownMsgID) {
       if (messages.data) {
         messages = messages.data;
       }
-      
+
       if (!messages.timeout) {
         renderMessage(messages)
       }
@@ -159,6 +180,34 @@ function postMessage(form) {
     });
 }
 
+function queueList() {
+  let proxy = getProxy();
+
+  proxy.getQueuesInfo(superToken, "chat")
+    .then(function (res) {
+      console.log("queue list", res);
+      // Disegna queue
+      const list = document.querySelector("#queue-list");
+
+      res.queue_names.forEach(queue => {
+        if (queue.queue_name != 'chat') {
+
+          var li = document.createElement('li')
+
+          li.setAttribute("data-id", queue.queue_name)
+          li.setAttribute("class", "contact")
+
+          list.appendChild(li);
+          li.innerHTML = `<div class="wrap"><div class="meta">${queue.queue_name}</div></div>`;
+
+          // Mobile anche
+        }
+      });
+
+    });
+
+}
+
 function renderMessage(message) {
   message = message[0];
   if (lastID != message.messageid) {
@@ -176,7 +225,9 @@ function renderMessage(message) {
     } else {
       sender = message.message.sender
       classe = "sent msgdms";
-      notification.play();
+      if (enableSound == 'true') {
+        notification.play();
+      }
     }
 
     let msgDate = new Date(message.createdatutc).toDateString();
@@ -185,7 +236,7 @@ function renderMessage(message) {
       today = msgDate;
       msgDate = new Date(msgDate).toISOString().slice(0, 10).replace(/-/g, "/");
       makeDateSpan(msgDate);
-    } else if(!alredyToday) {
+    } else if (!alredyToday) {
       msgDate = "TODAY";
       makeDateSpan(msgDate);
       alredyToday = 1;
@@ -259,8 +310,48 @@ function enableChat(user) {
 
   document.querySelector("#sender").value = user
   document.querySelector("#username").innerHTML = user
+  // mobile
+  document.querySelector("#username-mobile").innerHTML = user
+
+  const cbox = document.querySelector('#sound-btn');
+  cbox.checked = (enableSound === 'true');
+
+  const queuelist = document.querySelector("#queue-list");
+
+  queuelist.addEventListener("click", (evt) => {
+    if (evt.target.tagName === 'DIV' || evt.target.tagName === 'P') {
+      console.log(evt.target.innerHTML);
+
+      if (queueNameTest != evt.target.innerHTML) {
+
+        alredyToday = 0;
+        // Rimozione della classe active al precedente div
+        let previousChat = document.querySelector(`[data-id="${queueNameTest}"]`);
+        previousChat.classList.remove("active")
+
+        // Impostare la classe active al div scelto
+        let currentChat = document.querySelector(`[data-id="${evt.target.innerHTML}"]`);
+        currentChat.classList.add("active");
+
+        // cancellare la chat corrente dall'html
+        queueNameTest = evt.target.innerHTML;
+        const list = document.querySelector("#message-list");
+        list.innerHTML = "";
+
+        // Cambiare il nome della chat corrente
+        document.querySelector("#chatname").innerHTML = queueNameTest;
+
+        // Richiere il __last__ della chat richiesta
+        dmsGetMessage('__last__');
+
+      }
+
+    }
+  });
+
   getToken().then(() => {
     setTimeout(() => {
+      queueList();
       dmsGetMessage('__last__');
     }, 1000);
   });

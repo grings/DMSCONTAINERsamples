@@ -37,7 +37,8 @@
 
               <div class='row'>
                 <div class='input-field col s12'>
-                  <input class='validate' type='text' name='chatuser' id='chatuser'/>
+                  <input class='validate' type='text' name='chatuser'
+                    id='chatuser'/>
                   <label for='email'>Enter a username</label>
                 </div>
               </div>
@@ -55,7 +56,25 @@
       </center>
     </div>
 
+    <div class="col s12">
+      <ul id="slide-out" class="sidenav">
+        <li>
+          <div class="user-view">
+            <img src="./avatars/adam.png" alt="" />
+              <p class="truncate" style="margin-top:0px;display: inline;">
+                User: <strong id="username-mobile"></strong>
+              </p>
+          </div>
+        </li>
+        <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
+        <li><a href="#!">Second Link</a></li>
+        <li><div class="divider"></div></li>
+        <li><a class="subheader">Subheader</a></li>
+        <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+      </ul>
+      
 
+    </div>
     <nav id="nav" class="z-depth-0 hidden">
       <div class="nav-wrapper container">
         <span class="left">
@@ -74,14 +93,41 @@
     </nav>
     <div id="maindiv" class="container hidden" style="height:inherit">
       <div class="row padding-0" style="height:inherit">
-        <div class="col s12 padding-0" style="height:inherit">
-          <div class="card darken-1" style="height:inherit">
+        <div id="sidepanel" class="col s3 padding-0 sidepanel-desktop" style="height:inherit">
+          <div class="contact-profile" style="background-color:#2c3e50">
+            <div class="col s12 truncate padding-0">
+              <img src="./avatars/adam.png" alt="" />
+              <p class="truncate" style="margin-top:0px;display: inline;">
+                User: <strong id="username"></strong>
+              </p>
+            </div>
+          </div>
+          <div id="contacts">
+            <ul id="queue-list" class="padding-0" style="height: calc(100% -
+              34px);">
+              <li class="contact active" data-id="chat">
+                <div class="wrap">
+                  <div class="meta">chat</div>
+                </div>
+              </li>
+            </ul>
+            <!-- <div id="bottom-bar">
+              <button id="addcontact"><i class="fa fa-user-plus fa-fw"
+                  aria-hidden="true"></i> <span>Add contact</span></button>
+            </div> -->
+          </div>
+        </div>
+        <div class="col s12 l9 padding-0" style="height:inherit">
+          <div class="card darken-1" style="height:100%">
             <div class="card-content" style="height:100%">
               <div class="contact-profile">
                 <div class="col s9 truncate padding-0">
-                  <img src="./avatars/adam.png" alt="" />
-                  <p class="truncate" style="margin-top:0px;display: inline;">
-                    User: <strong id="username"></strong>
+                  <a href="#" data-target="slide-out" class="sidenav-trigger" style="color:#C62F32 !important">
+                    <i class="fa fa-users"></i>
+                  </a>
+                  <p class="truncate"
+                    style="margin-top:0px;margin-left:10px;display: inline;">
+                    Chat name: <strong id="chatname">Chat</strong>
                   </p>
                 </div>
                 <div class="col s3 padding-0">
@@ -105,7 +151,8 @@
                 </div>
               </div>
               <div class="col s12" style="height: calc(100% - 64px);">
-                <div id="real-chat" class="chat-body" style="height: calc(100% -
+                <div id="real-chat" class="chat-body" style="height: calc(100%
+                  -
                   50px);">
                   <ul id="message-list" style="padding-bottom:8px">
                   </ul>
@@ -133,6 +180,13 @@
               </form>
             </div>
           </div>
+        </div>
+        <div class="col s12" style="margin-top:10px">
+          Enable Sound
+          <label style="margin-left:20px; display:inline;">
+            <input id="sound-btn" type="checkbox" />
+            <span style="color:transparent"> Y </span>
+          </label>
         </div>
       </div>
     </div>
