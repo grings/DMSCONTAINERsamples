@@ -1,6 +1,6 @@
 import { EventStreamsRPCProxy } from './eventstreamsrpc.js';
 
-let lastID = 0;
+let lastID = getLastHour();
 let superToken = "";
 let queueNameTest = "chat";
 let eventStreamsRPCUrl = appConfig.URL;
@@ -46,6 +46,7 @@ let notification = new Audio('audio/notification.mp3');
 
 let today = new Date();
 let alredyToday = 0;
+let isFirst = 1;
 
 let enableSound = sessionStorage.getItem('sound') != undefined ? sessionStorage.getItem('sound') : true;
 
@@ -112,7 +113,7 @@ function getLastHour() {
   var d = new Date();
 
   d.setHours(d.getHours() - 1);
-
+  
   return d.toISOString();
 }
 
@@ -143,20 +144,31 @@ function getToken() {
 //  Prendi messaggi
 function dmsGetMessage(lastKnownMsgID) {
   let proxy = getProxy();
-  // Solo la prima volta deve chiedere il last, le altre volte deve chiedere l'id salvato
-  proxy.getNextMessageByTimestamp(superToken, queueNameTest, lastKnownMsgID, true)
-    .then(function (messages) {
-      if (messages.data) {
-        messages = messages.data;
-      }
+  // Solo la prima volta deve chiamare il metodo timestamp altrimenti dequeueMessage
+  if (isFirst) {
+    proxy.getNextMessageByTimestamp(superToken, queueNameTest, lastKnownMsgID, true)
+      .then(function (messages) {
+        procedureMessage(messages)
+      });
+  } else {
+    proxy.dequeueMessage(superToken, queueNameTest, lastKnownMsgID, 5)
+      .then(function (messages) {
+        procedureMessage(messages)
+      });
+  }
+}
 
-      if (!messages.timeout) {
-        renderMessage(messages)
-      }
-      setTimeout(() => {
-        dmsGetMessage(lastID);
-      }, 1000);
-    });
+function procedureMessage(messages) {
+  if (messages.data) {
+    messages = messages.data;
+  }
+
+  if (!messages.timeout) {
+    renderMessage(messages)
+  }
+  setTimeout(() => {
+    dmsGetMessage(lastID);
+  }, 1000);
 }
 
 //  Posta messaggi
@@ -164,7 +176,8 @@ function postMessage(form) {
   let proxy = getProxy();
   let queueMessageTest = {
     sender: form.sender.value,
-    message: htmlEntities(form.message.value)
+    message: htmlEntities(form.message.value),
+    chatName: queueNameTest
   };
   form.message.value = "";
 
@@ -208,7 +221,7 @@ function queueList() {
           // Mobile anche
           var lim = document.createElement('li')
 
-          lim.setAttribute("data-id", queue.queue_name+'-m')
+          lim.setAttribute("data-id", queue.queue_name + '-m')
           lim.setAttribute("class", "contact")
 
           listMobile.appendChild(lim);
@@ -222,8 +235,9 @@ function queueList() {
 
 function renderMessage(message) {
   message = message[0];
-  if (lastID != message.createdatutc) {
-    lastID = message.createdatutc;
+  if (lastID != message.messageid && message.message.chatName === queueNameTest) {
+    lastID = message.messageid;
+    isFirst = 0;
     messageList.push(message);
     const list = document.querySelector("#message-list");
     var li = document.createElement('li')
@@ -243,11 +257,12 @@ function renderMessage(message) {
     }
 
     let msgDate = new Date(message.createdatutc).toDateString();
-
     if (new Date(today).toDateString() < msgDate) {
-      today = msgDate;
-      msgDate = new Date(msgDate).toISOString().slice(0, 10).replace(/-/g, "/");
-      makeDateSpan(msgDate);
+      if(today != msgDate) {
+        today = msgDate;
+        msgDate = new Date(msgDate).toISOString().slice(0, 10).replace(/-/g, "/");
+        makeDateSpan(msgDate);
+      }
     } else if (!alredyToday) {
       msgDate = "TODAY";
       makeDateSpan(msgDate);
@@ -333,8 +348,7 @@ function enableChat(user) {
 
   // DESKTOP
   queuelist.addEventListener("click", (evt) => {
-    if (evt.target.tagName === 'DIV' || evt.target.tagName === 'P') {
-      console.log(evt.target.innerHTML);
+    if (evt.target.tagName === 'DIV') {
 
       if (queueNameTest != evt.target.innerHTML) {
 
@@ -363,12 +377,14 @@ function enableChat(user) {
         queueNameTest = evt.target.innerHTML;
         const list = document.querySelector("#message-list");
         list.innerHTML = "";
+        messageList = [];
 
         // Cambiare il nome della chat corrente
         document.querySelector("#chatname").innerHTML = queueNameTest;
 
         // Richiere il __last__ della chat richiesta
-        dmsGetMessage(getLastHour());
+        isFirst = 1;
+        lastID = getLastHour();
 
       }
 
@@ -377,8 +393,7 @@ function enableChat(user) {
 
   // MOBILE
   queuelistMobile.addEventListener("click", (evt) => {
-    if (evt.target.tagName === 'DIV' || evt.target.tagName === 'P') {
-      console.log(evt.target.innerHTML);
+    if (evt.target.tagName === 'DIV') {
 
       if (queueNameTest != evt.target.innerHTML) {
         alredyToday = 0;
@@ -406,12 +421,14 @@ function enableChat(user) {
         queueNameTest = evt.target.innerHTML;
         const list = document.querySelector("#message-list");
         list.innerHTML = "";
+        messageList = [];
 
         // Cambiare il nome della chat corrente
         document.querySelector("#chatname").innerHTML = queueNameTest;
 
         // Richiere il __last__ della chat richiesta
-        dmsGetMessage(getLastHour());
+        isFirst = 1;
+        lastID = getLastHour();
 
         var instance = M.Sidenav.getInstance(document.querySelectorAll('.sidenav')[0]);
         instance.close();
