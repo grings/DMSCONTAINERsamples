@@ -4,6 +4,7 @@ let lastID = getLastHour();
 let superToken = "";
 let queueNameTest = "chat";
 let eventStreamsRPCUrl = appConfig.URL;
+let isEmojiOpen = 0;
 
 let colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#00B3E6',
   '#E6B333', '#3366E6', '#999966', '#B34D4D',
@@ -41,6 +42,7 @@ let messageList = [];
 let inputElt = document.getElementById('sender-input');
 let loginElt = document.getElementById('chatuser');
 let soundBtn = document.getElementById('sound-btn');
+let emojiBtn = document.getElementById('emoji-pick');
 
 let notification = new Audio('audio/notification.mp3');
 
@@ -49,6 +51,28 @@ let alredyToday = 0;
 let isFirst = 1;
 
 let enableSound = sessionStorage.getItem('sound') != undefined ? sessionStorage.getItem('sound') : true;
+
+emojiBtn.addEventListener("click", function (e) {
+  
+  e.preventDefault();
+  if (isEmojiOpen === 0) {
+    isEmojiOpen = 1;
+    var newDiv = document.createElement("div");
+    newDiv.setAttribute('id', "emoji-div");
+    newDiv.innerHTML = "<emoji-picker></emoji-picker>";
+    emojiBtn.appendChild(newDiv);
+
+    document.querySelector('emoji-picker')
+      .addEventListener('emoji-click', event => {
+        document.getElementById('sender-input').value += event.detail.unicode + " ";
+        setButtonEnable();
+      });
+  } else {
+    isEmojiOpen = 0;
+    var elem = document.getElementById('emoji-div');
+    elem.remove();
+  }
+})
 
 inputElt.addEventListener("input", function () {
   if (this.value == '') {
@@ -99,12 +123,24 @@ document.addEventListener("DOMContentLoaded", function (e) {
     enableChat(user);
   }
 
+  if(appConfig.EMOJI) {
+    emojiBtn.classList.remove("hidden");
+  }
+
   // Timeout con chiamata
   // Nel dmsGetMessage, se torna qualcosa che non è timout true, allora rischedula dmsGetMessage
   const form = document.querySelector("#chatForm")
   form.addEventListener("submit", function (e) {
-    e.preventDefault()
-    postMessage(e.target)
+    e.preventDefault();
+    if (e.submitter.id !== 'emoji-pick') {
+      isEmojiOpen = 0;
+      var elem = document.getElementById('emoji-div');
+      if(elem) {
+        elem.remove();
+      }
+
+      postMessage(e.target)
+    }
   })
 
 })
@@ -113,7 +149,7 @@ function getLastHour() {
   var d = new Date();
 
   d.setHours(d.getHours() - 1);
-  
+
   return d.toISOString();
 }
 
@@ -209,6 +245,7 @@ function queueList() {
       res.queue_names.forEach(queue => {
         if (queue.queue_name != 'chat') {
 
+          let visibleName = getChatVisibleName(queue.queue_name)
           // Desktop
           var li = document.createElement('li')
 
@@ -216,7 +253,7 @@ function queueList() {
           li.setAttribute("class", "contact")
 
           list.appendChild(li);
-          li.innerHTML = `<div class="wrap"><div class="meta">${queue.queue_name}</div></div>`;
+          li.innerHTML = `<div class="wrap"><div class="meta">${visibleName}</div><div class="hidden-meta">${queue.queue_name}</div></div>`;
 
           // Mobile anche
           var lim = document.createElement('li')
@@ -225,7 +262,7 @@ function queueList() {
           lim.setAttribute("class", "contact")
 
           listMobile.appendChild(lim);
-          lim.innerHTML = `<div class="wrap"><div class="meta">${queue.queue_name}</div></div>`;
+          lim.innerHTML = `<div class="wrap"><div class="meta">${visibleName}</div><div class="hidden-meta">${queue.queue_name}</div></div>`;
         }
       });
 
@@ -258,7 +295,7 @@ function renderMessage(message) {
 
     let msgDate = new Date(message.createdatutc).toDateString();
     if (new Date(today).toDateString() < msgDate) {
-      if(today != msgDate) {
+      if (today != msgDate) {
         today = msgDate;
         msgDate = new Date(msgDate).toISOString().slice(0, 10).replace(/-/g, "/");
         makeDateSpan(msgDate);
@@ -348,6 +385,7 @@ function enableChat(user) {
 
   // DESKTOP
   queuelist.addEventListener("click", (evt) => {
+    
     if (evt.target.tagName === 'DIV') {
 
       if (queueNameTest != evt.target.innerHTML) {
@@ -380,7 +418,7 @@ function enableChat(user) {
         messageList = [];
 
         // Cambiare il nome della chat corrente
-        document.querySelector("#chatname").innerHTML = queueNameTest;
+        document.querySelector("#chatname").innerHTML = getChatVisibleName(queueNameTest);
 
         // Richiere il __last__ della chat richiesta
         isFirst = 1;
@@ -424,7 +462,7 @@ function enableChat(user) {
         messageList = [];
 
         // Cambiare il nome della chat corrente
-        document.querySelector("#chatname").innerHTML = queueNameTest;
+        document.querySelector("#chatname").innerHTML = getChatVisibleName(queueNameTest);
 
         // Richiere il __last__ della chat richiesta
         isFirst = 1;
@@ -443,6 +481,10 @@ function enableChat(user) {
       dmsGetMessage(getLastHour());
     }, 1000);
   });
+}
+
+function getChatVisibleName(queuename) {
+  return queuename.replace('chat.', '');
 }
 
 function makeDateSpan(date) {

@@ -1,5 +1,6 @@
 var appConfig={
     'URL' : 'https://localhost:443/eventstreamsrpc',
     'USER': 'user_admin',
-    'PWD': 'pwd1'
+    'PWD': 'pwd1',
+    'EMOJI':true
 }

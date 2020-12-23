@@ -10,6 +10,8 @@
     <title>DMSContainer Chat App</title>
     <script type="module" src="./js/eventstreamsrpc.js"></script>
     <script type="module" src="./js/index.js"></script>
+    <script type="module"
+      src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
     <!-- <script type="module" src="./js/app.js"></script> -->
     <link rel="stylesheet" href="./css/style.css">
     <link rel="manifest" href="/manifest.json">
@@ -57,21 +59,21 @@
     </div>
 
     <!-- <div class="col s12"> -->
-      <ul id="slide-out" class="sidenav">
-        <li>
-          <div class="user-view">
-            <img src="./avatars/adam.png" alt="" />
-            <p class="truncate" style="margin-top:0px;display: inline;">
-              User: <strong id="username-mobile"></strong>
-            </p>
-          </div>
-        </li>
-        <li class="contact active" data-id="chat-m">
-          <div class="wrap">
-            <div class="meta">chat</div>
-          </div>
-        </li>
-      </ul>
+    <ul id="slide-out" class="sidenav">
+      <li>
+        <div class="user-view">
+          <img src="./avatars/adam.png" alt="" />
+          <p class="truncate" style="margin-top:0px;display: inline;">
+            User: <strong id="username-mobile"></strong>
+          </p>
+        </div>
+      </li>
+      <li class="contact active" data-id="chat-m">
+        <div class="wrap">
+          <div class="meta">chat</div>
+        </div>
+      </li>
+    </ul>
 
 
     <!-- </div> -->
@@ -95,7 +97,8 @@
       <div class="row padding-0" style="height:inherit">
         <div id="sidepanel" class="col s3 padding-0 sidepanel-desktop"
           style="height:inherit">
-          <div class="contact-profile" style="background-color:#2c3e50;border-bottom:1px solid #435f7a">
+          <div class="contact-profile"
+            style="background-color:#2c3e50;border-bottom:1px solid #435f7a">
             <div class="col s12 truncate padding-0">
               <img src="./avatars/adam.png" alt="" />
               <p class="truncate" style="margin-top:0px;display: inline;">
@@ -108,7 +111,8 @@
               34px);">
               <li class="contact active" data-id="chat">
                 <div class="wrap">
-                  <div class="meta">chat</div>
+                  <div class="meta">Stanza1</div>
+                  <div class="hidden-meta">chat</div>
                 </div>
               </li>
             </ul>
@@ -129,7 +133,7 @@
                   </a>
                   <p class="truncate"
                     style="margin-top:0px;margin-left:10px;display: inline;">
-                    Chat name: <strong id="chatname">Chat</strong>
+                    Chat name: <strong id="chatname">Stanza1</strong>
                   </p>
                 </div>
                 <div class="col s3 padding-0">
@@ -165,6 +169,9 @@
               <form id="chatForm" class="chat-input">
                 <div class="message-input">
                   <div class="wrap">
+                    <a class="btn waves-effect waves-light hidden" id="emoji-pick">
+                      Emoji
+                    </a>
                     <input id="sender-input" class="input-message" type="text"
                       name="message"
                       placeholder="Write a message...">

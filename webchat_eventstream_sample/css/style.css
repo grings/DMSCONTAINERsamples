@@ -1,5 +1,5 @@
 .hidden {
-    display:none;
+    display:none !important;
 }
 
 .show {
@@ -42,6 +42,8 @@
     font-size: 0.9em;
     cursor: pointer;
     border-bottom: 1px solid #435f7a;
+    padding-left: 15px;
+    text-transform:capitalize;
 }
 
 .sidenav li.contact.active {
@@ -68,6 +70,30 @@
 
 #contacts ul li.contact .wrap .meta {
     padding: 15px 0 15px 0;
+    text-transform:capitalize;
+}
+
+.hidden-meta {
+    position: absolute;
+    top: 15px;
+    width: 110%;
+    height: 100%;
+    opacity: 0;
+    padding: 15px 0 15px 0;
+    margin: -15px;
+}
+
+#emoji-div {
+    height: 0px;
+    position: absolute;
+    top: -385px;
+}
+
+#emoji-pick {
+    padding: 5px 20px 10px 10px;
+    position: unset !important;
+    background-color: #59a9d2;
+    height: calc(100% - 2px);
 }
 
 #contacts ul li.contact .wrap .meta .name {
@@ -168,6 +194,10 @@ nav {
 .title {
     display: flex;
     margin: auto;
+}
+
+#chatname {
+    text-transform:capitalize;
 }
 
 .chat-body {
@@ -434,6 +464,10 @@ body {
     }
 
     .sidepanel-desktop {
+        display:none;
+    }
+
+    #emoji-pick {
         display:none;
     }
 }
