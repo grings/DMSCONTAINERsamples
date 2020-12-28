@@ -86,7 +86,8 @@
 #emoji-div {
     height: 0px;
     position: absolute;
-    top: -385px;
+    top: -400px;
+    left: 25px;
 }
 
 #emoji-pick {

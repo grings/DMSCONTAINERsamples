@@ -53,14 +53,15 @@ let isFirst = 1;
 let enableSound = sessionStorage.getItem('sound') != undefined ? sessionStorage.getItem('sound') : true;
 
 emojiBtn.addEventListener("click", function (e) {
-  
   e.preventDefault();
   if (isEmojiOpen === 0) {
     isEmojiOpen = 1;
     var newDiv = document.createElement("div");
     newDiv.setAttribute('id', "emoji-div");
     newDiv.innerHTML = "<emoji-picker></emoji-picker>";
-    emojiBtn.appendChild(newDiv);
+
+    let emojiDiv = document.getElementById('emoji-modal');
+    emojiDiv.appendChild(newDiv);
 
     document.querySelector('emoji-picker')
       .addEventListener('emoji-click', event => {
