@@ -91,10 +91,18 @@
 }
 
 #emoji-pick {
-    padding: 5px 20px 10px 10px;
+    padding: 5px 20px 10px 20px;
     position: unset !important;
     background-color: #59a9d2;
     height: calc(100% - 2px);
+}
+
+#last-li {
+    position: absolute;
+    bottom: 60px;
+    text-align: center;
+    width: 100%;
+    border-top: 1px solid #435f7a;
 }
 
 #contacts ul li.contact .wrap .meta .name {
@@ -118,6 +126,9 @@
 #bottom-bar {
     position: relative;
     bottom: 0px;
+    border-top: 2px solid #435f7a;
+    padding: 10px 20px 10px 10px;
+    text-align:center;
 }
 
 #bottom-bar button:nth-child(1) {

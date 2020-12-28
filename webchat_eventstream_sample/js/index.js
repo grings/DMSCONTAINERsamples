@@ -1,6 +1,7 @@
 import { EventStreamsRPCProxy } from './eventstreamsrpc.js';
 
-let lastID = getLastHour();
+let lastID = '__last__';
+let timestamp = getLastHour();
 let superToken = "";
 let queueNameTest = "chat";
 let eventStreamsRPCUrl = appConfig.URL;
@@ -179,11 +180,11 @@ function getToken() {
 }
 
 //  Prendi messaggi
-function dmsGetMessage(lastKnownMsgID) {
+function dmsGetMessage(lastKnownMsgID,timestamp) {
   let proxy = getProxy();
   // Solo la prima volta deve chiamare il metodo timestamp altrimenti dequeueMessage
   if (isFirst) {
-    proxy.getNextMessageByTimestamp(superToken, queueNameTest, lastKnownMsgID, true)
+    proxy.getNextMessageByTimestamp(superToken, queueNameTest, timestamp, true)
       .then(function (messages) {
         procedureMessage(messages)
       });
@@ -200,11 +201,12 @@ function procedureMessage(messages) {
     messages = messages.data;
   }
 
+  isFirst = 0;
   if (!messages.timeout) {
     renderMessage(messages)
   }
   setTimeout(() => {
-    dmsGetMessage(lastID);
+    dmsGetMessage(lastID,getLastHour());
   }, 1000);
 }
 
@@ -275,7 +277,7 @@ function renderMessage(message) {
   message = message[0];
   if (lastID != message.messageid && message.message.chatName === queueNameTest) {
     lastID = message.messageid;
-    isFirst = 0;
+    // isFirst = 0;
     messageList.push(message);
     const list = document.querySelector("#message-list");
     var li = document.createElement('li')
@@ -423,7 +425,8 @@ function enableChat(user) {
 
         // Richiere il __last__ della chat richiesta
         isFirst = 1;
-        lastID = getLastHour();
+        timestamp = getLastHour();
+        lastID = '__last__';
 
       }
 
@@ -467,7 +470,8 @@ function enableChat(user) {
 
         // Richiere il __last__ della chat richiesta
         isFirst = 1;
-        lastID = getLastHour();
+        timestamp = getLastHour();
+        lastID = '__last__';
 
         var instance = M.Sidenav.getInstance(document.querySelectorAll('.sidenav')[0]);
         instance.close();
@@ -479,7 +483,7 @@ function enableChat(user) {
   getToken().then(() => {
     setTimeout(() => {
       queueList();
-      dmsGetMessage(getLastHour());
+      dmsGetMessage(lastID,timestamp);
     }, 1000);
   });
 }

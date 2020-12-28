@@ -70,8 +70,16 @@
       </li>
       <li class="contact active" data-id="chat-m">
         <div class="wrap">
-          <div class="meta">chat</div>
+          <div class="meta">Stanza1</div>
+          <div class="hidden-meta">chat</div>
         </div>
+      </li>
+      <li id="last-li">
+        <label style="display:inline;">
+          <input id="sound-btn" type="checkbox" />
+          <span style="color:transparent"> Y </span>
+        </label>
+        Enable Sound
       </li>
     </ul>
 
@@ -108,7 +116,7 @@
           </div>
           <div id="contacts">
             <ul id="queue-list" class="padding-0" style="height: calc(100% -
-              34px);">
+              108px);">
               <li class="contact active" data-id="chat">
                 <div class="wrap">
                   <div class="meta">Stanza1</div>
@@ -116,6 +124,13 @@
                 </div>
               </li>
             </ul>
+            <div id="bottom-bar">
+              <label style="display:inline;">
+                <input id="sound-btn" type="checkbox" />
+                <span style="color:transparent"> Y </span>
+              </label>
+              Enable Sound
+            </div>
             <!-- <div id="bottom-bar">
               <button id="addcontact"><i class="fa fa-user-plus fa-fw"
                   aria-hidden="true"></i> <span>Add contact</span></button>
@@ -169,8 +184,9 @@
               <form id="chatForm" class="chat-input">
                 <div class="message-input">
                   <div class="wrap">
-                    <a class="btn waves-effect waves-light hidden" id="emoji-pick">
-                      Emoji
+                    <a class="btn waves-effect waves-light hidden"
+                      id="emoji-pick">
+                      🙂
                     </a>
                     <span id="emoji-modal"></span>
                     <input id="sender-input" class="input-message" type="text"
@@ -190,13 +206,6 @@
               </form>
             </div>
           </div>
-        </div>
-        <div class="col s12" style="margin-top:10px">
-          Enable Sound
-          <label style="margin-left:20px; display:inline;">
-            <input id="sound-btn" type="checkbox" />
-            <span style="color:transparent"> Y </span>
-          </label>
         </div>
       </div>
     </div>
