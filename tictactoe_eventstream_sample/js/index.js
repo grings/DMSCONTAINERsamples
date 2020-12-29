@@ -29,10 +29,10 @@ function procedureMessage(messages) {
   }
 
   if (!messages.timeout) {
-    console.log("messages",messages);
-    if(messages.message.player == currentPlayer) {
-      let cell = document.getElementById("cell-"+messages.message.moveIndex);
-      handleCellPlayed(cell,messages.message.moveIndex,messages.message.player);
+    console.log("messages", messages);
+    if (messages.message.player == currentPlayer) {
+      let cell = document.getElementById("cell-" + messages.message.moveIndex);
+      handleCellPlayed(cell, messages.message.moveIndex, messages.message.player);
       handleResultValidation();
     }
   }
@@ -42,11 +42,11 @@ function procedureMessage(messages) {
 }
 
 //  Posta messaggi
-function postMessage(moveIndex,player) {
+function postMessage(moveIndex, player) {
   let proxy = getProxy();
   let queueMessage = {
     player: player,
-    moveIndex:moveIndex
+    moveIndex: moveIndex
   };
   proxy.enqueueMessage(superToken, queueName, queueMessage)
     .then(function () {
@@ -89,7 +89,7 @@ const currentPlayerTurn = () => `It's ${currentPlayer}'s turn`;
 We set the inital message to let the players know whose turn it is
 */
 statusDisplay.innerHTML = currentPlayerTurn();
-function handleCellPlayed(clickedCell, clickedCellIndex,player) {
+function handleCellPlayed(clickedCell, clickedCellIndex, player) {
   /*
   We update our internal game state to reflect the played move, 
   as well as update the user interface to reflect the played move
@@ -177,16 +177,20 @@ function handleCellClick(clickedCellEvent) {
   // handleResultValidation();
 
   // POST MESSAGE
-  postMessage(clickedCellIndex,currentPlayer);
+  postMessage(clickedCellIndex, currentPlayer);
 }
 
 function handleRestartGame() {
-  gameActive = true;
-  currentPlayer = "X";
-  gameState = ["", "", "", "", "", "", "", "", ""];
-  statusDisplay.innerHTML = currentPlayerTurn();
-  document.querySelectorAll('.cell')
-    .forEach(cell => cell.innerHTML = "");
+  let proxy = getProxy();
+  proxy.deleteQueue(superToken, queueName)
+    .then(function () {
+      gameActive = true;
+      currentPlayer = "X";
+      gameState = ["", "", "", "", "", "", "", "", ""];
+      statusDisplay.innerHTML = currentPlayerTurn();
+      document.querySelectorAll('.cell')
+        .forEach(cell => cell.innerHTML = "");
+    });
 }
 /*
 And finally we add our event listeners to the actual game cells, as well as our 
