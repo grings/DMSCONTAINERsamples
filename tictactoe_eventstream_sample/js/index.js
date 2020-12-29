@@ -1,11 +1,58 @@
 import { EventStreamsRPCProxy } from './eventstreamsrpc.js';
 
 let eventStreamsRPCUrl = appConfig.URL;
+let superToken = "";
+let lastID = '__last__';
+let queueName = 'tictactoe.game5';
 
-// document.addEventListener("DOMContentLoaded", function (e) {
+document.addEventListener("DOMContentLoaded", function (e) {
+  getToken().then(() => {
+    setTimeout(() => {
+      dmsGetMessage(lastID);
+    }, 1000);
+  });
 
+})
 
-// })
+//  Prendi messaggi
+function dmsGetMessage(lastKnownMsgID) {
+  let proxy = getProxy();
+  proxy.dequeueMessage(superToken, queueName, lastKnownMsgID, 5)
+    .then(function (message) {
+      procedureMessage(message)
+    });
+}
+
+function procedureMessage(messages) {
+  if (messages.data) {
+    messages = messages.data[0];
+  }
+
+  if (!messages.timeout) {
+    console.log("messages",messages);
+    if(messages.message.player == currentPlayer) {
+      let cell = document.getElementById("cell-"+messages.message.moveIndex);
+      handleCellPlayed(cell,messages.message.moveIndex,messages.message.player);
+      handleResultValidation();
+    }
+  }
+  setTimeout(() => {
+    dmsGetMessage(lastID);
+  }, 1000);
+}
+
+//  Posta messaggi
+function postMessage(moveIndex,player) {
+  let proxy = getProxy();
+  let queueMessage = {
+    player: player,
+    moveIndex:moveIndex
+  };
+  proxy.enqueueMessage(superToken, queueName, queueMessage)
+    .then(function () {
+      console.log("Game state changed!");
+    });
+}
 
 /*
 We store our game status element here to allow us to more easily 
@@ -42,14 +89,15 @@ const currentPlayerTurn = () => `It's ${currentPlayer}'s turn`;
 We set the inital message to let the players know whose turn it is
 */
 statusDisplay.innerHTML = currentPlayerTurn();
-function handleCellPlayed(clickedCell, clickedCellIndex) {
+function handleCellPlayed(clickedCell, clickedCellIndex,player) {
   /*
   We update our internal game state to reflect the played move, 
   as well as update the user interface to reflect the played move
   */
-  gameState[clickedCellIndex] = currentPlayer;
-  clickedCell.innerHTML = currentPlayer;
+  gameState[clickedCellIndex] = player;
+  clickedCell.innerHTML = player;
 }
+
 function handlePlayerChange() {
   currentPlayer = currentPlayer === "X" ? "O" : "X";
   statusDisplay.innerHTML = currentPlayerTurn();
@@ -64,6 +112,7 @@ const winningConditions = [
   [0, 4, 8],
   [2, 4, 6]
 ];
+
 function handleResultValidation() {
   let roundWon = false;
   for (let i = 0; i <= 7; i++) {
@@ -100,6 +149,7 @@ function handleResultValidation() {
   */
   handlePlayerChange();
 }
+
 function handleCellClick(clickedCellEvent) {
   /*
   We will save the clicked html element in a variable for easier further use
@@ -123,8 +173,11 @@ function handleCellClick(clickedCellEvent) {
   /* 
   If everything if in order we will proceed with the game flow
   */
-  handleCellPlayed(clickedCell, clickedCellIndex);
-  handleResultValidation();
+  // handleCellPlayed(clickedCell, clickedCellIndex);
+  // handleResultValidation();
+
+  // POST MESSAGE
+  postMessage(clickedCellIndex,currentPlayer);
 }
 
 function handleRestartGame() {
@@ -149,18 +202,10 @@ function getProxy() {
 function getToken() {
   let proxy = getProxy();
   return proxy.login(appConfig.USER, appConfig.PWD)
-    // return proxy.login('public_chat', 'q1w2e3r4T!')
     .then(function (res) {
       superToken = res.token;
     });
 }
-
-// getToken().then(() => {
-//   setTimeout(() => {
-//     queueList();
-//     dmsGetMessage(lastID,timestamp);
-//   }, 1000);
-// });
 
 function htmlEntities(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
