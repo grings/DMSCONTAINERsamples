@@ -3,21 +3,49 @@ import { EventStreamsRPCProxy } from './eventstreamsrpc.js';
 let eventStreamsRPCUrl = appConfig.URL;
 let superToken = "";
 let lastID = '__last__';
-let queueName = 'tictactoe.game5';
+let playQName = '';
+let user = '';
+let playerType = '';
 
+const loginElt = document.getElementById('gameuser');
+loginElt.addEventListener("input", function () {
+  if (this.value == '') {
+    setLoginBtnDisabled();
+  } else {
+    setLoginBtnEnabled();
+  }
+})
+
+// MAIN
 document.addEventListener("DOMContentLoaded", function (e) {
+  // user = sessionStorage.getItem('gameuser');
   getToken().then(() => {
     setTimeout(() => {
-      dmsGetMessage(lastID);
+      const formLogin = document.querySelector("#loginForm");
+      if (user == "" || user == null) {
+        formLogin.addEventListener("submit", function (e) {
+          e.preventDefault()
+          user = e.target.gameuser.value;
+          // sessionStorage.setItem('gameuser', user);
+
+          showLoader(user);
+
+          // avvertire il gameMatcher della prenotazione e su quale queue risponderci
+          getTicket(user);
+        })
+      } else {
+        showLoader(user);
+      }
     }, 1000);
   });
 
 })
+// END MAIN
 
 //  Prendi messaggi
 function dmsGetMessage(lastKnownMsgID) {
   let proxy = getProxy();
-  proxy.dequeueMessage(superToken, queueName, lastKnownMsgID, 5)
+  proxy.dequeueMessage(superToken, playQName, lastKnownMsgID, 30)
     .then(function (message) {
       procedureMessage(message)
     });
@@ -28,6 +56,7 @@ function procedureMessage(messages) {
     messages = messages.data[0];
   }
 
+  // Se arriva un timeout l'avversario si è arreso
   if (!messages.timeout) {
     console.log("messages", messages);
     if (messages.message.player == currentPlayer) {
@@ -48,11 +77,13 @@ function postMessage(moveIndex, player) {
     player: player,
     moveIndex: moveIndex
   };
-  proxy.enqueueMessage(superToken, queueName, queueMessage)
+  proxy.enqueueMessage(superToken, playQName, queueMessage)
     .then(function () {
       console.log("Game state changed!");
     });
 }
+
+const playerTypeDisplay = document.querySelector('.player--symbol');
 
 /*
 We store our game status element here to allow us to more easily 
@@ -89,6 +120,7 @@ const currentPlayerTurn = () => `It's ${currentPlayer}'s turn`;
 We set the inital message to let the players know whose turn it is
 */
 statusDisplay.innerHTML = currentPlayerTurn();
+
 function handleCellPlayed(clickedCell, clickedCellIndex, player) {
   /*
   We update our internal game state to reflect the played move, 
@@ -167,7 +199,7 @@ function handleCellClick(clickedCellEvent) {
   Next up we need to check whether the call has already been played, 
   or if the game is paused. If either of those is true we will simply ignore the click.
   */
-  if (gameState[clickedCellIndex] !== "" || !gameActive) {
+  if (gameState[clickedCellIndex] !== "" || !gameActive || currentPlayer !== playerType) {
     return;
   }
   /* 
@@ -182,7 +214,7 @@ function handleCellClick(clickedCellEvent) {
 
 function handleRestartGame() {
   let proxy = getProxy();
-  proxy.deleteQueue(superToken, queueName)
+  proxy.deleteQueue(superToken, playQName)
     .then(function () {
       gameActive = true;
       currentPlayer = "X";
@@ -213,4 +245,86 @@ function getToken() {
 
 function htmlEntities(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function showLoader(user) {
+  var logindiv = document.querySelector("#login-div");
+  logindiv.classList.add("hidden");
+                                      
+  var loaderdiv = document.querySelector("#loaderdiv");
+  loaderdiv.classList.remove("hidden");
+  loaderdiv.classList.add("show");
+}
+
+function showGame(user) {
+  var loaderdiv = document.querySelector("#loaderdiv");
+  loaderdiv.classList.add("hidden");
+
+  var maindiv = document.querySelector("#maindiv");
+  maindiv.classList.remove("hidden");
+  maindiv.classList.add("show");
+
+  dmsGetMessage(lastID);
+}
+
+function getTicket(user) {
+  let rng = Math.floor(Math.random() * 100) + 1;
+  let queueMessage = {
+    username: user,
+    replyqueue: "TicketQueue." + user + rng
+  }
+  let proxy = getProxy();
+  proxy.enqueueMessage(superToken, appConfig.TICKETING_QUEUE, queueMessage)
+    .then(function () {
+      console.log("Ticket requested! Waiting for another player");
+      waitForTicket(queueMessage.replyqueue)
+    });
+}
+
+function waitForTicket(replyqueue) {
+  let proxy = getProxy();
+  proxy.dequeueMessage(superToken, replyqueue, '__last__', 5)
+    .then(function (message) {
+      console.log("message", message);
+
+      if (message.data) {
+        message = message.data[0];
+      }
+
+      if (!message.timeout) {
+        console.log("Trovato un giocatore!!", message.message);
+        playQName = message.message["playqueue"];
+
+        // Settare il player
+        playerType = message.message["playertype"];
+        playerTypeDisplay.innerHTML = `You are ${playerType}`;
+
+        acceptTicket(replyqueue);
+        showGame(user);
+      } else {
+        setTimeout(() => {
+          waitForTicket(replyqueue);
+        }, 1000);
+      }
+
+    });
+}
+
+function acceptTicket(replyqueue) {
+  let proxy = getProxy();
+  proxy.deleteQueue(superToken, replyqueue)
+    .then(function () {
+      console.log("Ticket di attesa eliminato insieme alla queue per l'attesa")
+    });
+}
+
+// Login input check methods
+function setLoginBtnDisabled() {
+  let btn = document.getElementById('btn_login');
+  btn.setAttribute('disabled', true);
+}
+
+function setLoginBtnEnabled() {
+  let btn = document.getElementById('btn_login');
+  btn.removeAttribute('disabled');
 }
