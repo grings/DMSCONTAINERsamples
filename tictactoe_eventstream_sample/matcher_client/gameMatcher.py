@@ -47,6 +47,8 @@ def game_matcher(esproxy):
                 waiting_users.pop(0)
                 waiting_users.pop(0)
                 print(waiting_users)
+        else:
+            tkn = esproxy.login(username, password).get("token")   
 
 def give_ticket_to_player(esproxy,queue_name,playqueue,playertype):
     tkn = esproxy.login(username, password).get("token")
