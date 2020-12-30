@@ -44,11 +44,15 @@ document.addEventListener("DOMContentLoaded", function (e) {
           showLoader(user);
           showGame(user);
         } else {
-          debugger;
           showLoader(user);
 
           // avvertire il gameMatcher della prenotazione e su quale queue risponderci
-          getTicket(user);
+          let replyqueueSess = sessionStorage.getItem('replyqueue')
+          if (!replyqueueSess) {
+            getTicket(user);
+          } else {
+            waitForTicket(replyqueueSess)
+          }
         }
       }
     }, 1000);
@@ -74,7 +78,6 @@ function procedureMessage(messages) {
   // Se arriva un timeout l'avversario si è arreso
   console.log("messages", messages);
   if (!messages.timeout) {
-    debugger;
     if (lastID != messages.messageid) {
       lastID = messages.messageid;
       if (messages.message.action === "restart") {
@@ -83,6 +86,7 @@ function procedureMessage(messages) {
         statusDisplay.innerHTML = currentPlayerTurn();
         // Rimuovi tasto rematch
         document.querySelector('.game--restart').classList.add("hidden");
+        document.querySelector('.game--another').classList.add("hidden");
       }
       for (let i = 0; i < messages.message.boardStatus.length; i++) {
         let cell = document.getElementById("cell-" + i);
@@ -385,6 +389,9 @@ function getTicket(user) {
     .then(function () {
       console.log("Ticket requested! Waiting for another player");
       waitForTicket(queueMessage.replyqueue)
+
+      // salvare in sessione replyqueue
+      sessionStorage.setItem("replyqueue", queueMessage.replyqueue)
     });
 }
 
@@ -425,6 +432,7 @@ function waitForTicket(replyqueue) {
 
 function acceptTicket(replyqueue) {
   let proxy = getProxy();
+  sessionStorage.removeItem("replyqueue");
   proxy.deleteQueue(superToken, replyqueue)
     .then(function () {
       console.log("Ticket di attesa eliminato insieme alla queue per l'attesa")
