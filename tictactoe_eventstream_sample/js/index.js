@@ -304,6 +304,7 @@ function handleRestartGame() {
       gameActive = true;
       // Rimuovi tasto rematch
       document.querySelector('.game--restart').classList.add("hidden");
+      document.querySelector('.game--another').classList.add("hidden");
 
       document.querySelectorAll('.cell')
         .forEach(cell => cell.innerHTML = "");
