@@ -35,14 +35,20 @@ document.addEventListener("DOMContentLoaded", function (e) {
         })
       } else {
         playQName = sessionStorage.getItem('gamequeue');
-        playerType = sessionStorage.getItem('userSymbol');
-        currentPlayer = sessionStorage.getItem('currentPlayer');
-
-        playerTypeDisplay.innerHTML = `You are ${playerType}`;
-
         if (playQName) {
+          playerType = sessionStorage.getItem('userSymbol');
+          currentPlayer = sessionStorage.getItem('currentPlayer');
+
+          playerTypeDisplay.innerHTML = `You are ${playerType}`;
+
           showLoader(user);
           showGame(user);
+        } else {
+          debugger;
+          showLoader(user);
+
+          // avvertire il gameMatcher della prenotazione e su quale queue risponderci
+          getTicket(user);
         }
       }
     }, 1000);
@@ -68,6 +74,7 @@ function procedureMessage(messages) {
   // Se arriva un timeout l'avversario si è arreso
   console.log("messages", messages);
   if (!messages.timeout) {
+    debugger;
     if (lastID != messages.messageid) {
       lastID = messages.messageid;
       if (messages.message.action === "restart") {
@@ -92,18 +99,19 @@ function procedureMessage(messages) {
       dmsGetMessage(lastID);
     }, 1000);
   } else {
+    // if (requestNewGame == false) {
     // Implementare l'avversario si è arreso
     // Controllare di chi era la mano di gioco, kickare chi era di turno e avvertire l'altro giocatore
     sessionStorage.removeItem("userSymbol");
     sessionStorage.removeItem("gamequeue");
     sessionStorage.removeItem("currentPlayer");
-    sessionStorage.removeItem("gameuser");
 
-    if(currentPlayer !== playerType) {
+    if (currentPlayer !== playerType) {
       showConceded();
     } else {
       showKicked();
     }
+    // }
   }
 }
 
@@ -208,6 +216,7 @@ function handleResultValidation() {
     statusDisplay.innerHTML = winningMessage();
     gameActive = false;
     document.querySelector('.game--restart').classList.remove("hidden");
+    document.querySelector('.game--another').classList.remove("hidden");
     return;
   }
   /* 
@@ -258,6 +267,24 @@ function handleCellClick(clickedCellEvent) {
   postMessage(currentPlayer, gameState);
 }
 
+function handleAnotherGame() {
+  sessionStorage.removeItem("userSymbol");
+  sessionStorage.removeItem("gamequeue");
+  sessionStorage.removeItem("currentPlayer");
+
+  window.location.reload();
+
+  // hideGame();
+
+  // resetView();
+  // document.querySelectorAll('.cell').forEach(cell => cell.innerHTML = "");
+
+  // showLoader(user);
+
+  // avvertire il gameMatcher della prenotazione e su quale queue risponderci
+  // getTicket(user);
+}
+
 function handleRestartGame() {
   let proxy = getProxy();
   let playerTypes = ["X", "O"];
@@ -295,6 +322,9 @@ restart button
 */
 document.querySelectorAll('.cell').forEach(cell => cell.addEventListener('click', handleCellClick));
 document.querySelector('.game--restart').addEventListener('click', handleRestartGame);
+document.querySelector('.game--another').addEventListener('click', handleAnotherGame);
+document.querySelector('.game--another-c').addEventListener('click', handleAnotherGame);
+document.querySelector('.game--another-k').addEventListener('click', handleAnotherGame);
 
 function getProxy() {
   return new EventStreamsRPCProxy(eventStreamsRPCUrl);
@@ -350,6 +380,15 @@ function showGame(user) {
   dmsGetMessage(lastID);
 }
 
+function hideGame() {
+  var maindiv = document.querySelector("#maindiv");
+  maindiv.classList.add("hidden");
+
+  var loaderdiv = document.querySelector("#loaderdiv");
+  loaderdiv.classList.remove("hidden");
+  loaderdiv.classList.add("show");
+}
+
 function getTicket(user) {
   let rng = Math.floor(Math.random() * 100) + 1;
   let queueMessage = {
@@ -388,6 +427,7 @@ function waitForTicket(replyqueue) {
         sessionStorage.setItem('gamequeue', playQName);
 
         acceptTicket(replyqueue);
+        gameActive = true;
         showGame(user);
       } else {
         setTimeout(() => {
