@@ -18,7 +18,7 @@ loginElt.addEventListener("input", function () {
 
 // MAIN
 document.addEventListener("DOMContentLoaded", function (e) {
-  // user = sessionStorage.getItem('gameuser');
+  user = sessionStorage.getItem('gameuser');
   getToken().then(() => {
     setTimeout(() => {
       const formLogin = document.querySelector("#loginForm");
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
         formLogin.addEventListener("submit", function (e) {
           e.preventDefault()
           user = e.target.gameuser.value;
-          // sessionStorage.setItem('gameuser', user);
+          sessionStorage.setItem('gameuser', user);
 
           showLoader(user);
 
@@ -34,7 +34,16 @@ document.addEventListener("DOMContentLoaded", function (e) {
           getTicket(user);
         })
       } else {
-        showLoader(user);
+        playQName = sessionStorage.getItem('gamequeue');
+        playerType = sessionStorage.getItem('userSymbol');
+        currentPlayer = sessionStorage.getItem('currentPlayer');
+
+        playerTypeDisplay.innerHTML = `You are ${playerType}`;
+
+        if (playQName) {
+          showLoader(user);
+          showGame(user);
+        }
       }
     }, 1000);
   });
@@ -57,25 +66,48 @@ function procedureMessage(messages) {
   }
 
   // Se arriva un timeout l'avversario si è arreso
+  console.log("messages", messages);
   if (!messages.timeout) {
-    console.log("messages", messages);
-    if (messages.message.player == currentPlayer) {
-      let cell = document.getElementById("cell-" + messages.message.moveIndex);
-      handleCellPlayed(cell, messages.message.moveIndex, messages.message.player);
-      handleResultValidation();
+    if (lastID != messages.messageid) {
+      lastID = messages.messageid;
+      if (messages.message.action === "restart") {
+        gameActive = true;
+        currentPlayer = messages.message.currentPlayer;
+        statusDisplay.innerHTML = currentPlayerTurn();
+        // Rimuovi tasto rematch
+        document.querySelector('.game--restart').classList.add("hidden");
+      }
+      for (let i = 0; i < messages.message.boardStatus.length; i++) {
+        let cell = document.getElementById("cell-" + i);
+        if (messages.message.boardStatus[i] != "") {
+          currentPlayer = messages.message.currentPlayer;
+          handleCellPlayed(cell, i, messages.message.boardStatus[i]);
+          handleResultValidation();
+        } else {
+          handleCellPlayed(cell, i, messages.message.boardStatus[i]);
+        }
+      }
+    }
+    setTimeout(() => {
+      dmsGetMessage(lastID);
+    }, 1000);
+  } else {
+    // Implementare l'avversario si è arreso
+    // Controllare di chi era la mano di gioco, kickare chi era di turno e avvertire l'altro giocatore
+    if(currentPlayer !== playerType) {
+      showConceded();
+    } else {
+      showKicked();
     }
   }
-  setTimeout(() => {
-    dmsGetMessage(lastID);
-  }, 1000);
 }
 
 //  Posta messaggi
-function postMessage(moveIndex, player) {
+function postMessage(currentPlayer, gamestate) {
   let proxy = getProxy();
   let queueMessage = {
-    player: player,
-    moveIndex: moveIndex
+    currentPlayer: currentPlayer,
+    boardStatus: gamestate
   };
   proxy.enqueueMessage(superToken, playQName, queueMessage)
     .then(function () {
@@ -126,12 +158,19 @@ function handleCellPlayed(clickedCell, clickedCellIndex, player) {
   We update our internal game state to reflect the played move, 
   as well as update the user interface to reflect the played move
   */
-  gameState[clickedCellIndex] = player;
-  clickedCell.innerHTML = player;
+  if (player) {
+    gameState[clickedCellIndex] = player;
+    clickedCell.innerHTML = player;
+  } else {
+    gameState[clickedCellIndex] = "";
+    clickedCell.innerHTML = "";
+  }
+
 }
 
 function handlePlayerChange() {
   currentPlayer = currentPlayer === "X" ? "O" : "X";
+  sessionStorage.setItem('currentPlayer', currentPlayer);
   statusDisplay.innerHTML = currentPlayerTurn();
 }
 const winningConditions = [
@@ -163,6 +202,7 @@ function handleResultValidation() {
   if (roundWon) {
     statusDisplay.innerHTML = winningMessage();
     gameActive = false;
+    document.querySelector('.game--restart').classList.remove("hidden");
     return;
   }
   /* 
@@ -209,21 +249,41 @@ function handleCellClick(clickedCellEvent) {
   // handleResultValidation();
 
   // POST MESSAGE
-  postMessage(clickedCellIndex, currentPlayer);
+  gameState[clickedCellIndex] = currentPlayer;
+  postMessage(currentPlayer, gameState);
 }
 
 function handleRestartGame() {
   let proxy = getProxy();
-  proxy.deleteQueue(superToken, playQName)
+  let playerTypes = ["X", "O"];
+
+  // Giocatore Random è primo
+  currentPlayer = playerTypes[Math.floor(Math.random() * 2)];
+  // currentPlayer = "X";
+  resetView();
+  let queueMessage = {
+    currentPlayer: currentPlayer,
+    boardStatus: gameState,
+    action: "restart"
+  };
+  proxy.enqueueMessage(superToken, playQName, queueMessage)
     .then(function () {
+      console.log("Game state changed!");
       gameActive = true;
-      currentPlayer = "X";
-      gameState = ["", "", "", "", "", "", "", "", ""];
-      statusDisplay.innerHTML = currentPlayerTurn();
+      // Rimuovi tasto rematch
+      document.querySelector('.game--restart').classList.add("hidden");
+
       document.querySelectorAll('.cell')
         .forEach(cell => cell.innerHTML = "");
     });
+
 }
+
+function resetView() {
+  gameState = ["", "", "", "", "", "", "", "", ""];
+  statusDisplay.innerHTML = currentPlayerTurn();
+}
+
 /*
 And finally we add our event listeners to the actual game cells, as well as our 
 restart button
@@ -250,10 +310,28 @@ function htmlEntities(str) {
 function showLoader(user) {
   var logindiv = document.querySelector("#login-div");
   logindiv.classList.add("hidden");
-                                      
+
   var loaderdiv = document.querySelector("#loaderdiv");
   loaderdiv.classList.remove("hidden");
   loaderdiv.classList.add("show");
+}
+
+function showConceded() {
+  var loaderdiv = document.querySelector("#maindiv");
+  loaderdiv.classList.add("hidden");
+
+  var maindiv = document.querySelector("#concedediv");
+  maindiv.classList.remove("hidden");
+  maindiv.classList.add("show");
+}
+
+function showKicked() {
+  var loaderdiv = document.querySelector("#maindiv");
+  loaderdiv.classList.add("hidden");
+
+  var maindiv = document.querySelector("#kickeddiv");
+  maindiv.classList.remove("hidden");
+  maindiv.classList.add("show");
 }
 
 function showGame(user) {
@@ -298,6 +376,11 @@ function waitForTicket(replyqueue) {
         // Settare il player
         playerType = message.message["playertype"];
         playerTypeDisplay.innerHTML = `You are ${playerType}`;
+
+        // Salvare il playerType nella session
+        sessionStorage.setItem('userSymbol', playerType);
+        sessionStorage.setItem('currentPlayer', currentPlayer);
+        sessionStorage.setItem('gamequeue', playQName);
 
         acceptTicket(replyqueue);
         showGame(user);

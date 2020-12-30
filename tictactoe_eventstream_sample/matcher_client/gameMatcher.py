@@ -8,6 +8,9 @@ def esproxy():
     return EventStreamsRPCProxy(base_url_eventstreams)
 
 def game_matcher(esproxy):
+    # Cancello la queue
+    initialize(esproxy)
+
     waiting_users = [];
     tkn = esproxy.login(username, password).get("token")
     messageid = '__last__'
@@ -26,7 +29,7 @@ def game_matcher(esproxy):
 
                 print("Creo la nuova coda")
                 # random.guid
-                playqueue = "tictactoe."+waiting_users[0]["username"]+waiting_users[1]["username"]
+                playqueue = "tictactoe."+waiting_users[0]["username"]+waiting_users[1]["username"]+str(random.randint(0, 100)) 
                 print("La coda è "+playqueue)
 
                 # Scelgo chi è X e chi è O
@@ -60,6 +63,9 @@ def start_match(playqueue,players):
     messages[1]["playertype"] = "O";
     # info dell'opponent da mandare
     # r = esproxy.EnqueueMultipleMessages(tkn, queue_name, )
-    
+
+def initialize(esproxy):
+    tkn = esproxy.login(username, password).get("token")
+    r = esproxy.delete_queue(tkn, "ticketQueue")
 
 game_matcher(esproxy())
