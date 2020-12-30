@@ -99,7 +99,6 @@ function procedureMessage(messages) {
       dmsGetMessage(lastID);
     }, 1000);
   } else {
-    // if (requestNewGame == false) {
     // Implementare l'avversario si è arreso
     // Controllare di chi era la mano di gioco, kickare chi era di turno e avvertire l'altro giocatore
     sessionStorage.removeItem("userSymbol");
@@ -111,7 +110,6 @@ function procedureMessage(messages) {
     } else {
       showKicked();
     }
-    // }
   }
 }
 
@@ -256,11 +254,6 @@ function handleCellClick(clickedCellEvent) {
   if (gameState[clickedCellIndex] !== "" || !gameActive || currentPlayer !== playerType) {
     return;
   }
-  /* 
-  If everything if in order we will proceed with the game flow
-  */
-  // handleCellPlayed(clickedCell, clickedCellIndex);
-  // handleResultValidation();
 
   // POST MESSAGE
   gameState[clickedCellIndex] = currentPlayer;
@@ -274,15 +267,6 @@ function handleAnotherGame() {
 
   window.location.reload();
 
-  // hideGame();
-
-  // resetView();
-  // document.querySelectorAll('.cell').forEach(cell => cell.innerHTML = "");
-
-  // showLoader(user);
-
-  // avvertire il gameMatcher della prenotazione e su quale queue risponderci
-  // getTicket(user);
 }
 
 function handleRestartGame() {
