@@ -94,6 +94,11 @@ function procedureMessage(messages) {
   } else {
     // Implementare l'avversario si è arreso
     // Controllare di chi era la mano di gioco, kickare chi era di turno e avvertire l'altro giocatore
+    sessionStorage.removeItem("userSymbol");
+    sessionStorage.removeItem("gamequeue");
+    sessionStorage.removeItem("currentPlayer");
+    sessionStorage.removeItem("gameuser");
+
     if(currentPlayer !== playerType) {
       showConceded();
     } else {
