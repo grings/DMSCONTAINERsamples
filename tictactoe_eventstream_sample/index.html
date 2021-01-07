@@ -22,6 +22,24 @@
     </head>
 
     <body class="grey lighten-4" style="height:inherit">
+        <!-- header nav -->
+        <nav id="nav" class="z-depth-0 hidden">
+            <div class="nav-wrapper container">
+                <span class="left">
+                    Tic Tac Toe Example
+                </span>
+                <a class="right img-top"
+                    href="http://dmscontainer.bittimeprofessionals.com">
+                    <img class="responsive-img"
+                        src="./img/dmscontainer_logo.png">
+                </a>
+                <a class="right"
+                    href="http://dmscontainer.bittimeprofessionals.com"
+                    style="margin-right:15px">
+                    Powered by
+                </a>
+            </div>
+        </nav>
 
         <!-- Login div -->
         <div id="login-div" class="login show">
@@ -84,12 +102,13 @@
         <!-- Opponent concede div -->
         <div id="concedediv" class="hidden">
             <center>
-                <div class="container valign-wrapper" style="height:100vh">
+                <div class="container valign-wrapper" style="height:calc(100vh - 64px)">
                     <div class="grey lighten-4 row" style="display:
                         inline-block;">
                         <i class="fa fa-flag fa-4x" style="color:#C62F32"></i>
                         <h4>Opponent has left the game</h4>
-                        <button class="blue-grey waves-effect waves-light btn game--another-c">Match another opponent</button>
+                        <button class="blue-grey waves-effect waves-light btn
+                            game--another-c">Match another opponent</button>
                     </div>
                 </div>
             </center>
@@ -99,12 +118,13 @@
         <!-- you've been kicked div -->
         <div id="kickeddiv" class="hidden">
             <center>
-                <div class="container valign-wrapper" style="height:100vh">
+                <div class="container valign-wrapper" style="height:calc(100vh - 64px)">
                     <div class="grey lighten-4 row" style="display:
                         inline-block;">
                         <i class="fa fa-ban fa-4x" style="color:#C62F32"></i>
                         <h4>You've been kicked for inactivity</h4>
-                        <button class="blue-grey waves-effect waves-light btn game--another-k">Match another opponent</button>
+                        <button class="blue-grey waves-effect waves-light btn
+                            game--another-k">Match another opponent</button>
                     </div>
                 </div>
             </center>
@@ -126,10 +146,20 @@
                     <div id="cell-7" data-cell-index="7" class="cell"></div>
                     <div id="cell-8" data-cell-index="8" class="cell"></div>
                 </div>
-                <h4 class="player--symbol"></h2>
-                <h4 class="game--status"></h2>
-                <button class="hidden waves-effect waves-light btn game--restart">Rematch</button>
-                <button class="hidden blue-grey waves-effect waves-light btn game--another">Match another opponent</button>
+                <div class="row">
+                    <div class='col s5 text-right'>
+                        <h4 class="player--symbol"></h2>
+                    </div>
+                    <div class='col s2'>
+                    </div> 
+                    <div class='col s5 text-left'>
+                        <h4 class="game--status"></h2>
+                    </div>
+                </div>
+                <button class="hidden waves-effect waves-light btn
+                    game--restart">Rematch</button>
+                <button class="hidden blue-grey waves-effect waves-light btn
+                    game--another">Match another opponent</button>
             </section>
         </div>
         <!-- END Game div -->

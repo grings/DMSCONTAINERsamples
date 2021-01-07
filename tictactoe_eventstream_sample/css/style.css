@@ -6,11 +6,19 @@ section {
     text-align: center;
 }
 
+.text-right {
+    text-align:right;
+}
+
+.text-left {
+    text-align:left;
+}
+
 .game--container {
     display: grid;
     grid-template-columns: repeat(3, auto);
     width: 306px;
-    margin: 50px auto;
+    margin: 40px auto;
 }
 
 .cell {
@@ -115,3 +123,20 @@ section {
 }
 
 /* END Loader CSS */
+
+.img-top {
+    max-width: 20%;
+    margin-top: 5px;
+    height: 59px;
+}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    .img-top {
+        height: 52px;
+    }
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    .img-top {
+        height: 52px;
+    }
+}

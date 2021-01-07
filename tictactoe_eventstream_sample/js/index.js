@@ -127,6 +127,11 @@ function postMessage(currentPlayer, gamestate) {
   proxy.enqueueMessage(superToken, playQName, queueMessage)
     .then(function () {
       console.log("Game state changed!");
+      // aggiornare il token fe
+      return proxy.login(appConfig.USER, appConfig.PWD)
+        .then(function (res) {
+          superToken = res.token;
+        });
     });
 }
 
@@ -365,6 +370,10 @@ function showGame(user) {
   var maindiv = document.querySelector("#maindiv");
   maindiv.classList.remove("hidden");
   maindiv.classList.add("show");
+
+  var navdiv = document.querySelector("#nav");
+  navdiv.classList.remove("hidden");
+  navdiv.classList.add("show");
 
   dmsGetMessage(lastID);
 }
