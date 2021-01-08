@@ -7,11 +7,15 @@ section {
 }
 
 .text-right {
-    text-align:right;
+    text-align: right;
 }
 
 .text-left {
-    text-align:left;
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .game--container {
@@ -37,7 +41,7 @@ section {
 }
 
 .hidden {
-    display:none !important;
+    display: none !important;
 }
 
 .show {
@@ -129,6 +133,7 @@ section {
     margin-top: 5px;
     height: 59px;
 }
+
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
     .img-top {
         height: 52px;
@@ -139,4 +144,16 @@ section {
     .img-top {
         height: 52px;
     }
+}
+
+.profile {
+    width:30%;
+}
+
+.margin-40 {
+    margin: 40px 0px 0px 0px;
+}
+
+.wordwrap {
+    word-wrap: break-word;
 }

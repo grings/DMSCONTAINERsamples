@@ -102,7 +102,8 @@
         <!-- Opponent concede div -->
         <div id="concedediv" class="hidden">
             <center>
-                <div class="container valign-wrapper" style="height:calc(100vh - 64px)">
+                <div class="container valign-wrapper" style="height:calc(100vh -
+                    64px)">
                     <div class="grey lighten-4 row" style="display:
                         inline-block;">
                         <i class="fa fa-flag fa-4x" style="color:#C62F32"></i>
@@ -118,7 +119,8 @@
         <!-- you've been kicked div -->
         <div id="kickeddiv" class="hidden">
             <center>
-                <div class="container valign-wrapper" style="height:calc(100vh - 64px)">
+                <div class="container valign-wrapper" style="height:calc(100vh -
+                    64px)">
                     <div class="grey lighten-4 row" style="display:
                         inline-block;">
                         <i class="fa fa-ban fa-4x" style="color:#C62F32"></i>
@@ -134,26 +136,35 @@
         <!-- Game div -->
         <div id="maindiv" class="hidden">
             <section>
-                <h1 class="game--title">Tic Tac Toe</h1>
-                <div class="game--container">
-                    <div id="cell-0" data-cell-index="0" class="cell"></div>
-                    <div id="cell-1" data-cell-index="1" class="cell"></div>
-                    <div id="cell-2" data-cell-index="2" class="cell"></div>
-                    <div id="cell-3" data-cell-index="3" class="cell"></div>
-                    <div id="cell-4" data-cell-index="4" class="cell"></div>
-                    <div id="cell-5" data-cell-index="5" class="cell"></div>
-                    <div id="cell-6" data-cell-index="6" class="cell"></div>
-                    <div id="cell-7" data-cell-index="7" class="cell"></div>
-                    <div id="cell-8" data-cell-index="8" class="cell"></div>
+                <h3 class="game--title">Tic Tac Toe</h3>
+                <div class="row" style="margin-bottom:0px;">
+                    <div class="col s12 l6 push-l3">
+                        <div class="game--container">
+                            <div id="cell-0" data-cell-index="0" class="cell"></div>
+                            <div id="cell-1" data-cell-index="1" class="cell"></div>
+                            <div id="cell-2" data-cell-index="2" class="cell"></div>
+                            <div id="cell-3" data-cell-index="3" class="cell"></div>
+                            <div id="cell-4" data-cell-index="4" class="cell"></div>
+                            <div id="cell-5" data-cell-index="5" class="cell"></div>
+                            <div id="cell-6" data-cell-index="6" class="cell"></div>
+                            <div id="cell-7" data-cell-index="7" class="cell"></div>
+                            <div id="cell-8" data-cell-index="8" class="cell"></div>
+                        </div>
+                    </div>
+                    <div class="col s6 l3 pull-l6 margin-40 wordwrap">
+                        <img class="profile" src="./avatars/p1.png" alt="" />
+                        <h4 id="your-name"></h4>
+                        <h5 class="player--symbol"></h5>
+                    </div>
+                    <div class="col s6 l3 margin-40 wordwrap">
+                        <img class="profile" src="./avatars/p2.png" alt="" />
+                        <h4 id="opponent-name"></h4>
+                        <h5 class="opponent--symbol"></h5>
+                    </div>
                 </div>
                 <div class="row">
-                    <div class='col s5 text-right'>
-                        <h4 class="player--symbol"></h2>
-                    </div>
-                    <div class='col s2'>
-                    </div> 
-                    <div class='col s5 text-left'>
-                        <h4 class="game--status"></h2>
+                    <div class='col s12'>
+                        <h4 class="game--status"></h4>
                     </div>
                 </div>
                 <button class="hidden waves-effect waves-light btn

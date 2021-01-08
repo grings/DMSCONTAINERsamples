@@ -6,6 +6,7 @@ let lastID = '__last__';
 let playQName = '';
 let user = '';
 let playerType = '';
+let opponent = "";
 
 const loginElt = document.getElementById('gameuser');
 loginElt.addEventListener("input", function () {
@@ -40,6 +41,11 @@ document.addEventListener("DOMContentLoaded", function (e) {
           currentPlayer = sessionStorage.getItem('currentPlayer');
 
           playerTypeDisplay.innerHTML = `You are ${playerType}`;
+          if(playerType === "X" || playerType === "x") {
+            opponentTypeDisplay.innerHTML = `Opponent is O`;
+          } else {
+            opponentTypeDisplay.innerHTML = `Opponent is X`;
+          }
 
           showLoader(user);
           showGame(user);
@@ -64,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
 //  Prendi messaggi
 function dmsGetMessage(lastKnownMsgID) {
   let proxy = getProxy();
-  proxy.dequeueMessage(superToken, playQName, lastKnownMsgID, 30)
+  proxy.dequeueMessage(superToken, playQName, lastKnownMsgID, 60)
     .then(function (message) {
       procedureMessage(message)
     });
@@ -135,7 +141,11 @@ function postMessage(currentPlayer, gamestate) {
     });
 }
 
+const userNameDisplay = document.querySelector('#your-name');
+const opponentNameDisplay = document.querySelector('#opponent-name');
+
 const playerTypeDisplay = document.querySelector('.player--symbol');
+const opponentTypeDisplay = document.querySelector('.opponent--symbol');
 
 /*
 We store our game status element here to allow us to more easily 
@@ -375,6 +385,9 @@ function showGame(user) {
   navdiv.classList.remove("hidden");
   navdiv.classList.add("show");
 
+  userNameDisplay.innerHTML = sessionStorage.getItem("gameuser");
+  opponentNameDisplay.innerHTML = sessionStorage.getItem("opponent");
+
   dmsGetMessage(lastID);
 }
 
@@ -421,11 +434,20 @@ function waitForTicket(replyqueue) {
         // Settare il player
         playerType = message.message["playertype"];
         playerTypeDisplay.innerHTML = `You are ${playerType}`;
+        if(playerType === "X" || playerType === "x") {
+          opponentTypeDisplay.innerHTML = `Opponent is O`;
+        } else {
+          opponentTypeDisplay.innerHTML = `Opponent is X`;
+        }
+
+        //Settare l'avversario
+        opponent = message.message["opponent"];
 
         // Salvare il playerType nella session
         sessionStorage.setItem('userSymbol', playerType);
         sessionStorage.setItem('currentPlayer', currentPlayer);
         sessionStorage.setItem('gamequeue', playQName);
+        sessionStorage.setItem('opponent', opponent);
 
         acceptTicket(replyqueue);
         gameActive = true;

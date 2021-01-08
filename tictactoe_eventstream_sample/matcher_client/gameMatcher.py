@@ -36,10 +36,10 @@ def game_matcher(esproxy):
                 players = ["X","O"]
 
                 print("Avverto l'utente " + waiting_users[0]["username"] + " che il gioco sta per iniziare")
-                give_ticket_to_player(esproxy,waiting_users[0]["replyqueue"],playqueue,players[0])
+                give_ticket_to_player(esproxy,waiting_users[0]["replyqueue"],playqueue,players[0],waiting_users[1]["username"])
 
                 print("Avverto l'utente " + waiting_users[1]["username"] + " che il gioco sta per iniziare")
-                give_ticket_to_player(esproxy,waiting_users[1]["replyqueue"],playqueue,players[1])
+                give_ticket_to_player(esproxy,waiting_users[1]["replyqueue"],playqueue,players[1],waiting_users[0]["username"])
 
                 # start_match(esproxy,waiting_users[1]["replyqueue"],playqueue,players[1])
 
@@ -50,10 +50,10 @@ def game_matcher(esproxy):
         else:
             tkn = esproxy.login(username, password).get("token")   
 
-def give_ticket_to_player(esproxy,queue_name,playqueue,playertype):
+def give_ticket_to_player(esproxy,queue_name,playqueue,playertype,opponent):
     tkn = esproxy.login(username, password).get("token")
     # info dell'opponent da mandare
-    r = esproxy.enqueue_message(tkn, queue_name, {"message": "A New game is starting!", "playqueue":playqueue, "playertype":playertype})
+    r = esproxy.enqueue_message(tkn, queue_name, {"message": "A New game is starting!", "playqueue":playqueue, "playertype":playertype, "opponent":opponent})
     # print(r)
 
 # Scrive direttamente due messaggi invece di uno alla volta
