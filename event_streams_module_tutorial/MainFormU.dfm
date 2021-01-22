@@ -2,8 +2,8 @@ object MainForm: TMainForm
   Left = 0
   Top = 0
   Caption = 'Event Stream Module Tutorial'
-  ClientHeight = 493
-  ClientWidth = 773
+  ClientHeight = 564
+  ClientWidth = 975
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,8 +13,8 @@ object MainForm: TMainForm
   OldCreateOrder = False
   OnCreate = FormCreate
   DesignSize = (
-    773
-    493)
+    975
+    564)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -32,13 +32,20 @@ object MainForm: TMainForm
     Caption = 'Last Known ID'
   end
   object Label4: TLabel
-    Left = 652
+    Left = 854
     Top = 4
     Width = 111
     Height = 13
     Anchors = [akTop, akRight]
     Caption = 'Dequeue Timeout [sec]'
     ExplicitLeft = 715
+  end
+  object Label5: TLabel
+    Left = 8
+    Top = 125
+    Width = 22
+    Height = 13
+    Caption = 'Logs'
   end
   object EditQueueName: TEdit
     Left = 8
@@ -78,8 +85,8 @@ object MainForm: TMainForm
   object Memo1: TMemo
     Left = 8
     Top = 144
-    Width = 757
-    Height = 279
+    Width = 959
+    Height = 258
     Anchors = [akLeft, akTop, akRight, akBottom]
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -87,7 +94,9 @@ object MainForm: TMainForm
     Font.Name = 'Consolas'
     Font.Style = []
     ParentFont = False
+    ReadOnly = True
     TabOrder = 4
+    ExplicitWidth = 752
   end
   object EditLastKnownID: TEdit
     Left = 8
@@ -97,7 +106,7 @@ object MainForm: TMainForm
     TabOrder = 5
   end
   object btnDelQueue: TButton
-    Left = 652
+    Left = 854
     Top = 82
     Width = 113
     Height = 25
@@ -105,53 +114,114 @@ object MainForm: TMainForm
     Caption = 'Delete Queue'
     TabOrder = 6
     OnClick = btnDelQueueClick
+    ExplicitLeft = 652
   end
   object Panel1: TPanel
     Left = 0
-    Top = 430
-    Width = 773
-    Height = 63
+    Top = 408
+    Width = 975
+    Height = 156
     Align = alBottom
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 7
-    object Label3: TLabel
-      Left = 9
-      Top = 10
-      Width = 71
-      Height = 13
-      Caption = 'Message Value'
-    end
-    object btnSend: TButton
-      Left = 136
-      Top = 27
-      Width = 178
-      Height = 25
-      Caption = 'Send Message'
+    ExplicitLeft = 8
+    ExplicitWidth = 768
+    object GroupBox1: TGroupBox
+      Left = 8
+      Top = 16
+      Width = 177
+      Height = 113
+      Caption = 'Single Message'
       TabOrder = 0
-      OnClick = btnSendClick
+      object Label3: TLabel
+        Left = 17
+        Top = 26
+        Width = 71
+        Height = 13
+        Caption = 'Message Value'
+      end
+      object EditValue: TEdit
+        Left = 17
+        Top = 45
+        Width = 71
+        Height = 21
+        NumbersOnly = True
+        TabOrder = 0
+        Text = '1'
+      end
+      object btnSend: TButton
+        Left = 17
+        Top = 72
+        Width = 138
+        Height = 25
+        Caption = 'Send Message'
+        TabOrder = 1
+        OnClick = btnSendClick
+      end
     end
-    object EditValue: TEdit
-      Left = 9
-      Top = 29
-      Width = 121
-      Height = 21
-      NumbersOnly = True
+    object GroupBox2: TGroupBox
+      Left = 191
+      Top = 16
+      Width = 170
+      Height = 113
+      Caption = 'Single Huge Message'
       TabOrder = 1
-      Text = '1'
+      object btnHugeMessage: TButton
+        Left = 16
+        Top = 72
+        Width = 138
+        Height = 25
+        Caption = 'Send Huge Message'
+        TabOrder = 0
+        OnClick = btnHugeMessageClick
+      end
     end
-    object btnHugeMessage: TButton
-      Left = 320
-      Top = 27
-      Width = 178
-      Height = 25
-      Caption = 'Send Huge Message'
+    object GroupBox3: TGroupBox
+      Left = 372
+      Top = 16
+      Width = 285
+      Height = 113
+      Caption = 'Messages with TTL'
       TabOrder = 2
-      OnClick = btnHugeMessageClick
+      object Label6: TLabel
+        Left = 13
+        Top = 26
+        Width = 44
+        Height = 13
+        Caption = 'TTL [min]'
+      end
+      object EditTTL: TEdit
+        Left = 13
+        Top = 45
+        Width = 44
+        Height = 21
+        NumbersOnly = True
+        TabOrder = 0
+        Text = '1'
+      end
+      object btnSendWithTTL: TButton
+        Left = 12
+        Top = 72
+        Width = 118
+        Height = 25
+        Caption = 'Send Single Message'
+        TabOrder = 1
+        OnClick = btnSendWithTTLClick
+      end
+      object btnMultipleWithTTL: TButton
+        Left = 136
+        Top = 72
+        Width = 137
+        Height = 25
+        Caption = 'Send Multiple Messages'
+        TabOrder = 2
+        OnClick = btnMultipleWithTTLClick
+      end
     end
   end
   object EditTimeout: TEdit
-    Left = 652
+    Left = 854
     Top = 23
     Width = 113
     Height = 21
@@ -160,9 +230,10 @@ object MainForm: TMainForm
     NumbersOnly = True
     TabOrder = 8
     Text = '10'
+    ExplicitLeft = 652
   end
   object btnCount: TButton
-    Left = 652
+    Left = 854
     Top = 113
     Width = 113
     Height = 25
@@ -170,6 +241,7 @@ object MainForm: TMainForm
     Caption = 'Queue Size'
     TabOrder = 9
     OnClick = btnCountClick
+    ExplicitLeft = 652
   end
   object chkUpdateKID: TCheckBox
     Left = 398

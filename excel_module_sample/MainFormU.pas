@@ -98,6 +98,7 @@ type
     DBGrid3: TDBGrid;
     btnHuge: TButton;
     btnRawJSON: TButton;
+    btnSparkline: TButton;
     procedure btnSimpleWorksheetClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -106,6 +107,7 @@ type
     procedure btnAllTabsClick(Sender: TObject);
     procedure btnHugeClick(Sender: TObject);
     procedure btnRawJSONClick(Sender: TObject);
+    procedure btnSparklineClick(Sender: TObject);
   private
     fProxy: TExcelRPCProxy;
     fToken: string;
@@ -230,8 +232,8 @@ const
     '  "worksheets": [{' +
     '	"name": "My First Worksheet",' +
     '	"columns": [' +
-    '		    {"title": "Product Name",  "type": "general"},' +
-    '		    {"title": "Price", "type": "number", "format": "€ #,##0.00"}' +
+    '		    {"title": "Product Name",  "type": "general", "width": 100, "header_options": {"font_color":"red", "font_size": 18}, "options":{"font_size": 16}},' +
+    '		    {"title": "Price", "type": "number", "format": "€ #,##0.00", "header_options": {"font_color":"green", "font_size": 18}, "options":{"font_size": 16}}' +
     '            ],' +
     '	"data": [' +
     '                 ["Pizza Margherita", 5.00],' +
@@ -243,7 +245,7 @@ begin
   lProxy := TExcelRPCProxy.Create(GetEndPoint);
   try
     lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lJResp := fProxy.Login('user_sender', 'pwd1');
+    lJResp := fProxy.Login('user_report', 'pwd1');
     try
       lToken := lJResp.S['token'];
     finally
@@ -277,6 +279,72 @@ begin
     Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
   finally
     lJResp.Free;
+  end;
+  ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
+end;
+
+procedure TMainForm.btnSparklineClick(Sender: TObject);
+var
+  lJResp: TJSONObject;
+  lOutputFileName: string;
+  lJSONData: TJSONObject;
+  lToken: string;
+  lProxy: TExcelRPCProxy;
+const
+  JSON =
+    '{ ' +
+    '  "worksheets": [{' +
+    '	"name": "My First Worksheet",' +
+    '	"columns": [' +
+    '		    {"title": "Jan",  "type": "number", "width": 10},' +
+    '		    {"title": "Feb",  "type": "number", "width": 10},' +
+    '		    {"title": "Mar",  "type": "number", "width": 10},' +
+    '		    {"title": "Apr",  "type": "number", "width": 10},' +
+    '		    {"title": "May",  "type": "number", "width": 10},' +
+    '		    {"title": "Jun",  "type": "number", "width": 10},' +
+    '		    {"title": "Jul",  "type": "number", "width": 10},' +
+    '		    {"title": "Aug",  "type": "number", "width": 10},' +
+    '		    {"title": "Sep",  "type": "number", "width": 10},' +
+    '		    {"title": "Oct",  "type": "number", "width": 10},' +
+    '		    {"title": "Nov",  "type": "number", "width": 10},' +
+    '		    {"title": "Dec",  "type": "number", "width": 10},' +
+    '		    {"title": "Trend","type": "sparkline", "width": 15}' +
+    '            ],' +
+    '	"data": [' +
+    '             [5,4,2,6,4,3,2,5,13,19,15,12, {"range":"A2:L2","markers": true}],' +
+    '             [5,4,2,6,4,3,2,5,13,19,15,12, {"range":"A3:L3","markers": false}],' +
+    '             [2,2,3,4,5,6,7,8,9,3,1,1, {"range":"A4:L4","markers": true}],' +
+    '             [2,1,15,4,2,6,2,8,9,3,5,6, {"range":"A5:L5","type":"column"}],' +
+    '             [2,1,15,-4,-2,6,2,8,-9,-3,5,6, {"range":"A6:L6","type":"win_loss", "negative_points":true}],' +
+    '             [2,2,3,4,5,6,7,8,9,3,1,1, {"range":"A7:L7","markers": true}],' +
+    '             [2,1,5,4,2,6,2,10,9,1,8,1, {"range":"A8:L8","type":"column"}],' +
+    '             [2,1,15,-4,-2,6,2,8,-9,-3,5,6, {"range":"A9:L9","type":"win_loss", "negative_points":true}],' +
+    '             [5,4,2,6,4,3,2,5,13,19,25,12, {"range":"A10:L10","markers": true}],' +
+    '             [2,2,3,4,5,6,7,8,9,3,1,8, {"range":"A11:L11", "type":"column", "style": 12}],' +
+    '             [3,20,-3,-4,2,-2,6,-12,14,-25,16,16, {"range":"A12:L12","type":"win_loss", "negative_points": true}]' +
+    '		    ]' +
+    '}]}';
+begin
+  lProxy := TExcelRPCProxy.Create(GetEndPoint);
+  try
+    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+    lJResp := fProxy.Login('user_report', 'pwd1');
+    try
+      lToken := lJResp.S['token'];
+    finally
+      lJResp.Free;
+    end;
+    lOutputFileName := 'sparkling_json.xlsx';
+    lJSONData := TJSONObject.Parse(JSON) as TJSONObject;
+    lJResp := fProxy.ConvertToXLSX(lToken, lJSONData);
+    try
+      { Base64StringToFile is declared in MVCFramework.Commons.pas }
+      Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
+    finally
+      lJResp.Free;
+    end;
+  finally
+    lProxy.Free;
   end;
   ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
@@ -340,7 +408,7 @@ begin
   begin
     Exit;
   end;
-  lJObj := fProxy.Login('user_sender', 'pwd1');
+  lJObj := fProxy.Login('user_report', 'pwd1');
   try
     fToken := lJObj.S['token'];
   finally
@@ -376,6 +444,8 @@ begin
   btnThirdTab.Caption := fa_files_o + ' ' + btnThirdTab.Caption;
   btnAllTabs.Caption := fa_puzzle_piece + ' ' + btnAllTabs.Caption;
   btnHuge.Caption := fa_truck + ' ' + btnHuge.Caption;
+  btnRawJSON.Caption := fa_bank + ' ' + btnRawJSON.Caption;
+  btnSparkline.Caption := fa_area_chart + ' ' + btnSparkline.Caption;
   RzPageControl1.ActivePageIndex := 0;
 end;
 

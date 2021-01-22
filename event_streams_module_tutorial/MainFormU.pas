@@ -20,14 +20,22 @@ type
     Label2: TLabel;
     btnDelQueue: TButton;
     Panel1: TPanel;
-    btnSend: TButton;
-    EditValue: TEdit;
-    Label3: TLabel;
     Label4: TLabel;
     EditTimeout: TEdit;
     btnCount: TButton;
     chkUpdateKID: TCheckBox;
+    Label5: TLabel;
+    GroupBox1: TGroupBox;
+    Label3: TLabel;
+    EditValue: TEdit;
+    btnSend: TButton;
+    GroupBox2: TGroupBox;
     btnHugeMessage: TButton;
+    GroupBox3: TGroupBox;
+    EditTTL: TEdit;
+    Label6: TLabel;
+    btnSendWithTTL: TButton;
+    btnMultipleWithTTL: TButton;
     procedure btnDequeueClick(Sender: TObject);
     procedure btnFirstClick(Sender: TObject);
     procedure btnLastClick(Sender: TObject);
@@ -36,15 +44,20 @@ type
     procedure btnCountClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnHugeMessageClick(Sender: TObject);
+    procedure btnSendWithTTLClick(Sender: TObject);
+    procedure btnMultipleWithTTLClick(Sender: TObject);
   private
     fPID: Cardinal;
     fStart: TDateTime;
+    fLastLogin: TDateTime;
+    fToken: string;
+    procedure EnsureLogin(const aProxy: TEventStreamsRPCProxy);
     procedure Log(const Text: String);
     procedure LogStart(const Text: String);
     procedure LogEnd;
     procedure DequeueMessage(const QueueName, LastKnownID: String);
-    procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
-      const Certificate: TCertificate; var Accepted: Boolean);
+    procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;
+      var Accepted: Boolean);
   public
     { Public declarations }
   end;
@@ -73,19 +86,12 @@ procedure TMainForm.btnCountClick(Sender: TObject);
 var
   lJObj: TJsonObject;
   lProxy: TEventStreamsRPCProxy;
-  lToken: string;
 begin
   lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
   try
     lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lJObj := lProxy.Login(DMS_USERNAME, DMS_PWD);
-    try
-      lToken := lJObj.S['token'];
-    finally
-      lJObj.Free;
-    end;
-
-    lJObj := lProxy.GetQueueSize(lToken, EditQueueName.Text);
+    EnsureLogin(lProxy);
+    lJObj := lProxy.GetQueueSize(fToken, EditQueueName.Text);
     try
       Memo1.Lines.Add(lJObj.ToJSON());
     finally
@@ -100,20 +106,14 @@ procedure TMainForm.btnDelQueueClick(Sender: TObject);
 var
   lJObj: TJsonObject;
   lProxy: TEventStreamsRPCProxy;
-  lToken: string;
 begin
   if MessageDlg('Are you sure?', mtConfirmation, mbYesNo, 0) <> mrYes then
     Exit;
   lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
   try
     lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lJObj := lProxy.Login(DMS_USERNAME, DMS_PWD);
-    try
-      lToken := lJObj.S['token'];
-    finally
-      lJObj.Free;
-    end;
-    lProxy.DeleteQueue(lToken, EditQueueName.Text);
+    EnsureLogin(lProxy);
+    lProxy.DeleteQueue(fToken, EditQueueName.Text);
     Memo1.Lines.Add('CLIENT >> Queue Deleted');
   finally
     lProxy.Free;
@@ -134,29 +134,35 @@ procedure TMainForm.btnHugeMessageClick(Sender: TObject);
 var
   lJObj: TJsonObject;
   lProxy: TEventStreamsRPCProxy;
-  lToken: string;
+  lRes: TJsonObject;
 begin
-  lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
+  LogStart('send huge message');
   try
-    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lJObj := lProxy.Login(DMS_USERNAME, DMS_PWD);
-    try
-      lToken := lJObj.S['token'];
-    finally
-      lJObj.Free;
-    end;
 
-    lJObj := TJsonObject.Create;
+    lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
     try
-      lJObj.S['timestamp'] := TimeToStr(now);
-      lJObj.I['sender_pid'] := fPID;
-      lJObj.S['text'] := StringOfChar('*', 1024 * 10);
-      lProxy.EnqueueMessage(lToken, EditQueueName.Text, lJObj.Clone);
+      lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+      EnsureLogin(lProxy);
+
+      lJObj := TJsonObject.Create;
+      try
+        lJObj.S['timestamp'] := TimeToStr(now);
+        lJObj.I['sender_pid'] := fPID;
+        lJObj.S['text'] := StringOfChar('*', 1024 * 10);
+        lRes := lProxy.EnqueueMessage(fToken, EditQueueName.Text, lJObj.Clone);
+        try
+          Log(lRes.ToJSON);
+        finally
+          lRes.Free;
+        end;
+      finally
+        lJObj.Free;
+      end;
     finally
-      lJObj.Free;
+      lProxy.Free;
     end;
   finally
-    lProxy.Free;
+    LogEnd;
   end;
 end;
 
@@ -169,30 +175,118 @@ procedure TMainForm.btnSendClick(Sender: TObject);
 var
   lJObj: TJsonObject;
   lProxy: TEventStreamsRPCProxy;
-  lToken: string;
+  lRes: TJsonObject;
 begin
-  lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
+  LogStart('send single message');
   try
-    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lJObj := lProxy.Login(DMS_USERNAME, DMS_PWD);
+    lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
     try
-      lToken := lJObj.S['token'];
+      lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+      EnsureLogin(lProxy);
+      lJObj := TJsonObject.Create;
+      try
+        lJObj.S['timestamp'] := TimeToStr(now);
+        lJObj.I['sender_pid'] := fPID;
+        lJObj.I['value'] := StrToInt(EditValue.Text);
+        lRes := lProxy.EnqueueMessage(fToken, EditQueueName.Text, lJObj.Clone);
+        try
+          Log(lRes.ToJSON);
+        finally
+          lRes.Free;
+        end;
+        EditValue.Text := (lJObj.I['value'] + 1).ToString;
+      finally
+        lJObj.Free;
+      end;
     finally
-      lJObj.Free;
-    end;
-
-    lJObj := TJsonObject.Create;
-    try
-      lJObj.S['timestamp'] := TimeToStr(now);
-      lJObj.I['sender_pid'] := fPID;
-      lJObj.I['value'] := StrToInt(EditValue.Text);
-      lProxy.EnqueueMessage(lToken, EditQueueName.Text, lJObj.Clone);
-      EditValue.Text := (lJObj.I['value'] + 1).ToString;
-    finally
-      lJObj.Free;
+      lProxy.Free;
     end;
   finally
-    lProxy.Free;
+    LogEnd;
+  end;
+end;
+
+procedure TMainForm.btnSendWithTTLClick(Sender: TObject);
+var
+  lJObj: TJsonObject;
+  lProxy: TEventStreamsRPCProxy;
+  lRes: TJsonObject;
+begin
+  LogStart('send single message with TTL');
+  try
+
+    lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
+    try
+      lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+      EnsureLogin(lProxy);
+      lJObj := TJsonObject.Create;
+      try
+        lJObj.S['timestamp'] := TimeToStr(now);
+        lJObj.I['sender_pid'] := fPID;
+        lJObj.I['value'] := StrToInt(EditValue.Text);
+        lRes := lProxy.EnqueueMessageTTL(fToken, EditQueueName.Text, StrToInt(EditTTL.Text), lJObj.Clone);
+        try
+          Log(lRes.ToJSON);
+        finally
+          lRes.Free;
+        end;
+
+        EditValue.Text := (lJObj.I['value'] + 1).ToString;
+      finally
+        lJObj.Free;
+      end;
+    finally
+      lProxy.Free;
+    end;
+  finally
+    LogEnd;
+  end;
+end;
+
+procedure TMainForm.btnMultipleWithTTLClick(Sender: TObject);
+var
+  lJObj: TJsonObject;
+  lProxy: TEventStreamsRPCProxy;
+  I, lStart: Integer;
+  lMessages: TJsonArray;
+  lRes: TJsonObject;
+const
+  MESSAGES_COUNT = 10;
+begin
+  LogStart('send multiple message with TTL');
+  try
+
+    lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
+    try
+      lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+      EnsureLogin(lProxy);
+      lMessages := TJsonArray.Create;
+      try
+        lStart := StrToInt(EditValue.Text);
+        for I := lStart to lStart + MESSAGES_COUNT do
+        begin
+          lJObj := lMessages.AddObject;
+          lJObj.S['queue'] := 'queue.sample' + IntToStr(I - lStart);
+          lJObj.I['ttl'] := I - lStart + 1; // ttl = 0 means "no custom ttl"
+          lJObj.O['message'].S['timestamp'] := TimeToStr(now);
+          lJObj.O['message'].I['sender_pid'] := fPID;
+          lJObj.O['message'].I['value'] := I;
+        end;
+        EditValue.Text := IntToStr(lStart + MESSAGES_COUNT + 1);
+        lRes := lProxy.EnqueueMultipleMessages(fToken, lMessages.Clone);
+        try
+          Log(lRes.ToJSON);
+        finally
+          lRes.Free;
+        end;
+      finally
+        lMessages.Free;
+      end;
+    finally
+      lProxy.Free;
+    end;
+  finally
+    LogEnd;
   end;
 end;
 
@@ -201,24 +295,17 @@ var
   lProxy: TEventStreamsRPCProxy;
   lJObj: TJsonObject;
   lLastMgsID: string;
-  lToken: string;
   lJMessage: TJsonObject;
 begin
   lProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
   try
     lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lJObj := lProxy.Login(DMS_USERNAME, DMS_PWD);
-    try
-      lToken := lJObj.S['token'];
-    finally
-      lJObj.Free;
-    end;
+    EnsureLogin(lProxy);
     LogStart('Dequeue ' + LastKnownID);
     try
       lLastMgsID := LastKnownID;
       try
-        lJMessage := lProxy.DequeueMultipleMessage(lToken, QueueName, lLastMgsID, 1,
-          StrToInt(EditTimeout.Text));
+        lJMessage := lProxy.DequeueMultipleMessage(fToken, QueueName, lLastMgsID, 1, StrToInt(EditTimeout.Text));
         try
           if lJMessage.B['timeout'] then
           begin
@@ -250,8 +337,26 @@ begin
   end;
 end;
 
+procedure TMainForm.EnsureLogin(const aProxy: TEventStreamsRPCProxy);
+var
+  lJObj: TJsonObject;
+begin
+  if MinutesBetween(now, fLastLogin) > 10 then
+  begin
+    lJObj := aProxy.Login(DMS_USERNAME, DMS_PWD);
+    try
+      fToken := lJObj.S['token'];
+      fLastLogin := now;
+    finally
+      lJObj.Free;
+    end;
+  end;
+end;
+
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
+  fLastLogin := 0;
+  fToken := '';
   fPID := GetCurrentProcessId;
   Caption := 'EventStreams Module :: Tutorial (PID ' + fPID.ToString + ')';
 end;
@@ -272,8 +377,8 @@ begin
   Log(TimeToStr(fStart) + ': START -> ' + Text);
 end;
 
-procedure TMainForm.OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
-  const Certificate: TCertificate; var Accepted: Boolean);
+procedure TMainForm.OnValidateCert(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;
+  var Accepted: Boolean);
 begin
   Accepted := True;
 end;
