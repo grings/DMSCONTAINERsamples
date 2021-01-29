@@ -212,7 +212,7 @@ object MainForm: TMainForm
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 180
+      Width = 122
       Height = 56
       Align = alLeft
       Caption = '1st Tab'
@@ -222,9 +222,9 @@ object MainForm: TMainForm
     end
     object btnAllTypes: TButton
       AlignWithMargins = True
-      Left = 189
+      Left = 131
       Top = 3
-      Width = 180
+      Width = 122
       Height = 56
       Align = alLeft
       Caption = '2nd Tab'
@@ -234,9 +234,9 @@ object MainForm: TMainForm
     end
     object btnAllTabs: TButton
       AlignWithMargins = True
-      Left = 561
+      Left = 387
       Top = 3
-      Width = 180
+      Width = 163
       Height = 56
       Align = alLeft
       Caption = 'All in one workbook'
@@ -246,9 +246,9 @@ object MainForm: TMainForm
     end
     object btnThirdTab: TButton
       AlignWithMargins = True
-      Left = 375
+      Left = 259
       Top = 3
-      Width = 180
+      Width = 122
       Height = 56
       Align = alLeft
       Caption = '3rd Tab'
@@ -258,9 +258,9 @@ object MainForm: TMainForm
     end
     object btnHuge: TButton
       AlignWithMargins = True
-      Left = 747
+      Left = 556
       Top = 3
-      Width = 180
+      Width = 138
       Height = 56
       Align = alLeft
       Caption = 'Huge workbook'
@@ -270,7 +270,7 @@ object MainForm: TMainForm
     end
     object btnRawJSON: TButton
       AlignWithMargins = True
-      Left = 933
+      Left = 700
       Top = 3
       Width = 118
       Height = 56
@@ -279,10 +279,12 @@ object MainForm: TMainForm
       TabOrder = 5
       WordWrap = True
       OnClick = btnRawJSONClick
+      ExplicitLeft = 656
+      ExplicitTop = 6
     end
     object btnSparkline: TButton
       AlignWithMargins = True
-      Left = 1057
+      Left = 948
       Top = 3
       Width = 118
       Height = 56
@@ -291,6 +293,20 @@ object MainForm: TMainForm
       TabOrder = 6
       WordWrap = True
       OnClick = btnSparklineClick
+      ExplicitLeft = 1057
+    end
+    object btnRawWithFormulas: TButton
+      AlignWithMargins = True
+      Left = 824
+      Top = 3
+      Width = 118
+      Height = 56
+      Align = alLeft
+      Caption = 'Raw JSON with formulas'
+      TabOrder = 7
+      WordWrap = True
+      OnClick = btnRawWithFormulasClick
+      ExplicitLeft = 933
     end
   end
   object Panel6: TPanel
