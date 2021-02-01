@@ -1,1 +1,13 @@
-TEST
+{
+"worksheets": [{
+  "name": "My First Worksheet",
+  "columns": [
+    {"title": "Product Name",  "type": "general", "width": 100, "header_options": {"font_color":"red", "font_size": 18}, "options":{"font_size": 16}},
+    {"title": "Price", "type": "number", "format": "€ #,##0.00", "header_options": {"font_color":"green", "font_size": 18}, "options":{"font_size": 16}}
+  ],
+  "data": [
+	["Pizza Margherita", 5.00],
+    ["Pizza 4 Formaggi", {"value":6.50, "options":{"font_color":"green"}}],
+    ["Pizza Porcini e Salsiccia", 10.50]
+  ]
+}]}
