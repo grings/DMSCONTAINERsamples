@@ -117,7 +117,7 @@
         <DCCReference Include="lib\PdfiumCore.pas"/>
         <DCCReference Include="lib\PdfiumCtrl.pas"/>
         <DCCReference Include="lib\PdfiumLib.pas"/>
-        <DCCReference Include="EventStreamsRPCProxy.pas"/>
+        <DCCReference Include="..\commons\EventStreamsRPCProxy.pas"/>
         <RcItem Include="..\commons\FontAwesome.otf">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>
