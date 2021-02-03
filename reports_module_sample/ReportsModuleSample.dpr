@@ -16,7 +16,8 @@ uses
   Vcl.Styles,
   PdfiumCore in 'lib\PdfiumCore.pas',
   PdfiumCtrl in 'lib\PdfiumCtrl.pas',
-  PdfiumLib in 'lib\PdfiumLib.pas';
+  PdfiumLib in 'lib\PdfiumLib.pas',
+  EventStreamsRPCProxy in 'EventStreamsRPCProxy.pas';
 
 {$R *.res}
 

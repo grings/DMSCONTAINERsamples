@@ -87,6 +87,9 @@ type
     btnFirst: TButton;
     btnInvoces: TButton;
     btnOffLineInvoce: TButton;
+    Panel8: TPanel;
+    lbxAsyncReports: TListBox;
+    Button1: TButton;
     procedure btnReport1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -106,20 +109,26 @@ type
     procedure btnFirstClick(Sender: TObject);
     procedure btnInvocesClick(Sender: TObject);
     procedure btnOffLineInvoceClick(Sender: TObject);
+    procedure lbxAsyncReportsDblClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure lbxAsyncReportsDrawItem(Control: TWinControl; Index: Integer;
+      Rect: TRect; State: TOwnerDrawState);
   private
     fPDFViewer: TPdfControl;
     fProxy: TReportsRPCProxy;
     fToken: string;
+    FRepNo: Integer;
+    FQueueName: string;
     procedure UpdateGUI;
     procedure ResetFolder;
-    function Folder(aFolder: String): String;
-    function GetEndPoint: String;
+    function Folder(aFolder: string): string;
+    function GetEndPoint: string;
     procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
       const Certificate: TCertificate; var Accepted: Boolean);
     function GetJSONData: TJDOJSONObject;
     function GetJSONDataMulti(const aDataSet: TDataSet): TJDOJSONObject;
-    procedure GenerateReport(const aModelFileName: String; const aFormat: String;
-      aJSONData: TJDOJSONObject; const aOutputFileName: String);
+    procedure GenerateReport(const aModelFileName: string; const aFormat: string;
+      aJSONData: TJDOJSONObject; const aOutputFileName: string; genAsync: Boolean = false);
 
     procedure RefreshList;
   public
@@ -154,15 +163,17 @@ uses
   MVCFramework.DataSet.Utils,
   sevenzip,
   Vcl.Printers,
+  System.Threading,
   MVCFramework.JSONRPC,
   PdfiumCore,
   System.TypInfo,
   FontAwesomeU,
-  FontAwesomeCodes;
+  FontAwesomeCodes, EventStreamsRPCProxy;
 
 {$R *.dfm}
 
-function TMainForm.Folder(aFolder: String): String;
+
+function TMainForm.Folder(aFolder: string): string;
 begin
   Result := TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), aFolder);
 end;
@@ -204,7 +215,8 @@ var
 begin
   ResetFolder;
   lReportFileName := Folder('output_pdf.zip');
-  GenerateReport(Folder(MODEL02), 'pdf', GetJSONDataMulti(dsCustomers), lReportFileName);
+  GenerateReport(Folder(MODEL02), 'pdf', GetJSONDataMulti(dsCustomers),
+    lReportFileName);
   lArchive := CreateInArchive(CLSID_CFormatZip);
   lArchive.OpenFile(lReportFileName);
   TDirectory.CreateDirectory(Folder('output_pdf'));
@@ -214,8 +226,8 @@ end;
 
 procedure TMainForm.btnScaleClick(Sender: TObject);
 begin
-  if fPDFViewer.ScaleMode = High(fPDFViewer.ScaleMode) then
-    fPDFViewer.ScaleMode := Low(fPDFViewer.ScaleMode)
+  if fPDFViewer.ScaleMode = high(fPDFViewer.ScaleMode) then
+    fPDFViewer.ScaleMode := low(fPDFViewer.ScaleMode)
   else
     fPDFViewer.ScaleMode := Succ(fPDFViewer.ScaleMode);
   UpdateGUI;
@@ -239,6 +251,36 @@ begin
   lReportFileName := Folder('output_html.zip');
   GenerateReport(Folder(MODEL04), 'html', GetJSONDataMulti(dsCustomers), lReportFileName);
   ShellExecute(0, PChar('open'), PChar(Folder('output_html\0.html')), nil, nil, SW_SHOWMAXIMIZED);
+end;
+
+procedure TMainForm.Button1Click(Sender: TObject);
+var
+  lJTemplateData: TJDOJSONObject;
+  lJResp: TJsonObject;
+  lArchive: I7zInArchive;
+  lModelFileName: string;
+begin
+  FQueueName:= '';
+  lModelFileName := Folder(MODEL02);
+  lJTemplateData := TJDOJSONObject.Create;
+  lJTemplateData.S['template_data'] := FileToBase64String(lModelFileName);
+
+  lJResp := fProxy.GenerateMultipleReportAsync(fToken,
+
+    TPath.GetFileNameWithoutExtension(lModelFileName) + '_' +
+    FRepNo.ToString.PadLeft(2, '0'), lJTemplateData,
+    GetJSONDataMulti(dsCustomers), 'pdf');
+  try
+    if not lJResp.IsNull('error') then
+    begin
+      raise Exception.Create(lJResp.O['error'].S['message']);
+    end;
+    FQueueName:= lJResp.s['queuename'];
+   FRepNo:= FRepNo+1;
+  finally
+    lJResp.Free;
+  end;
+
 end;
 
 procedure TMainForm.btnBigClick(Sender: TObject);
@@ -399,7 +441,7 @@ begin
   fProxy.RPCExecutor.SetOnReceiveResponse(
     procedure(ARequest, aResponse: IJSONRPCObject)
     begin
-      Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
+      Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(false), 'trace');
     end);
   lJSON := fProxy.Login('user_admin', 'pwd1');
   try
@@ -418,10 +460,79 @@ begin
   btnReport2.Caption := fa_file + ' ' + btnReport2.Caption;
   btnTableHTML.Caption := fa_table + ' ' + btnTableHTML.Caption;
   btnHTMLCustomers.Caption := fa_html5 + ' ' + btnHTMLCustomers.Caption;
+
+  TThread.CreateAnonymousThread(
+    procedure
+    var
+      lJObj: TJsonObject;
+      lLastMgsID: string;
+      I: Integer;
+      lProxy: TEventStreamsRPCProxy;
+
+    begin
+
+      lProxy := TEventStreamsRPCProxy.Create('https://' + SERVERNAME + '/eventstreamsrpc');
+      try
+        lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+        lProxy.RPCExecutor.SetOnReceiveResponse(
+          procedure(ARequest, aResponse: IJSONRPCObject)
+          begin
+            Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(false), 'trace');
+          end);
+
+        lLastMgsID := '__first__';
+        while true do
+        begin
+          if not FQueueName.IsEmpty then
+          begin
+            try
+              lJObj := lProxy.
+                DequeueMultipleMessage(fToken, FQueueName, lLastMgsID, 1, 10);
+              try
+                if lJObj.A['data'].Count > 0 then
+                begin
+                  if lJObj.A['data'].O[0].O['message'].S['state'] = 'CREATED' then
+                  begin
+                    if lJObj.A['data'].O[0].O['message'].S['queuename'] = FQueueName then
+                    begin
+
+                      TThread.Synchronize(nil,
+                        procedure
+                        begin
+
+                          lbxAsyncReports.Items.AddPair(
+                            lJObj.A['data'].O[0].O['message'].S['reportname'],
+                            lJObj.A['data'].O[0].O['message'].S['reportid']
+                            );
+                        end);
+                    end;
+                  end;
+                  lLastMgsID := lJObj.A['data'].O[0].S['messageid'];
+                end;
+
+                // end;
+              finally
+                lJObj.Free;
+              end;
+            except
+              on E: Exception do
+              begin
+
+                Sleep(1000);
+              end;
+            end;
+          end;
+          Sleep(500);
+        end;
+      finally
+        lProxy.Free;
+      end;
+    end).Start;
+
 end;
 
-procedure TMainForm.GenerateReport(const aModelFileName: String; const aFormat: String;
-aJSONData: TJDOJSONObject; const aOutputFileName: String);
+procedure TMainForm.GenerateReport(const aModelFileName: string; const aFormat: string;
+aJSONData: TJDOJSONObject; const aOutputFileName: string; genAsync: Boolean);
 var
   lJTemplateData: TJDOJSONObject;
   lJResp: TJsonObject;
@@ -429,25 +540,38 @@ var
 begin
   lJTemplateData := TJDOJSONObject.Create;
   lJTemplateData.S['template_data'] := FileToBase64String(aModelFileName);
-  lJResp := fProxy.GenerateMultipleReport(fToken, lJTemplateData, aJSONData, aFormat);
+  if genAsync then
+  begin
+
+    lJResp := fProxy.GenerateMultipleReportAsync(fToken,
+
+      TPath.GetFileNameWithoutExtension(aModelFileName) + '_' +
+      FRepNo.ToString.PadLeft(2, '0'), lJTemplateData, aJSONData, aFormat);
+  end
+  else
+    lJResp := fProxy.GenerateMultipleReport(fToken, lJTemplateData, aJSONData, aFormat);
   try
     if not lJResp.IsNull('error') then
     begin
       raise Exception.Create(lJResp.O['error'].S['message']);
     end;
-
-    Base64StringToFile(lJResp.S['zipfile'], aOutputFileName);
+    if not genAsync then
+      Base64StringToFile(lJResp.S['zipfile'], aOutputFileName);
   finally
     lJResp.Free;
   end;
   // unzip the file
-  lArchive := CreateInArchive(CLSID_CFormatZip);
-  lArchive.OpenFile(aOutputFileName);
-  TDirectory.CreateDirectory(Folder('output_' + aFormat));
-  lArchive.ExtractTo(Folder('output_' + aFormat));
+  if not genAsync then
+  begin
+    lArchive := CreateInArchive(CLSID_CFormatZip);
+    lArchive.OpenFile(aOutputFileName);
+    TDirectory.CreateDirectory(Folder('output_' + aFormat));
+    lArchive.ExtractTo(Folder('output_' + aFormat));
+  end;
+  FRepNo := FRepNo + 1;
 end;
 
-function TMainForm.GetEndPoint: String;
+function TMainForm.GetEndPoint: string;
 begin
   Result := 'https://' + SERVERNAME + '/reportsrpc';
 end;
@@ -470,13 +594,50 @@ function TMainForm.GetJSONDataMulti(const aDataSet: TDataSet): TJDOJSONObject;
 begin
   Result := TJDOJSONObject.Create;
   try
-    Result.O['meta'].S['title'] := 'Customer List';
+    Result.O['meta'].S['title'] := 'Customer List n.' + FRepNo.ToString.PadLeft(2, ' ');
     aDataSet.First;
     Result.A['items'].Add(aDataSet.AsJDOJSONArray);
   except
     Result.Free;
     raise;
   end;
+end;
+
+procedure TMainForm.lbxAsyncReportsDblClick(Sender: TObject);
+begin
+  var
+  idx := lbxAsyncReports.ItemIndex;
+  if idx >= 0 then
+  begin
+    ResetFolder;
+    var
+    lReportFileName := Folder('output_pdf.zip');
+    var
+    lJResp := fProxy.GetAsyncReport(fToken, lbxAsyncReports.Items.ValueFromIndex[idx]);
+    try
+      if lJResp.IsNull('error') then
+      begin
+        Base64StringToFile(lJResp.S['zipfile'], lReportFileName);
+        var
+        lArchive := CreateInArchive(CLSID_CFormatZip);
+        lArchive.OpenFile(lReportFileName);
+        TDirectory.CreateDirectory(Folder('output_pdf'));
+        lArchive.ExtractTo(Folder('output_pdf'));
+        RefreshList;
+      end;
+    finally
+      lJResp.Free;
+    end;
+
+  end;
+end;
+
+procedure TMainForm.lbxAsyncReportsDrawItem(Control: TWinControl;
+Index: Integer; Rect: TRect; State: TOwnerDrawState);
+begin
+
+  lbxAsyncReports.Canvas.TextOut(Rect.Left, Rect.Top, lbxAsyncReports.Items.Names[index]);
+
 end;
 
 procedure TMainForm.ListBox1DblClick(Sender: TObject);
@@ -497,7 +658,7 @@ end;
 procedure TMainForm.RefreshList;
 var
   lFiles: TArray<string>;
-  lFile: String;
+  lFile: string;
 begin
   ListBox1.Items.Clear;
   lFiles := TDirectory.GetFiles(Folder('output_pdf'), '*.pdf');
@@ -515,7 +676,7 @@ end;
 procedure TMainForm.ResetFolder;
 var
   lFiles: TArray<string>;
-  lFile: String;
+  lFile: string;
 begin
   fPDFViewer.Close;
   TDirectory.CreateDirectory(Folder('output_pdf'));

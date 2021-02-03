@@ -70,10 +70,6 @@ object MainForm: TMainForm
       end
       object tsPDFViewer: TTabSheet
         Caption = 'Report'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object Panel4: TPanel
           Left = 0
           Top = 41
@@ -309,7 +305,7 @@ object MainForm: TMainForm
       Left = 0
       Top = 41
       Width = 185
-      Height = 519
+      Height = 279
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -330,6 +326,46 @@ object MainForm: TMainForm
       BevelOuter = bvNone
       Caption = 'Generated Reports'
       TabOrder = 1
+    end
+    object Panel8: TPanel
+      Left = 0
+      Top = 320
+      Width = 185
+      Height = 240
+      Align = alBottom
+      BevelOuter = bvNone
+      Caption = 'Panel3'
+      TabOrder = 2
+      object lbxAsyncReports: TListBox
+        Left = 0
+        Top = 52
+        Width = 185
+        Height = 188
+        Align = alClient
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -21
+        Font.Name = 'FontAwesome'
+        Font.Style = []
+        ItemHeight = 21
+        ParentFont = False
+        Sorted = True
+        TabOrder = 0
+        OnDblClick = lbxAsyncReportsDblClick
+        OnDrawItem = lbxAsyncReportsDrawItem
+      end
+      object Button1: TButton
+        AlignWithMargins = True
+        Left = 3
+        Top = 3
+        Width = 179
+        Height = 46
+        Align = alTop
+        Caption = 'GenReport Async'
+        TabOrder = 1
+        WordWrap = True
+        OnClick = Button1Click
+      end
     end
   end
   object Panel6: TPanel
@@ -953,7 +989,7 @@ object MainForm: TMainForm
     Left = 280
     Top = 224
     Content = {
-      414442530F000000A10E0000FF00010001FF02FF03040016000000460044004D
+      414442530F003728A10E0000FF00010001FF02FF03040016000000460044004D
       0065006D005400610062006C006500310005000A0000005400610062006C0065
       00060000000000070000080032000000090000FF0AFF0B04000E000000430055
       00530054005F004E004F0005000E00000043005500530054005F004E004F000C
@@ -1181,7 +1217,7 @@ object MainForm: TMainForm
     Left = 280
     Top = 280
     Content = {
-      414442530F000000FF050000FF00010001FF02FF0304001C0000006400730043
+      414442530F003728FF050000FF00010001FF02FF0304001C0000006400730043
       007500730074006F006D0065007200730042006900670005000A000000540061
       0062006C006500060000000000070000080032000000090000FF0AFF0B04000E
       00000043005500530054005F004E004F0005000E00000043005500530054005F
