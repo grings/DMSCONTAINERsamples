@@ -289,16 +289,16 @@ const
     '  "worksheets": [{' +
     '	"name": "My First Worksheet",' +
     '	"columns": [' +
-    '		    {"title": "Product Name",  "type": "general", "width": 100, "header_options": {"font_color":"red", "font_size": 18}, "options":{"font_size": 16}},'
+    '		    {"title": "Product Name",  "type": "general", "width": 100, "header_options": {"font_color":"red", "font_size": 18}, "options":{"font_size": 14}},'
     +
-    '		    {"title": "Price", "type": "number", "format": "€ #,##0.00", "header_options": {"font_color":"green", "font_size": 18}, "options":{"font_size": 16}}'
+    '		    {"title": "Price", "type": "number", "format": "€ #,##0.00", "header_options": {"font_color":"green", "font_size": 18}, "options":{"font_size": 14}}'
     +
     '            ],' +
     '	"data": [' +
     '                 ["Pizza Margherita", 5.00],' +
-    '                 ["Pizza Napoli", {"value":5.00,"options":{"font_color":"red"}}],' +
+    '                 ["Pizza Napoli", {"value":5.00,"options":{"font_color":"red", "font_size":22}}],' +
     '	        		    ["Pizza 4 Formaggi", 6.50],' +
-    '		   	          ["Pizza Porcini e Salsiccia", 10.50]' +
+    '		   	          [{"value":"Pizza Porcini e Salsiccia","options":{"bold":True}}, 10.50]' +
     '		    ]' +
     '}]}';
 begin
