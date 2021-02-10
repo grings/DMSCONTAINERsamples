@@ -31,8 +31,7 @@
                 ["Pizza Napoli", {
                         "value": 5.00,
                         "options": {
-                            "font_color": "red",
-                            "font_size": 22
+                            "font_color": "red"
                         }
                     }
                 ],

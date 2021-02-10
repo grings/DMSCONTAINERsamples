@@ -100,6 +100,8 @@ type
     btnRawJSON: TButton;
     btnSparkline: TButton;
     btnRawWithFormulas: TButton;
+    btnRawWithFormatting: TButton;
+    btnShowcase: TButton;
     procedure btnSimpleWorksheetClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -110,6 +112,8 @@ type
     procedure btnRawJSONClick(Sender: TObject);
     procedure btnSparklineClick(Sender: TObject);
     procedure btnRawWithFormulasClick(Sender: TObject);
+    procedure btnRawWithFormattingClick(Sender: TObject);
+    procedure btnShowcaseClick(Sender: TObject);
   private
     procedure LoadAllTypes;
     function DelphiDataTypeToExcel(const DataType: TFieldType): string;
@@ -118,6 +122,7 @@ type
     function GetEndPoint: string;
     procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;
       var Accepted: Boolean);
+    procedure GenerateExcelFileFromRawJSONFile(const FileName: String);
     function GetJSONData(const WorkSheetName: string; const DataSet: TDataSet): TJDOJSONObject;
     function GetWorkbookJSONData(const WorkSheetsName: array of string; const DataSets: array of TDataSet)
       : TJDOJSONObject;
@@ -147,7 +152,6 @@ uses
   System.DateUtils;
 
 {$R *.dfm}
-
 
 function TMainForm.Folder(aFolder: string): string;
 begin
@@ -252,13 +256,12 @@ begin
     finally
       lJResp.Free;
     end;
-    lJResp := lProxy.ConvertToXLSX(lToken, GetWorkbookJSONData(['Customers0', 'All Types0', 'All Types with Formatting0',
-      'Customers1', 'All Types1', 'All Types with Formatting1', 'Customers2', 'All Types2', 'All Types with Formatting2',
-      'Customers3', 'All Types3', 'All Types with Formatting3', 'Customers4', 'All Types4',
-      'All Types with Formatting4'],
-      [dsCustomers, dsAllTypes, dsAllFormattedFields, dsCustomers, dsAllTypes, dsAllFormattedFields, dsCustomers,
-      dsAllTypes, dsAllFormattedFields, dsCustomers, dsAllTypes, dsAllFormattedFields, dsCustomers, dsAllTypes,
-      dsAllFormattedFields]));
+    lJResp := lProxy.ConvertToXLSX(lToken, GetWorkbookJSONData(['Customers0', 'All Types0',
+      'All Types with Formatting0', 'Customers1', 'All Types1', 'All Types with Formatting1', 'Customers2',
+      'All Types2', 'All Types with Formatting2', 'Customers3', 'All Types3', 'All Types with Formatting3',
+      'Customers4', 'All Types4', 'All Types with Formatting4'], [dsCustomers, dsAllTypes, dsAllFormattedFields,
+      dsCustomers, dsAllTypes, dsAllFormattedFields, dsCustomers, dsAllTypes, dsAllFormattedFields, dsCustomers,
+      dsAllTypes, dsAllFormattedFields, dsCustomers, dsAllTypes, dsAllFormattedFields]));
     try
       Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
     finally
@@ -284,23 +287,19 @@ var
   lToken: string;
   lProxy: TExcelRPCProxy;
 const
-  JSON =
-    '{ ' +
-    '  "worksheets": [{' +
-    '	"name": "My First Worksheet",' +
-    '	"columns": [' +
-    '		    {"title": "Product Name",  "type": "general", "width": 100, "header_options": {"font_color":"red", "font_size": 18}, "options":{"font_size": 14}},'
-    +
-    '		    {"title": "Price", "type": "number", "format": "€ #,##0.00", "header_options": {"font_color":"green", "font_size": 18}, "options":{"font_size": 14}}'
-    +
-    '            ],' +
-    '	"data": [' +
-    '                 ["Pizza Margherita", 5.00],' +
-    '                 ["Pizza Napoli", {"value":5.00,"options":{"font_color":"red", "font_size":22}}],' +
-    '	        		    ["Pizza 4 Formaggi", 6.50],' +
-    '		   	          [{"value":"Pizza Porcini e Salsiccia","options":{"bold":True}}, 10.50]' +
-    '		    ]' +
-    '}]}';
+  JSON = '{ ' +
+         '  "worksheets": [{' +
+         '	"name": "My First Worksheet",' + '	"columns": [' +
+         '		    {"title": "Product Name",  "type": "general", "width": 100, "header_options": {"font_color":"red", "font_size": 18}, "options":{"font_size": 14}},' +
+         '		    {"title": "Price", "type": "number", "format": "€ #,##0.00", "header_options": {"font_color":"green", "font_size": 18}, "options":{"font_size": 14}}' +
+         '            ],' +
+         '	"data": [' +
+         '            ["Pizza Margherita", 5.00],' +
+         '            ["Pizza Napoli", {"value":5.00,"options":{"font_color":"red", "font_size":22}}],' +
+         '        		["Pizza 4 Formaggi", 6.50],' +
+         '		   	    [{"value":"Pizza Porcini e Salsiccia","options":{"bold":True}}, 10.50]' +
+         '		      ]' +
+         '}]}';
 begin
   lProxy := TExcelRPCProxy.Create(GetEndPoint);
   try
@@ -332,42 +331,19 @@ begin
   ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
 
-procedure TMainForm.btnRawWithFormulasClick(Sender: TObject);
-var
-  lJResp: TJSONObject;
-  lOutputFileName: string;
-  lJSONData: TJSONObject;
-  lToken: string;
-  lProxy: TExcelRPCProxy;
+procedure TMainForm.btnRawWithFormattingClick(Sender: TObject);
 begin
-  lProxy := TExcelRPCProxy.Create(GetEndPoint);
-  try
-    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lProxy.RPCExecutor.SetOnReceiveResponse(
-      procedure(ARequest, aResponse: IJSONRPCObject)
-      begin
-        Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
-      end);
+  GenerateExcelFileFromRawJSONFile('raw_with_formatting');
+end;
 
-    lJResp := lProxy.Login('user_report', 'pwd1');
-    try
-      lToken := lJResp.S['token'];
-    finally
-      lJResp.Free;
-    end;
-    lOutputFileName := 'raw_json_with_formulas.xlsx';
-    lJSONData := TJSONObject.ParseFromFile(TPath.ChangeExtension(lOutputFileName, '.json')) as TJSONObject;
-    lJResp := lProxy.ConvertToXLSX(lToken, lJSONData);
-    try
-      { Base64StringToFile is declared in MVCFramework.Commons.pas }
-      Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
-    finally
-      lJResp.Free;
-    end;
-  finally
-    lProxy.Free;
-  end;
-  ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
+procedure TMainForm.btnRawWithFormulasClick(Sender: TObject);
+begin
+  GenerateExcelFileFromRawJSONFile('raw_json_with_formulas');
+end;
+
+procedure TMainForm.btnShowcaseClick(Sender: TObject);
+begin
+  GenerateExcelFileFromRawJSONFile('showcase');
 end;
 
 procedure TMainForm.btnSimpleWorksheetClick(Sender: TObject);
@@ -413,11 +389,7 @@ var
   lToken: string;
   lProxy: TExcelRPCProxy;
 const
-  JSON =
-    '{ ' +
-    '  "worksheets": [{' +
-    '	"name": "My First Worksheet",' +
-    '	"columns": [' +
+  JSON = '{ ' + '  "worksheets": [{' + '	"name": "My First Worksheet",' + '	"columns": [' +
     '		    {"title": "Jan",  "type": "number", "width": 10},' +
     '		    {"title": "Feb",  "type": "number", "width": 10},' +
     '		    {"title": "Mar",  "type": "number", "width": 10},' +
@@ -430,25 +402,19 @@ const
     '		    {"title": "Oct",  "type": "number", "width": 10},' +
     '		    {"title": "Nov",  "type": "number", "width": 10},' +
     '		    {"title": "Dec",  "type": "number", "width": 10},' +
-    '		    {"title": "Trend","type": "sparkline", "width": 15}' +
-    '            ],' +
-    '	"data": [' +
-    '             [5,4,2,6,4,3,2,5,13,19,15,12, {"t":"sl", "range":"A2:L2","markers": true}],' +
-    '             [5,4,2,6,4,3,2,5,13,19,15,12, {"t":"sl", "range":"A3:L3","markers": false}],' +
-    '             [2,2,3,4,5,6,7,8,9,3,1,1, {"t":"sl", "range":"A4:L4","markers": true}],' +
-    '             [2,1,15,4,2,6,2,8,9,3,5,6, {"t":"sl", "range":"A5:L5","type":"column"}],' +
-    '             [2,1,15,-4,-2,6,2,8,-9,-3,5,6, {"t":"sl", "range":"A6:L6","type":"win_loss", "negative_points":true}],'
-    +
-    '             [2,2,3,4,5,6,7,8,9,3,1,1, {"t":"sl", "range":"A7:L7","markers": true}],' +
-    '             [2,1,5,4,2,6,2,10,9,1,8,1, {"t":"sl", "range":"A8:L8","type":"column"}],' +
-    '             [2,1,15,-4,-2,6,2,8,-9,-3,5,6, {"t":"sl", "range":"A9:L9","type":"win_loss", "negative_points":true}],'
-    +
-    '             [5,4,2,6,4,3,2,5,13,19,25,12, {"t":"sl", "range":"A10:L10","markers": true}],' +
-    '             [2,2,3,4,5,6,7,8,9,3,1,8, {"t":"sl", "range":"A11:L11", "type":"column", "style": 12}],' +
-    '             [3,20,-3,-4,2,-2,6,-12,14,-25,16,16, {"t":"sl", "range":"A12:L12","type":"win_loss", "negative_points": true}]'
-    +
-    '		    ]' +
-    '}]}';
+    '		    {"title": "Trend","type": "sparkline", "width": 15}' + '            ],' + '	"data": [' +
+    '             [5,4,2,6,4,3,2,5,13,19,15,12, {"type":"sparkline", "range":"A2:L2","markers": true}],' +
+    '             [5,4,2,6,4,3,2,5,13,19,15,12, {"type":"sparkline","range":"A3:L3","markers": false}],' +
+    '             [2,2,3,4,5,6,7,8,9,3,1,1, {"type":"sparkline","range":"A4:L4","markers": true}],' +
+    '             [2,1,15,4,2,6,2,8,9,3,5,6, {"type":"sparkline","range":"A5:L5","sparkline_type":"column"}],' +
+    '             [2,1,15,-4,-2,6,2,8,-9,-3,5,6, {"type":"sparkline","range":"A6:L6","sparkline_type":"win_loss", "negative_points":true}],'
+    + '             [2,2,3,4,5,6,7,8,9,3,1,1, {"type":"sparkline","range":"A7:L7","markers": true}],' +
+    '             [2,1,5,4,2,6,2,10,9,1,8,1, {"type":"sparkline","range":"A8:L8","sparkline_type":"column"}],' +
+    '             [2,1,15,-4,-2,6,2,8,-9,-3,5,6, {"type":"sparkline","range":"A9:L9","sparkline_type":"win_loss", "negative_points":true}],'
+    + '             [5,4,2,6,4,3,2,5,13,19,25,12, {"type":"sparkline","range":"A10:L10","markers": true}],' +
+    '             [2,2,3,4,5,6,7,8,9,3,1,8, {"type":"sparkline","range":"A11:L11", "sparkline_type":"column", "style": 12}],' +
+    '             [3,20,-3,-4,2,-2,6,-12,14,-25,16,16, {"type":"sparkline","range":"A12:L12","sparkline_type":"win_loss", "negative_points": true}]'
+    + '		    ]' + '}]}';
 begin
   lProxy := TExcelRPCProxy.Create(GetEndPoint);
   try
@@ -465,7 +431,8 @@ begin
     finally
       lJResp.Free;
     end;
-    lOutputFileName := 'sparkling_json.xlsx';
+    lOutputFileName := 'sparkline_json.xlsx';
+    TFile.WriteAllText(tpath.ChangeExtension(lOutputFileName, '.json'), JSON);
     lJSONData := TJSONObject.Parse(JSON) as TJSONObject;
     lJResp := lProxy.ConvertToXLSX(lToken, lJSONData);
     try
@@ -573,8 +540,49 @@ begin
   btnHuge.Caption := fa_truck + ' ' + btnHuge.Caption;
   btnRawJSON.Caption := fa_bank + ' ' + btnRawJSON.Caption;
   btnRawWithFormulas.Caption := fa_bank + ' ' + btnRawWithFormulas.Caption;
+  btnRawWithFormatting.Caption := fa_bank + ' ' + btnRawWithFormatting.Caption;
   btnSparkline.Caption := fa_area_chart + ' ' + btnSparkline.Caption;
+  btnShowcase.Caption := fa_bomb + ' ' + btnShowcase.Caption;
   RzPageControl1.ActivePageIndex := 0;
+end;
+
+procedure TMainForm.GenerateExcelFileFromRawJSONFile(const FileName: String);
+var
+  lJResp: TJSONObject;
+  lOutputFileName: string;
+  lJSONData: TJSONObject;
+  lToken: string;
+  lProxy: TExcelRPCProxy;
+begin
+  lProxy := TExcelRPCProxy.Create(GetEndPoint);
+  try
+    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+    lProxy.RPCExecutor.SetOnReceiveResponse(
+      procedure(ARequest, aResponse: IJSONRPCObject)
+      begin
+        Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
+      end);
+
+    lJResp := lProxy.Login('user_report', 'pwd1');
+    try
+      lToken := lJResp.S['token'];
+    finally
+      lJResp.Free;
+    end;
+    lOutputFileName := TPath.ChangeExtension(FileName, '.xlsx');
+    lJSONData := TJSONObject.ParseFromFile(TPath.ChangeExtension(FileName, '.json')) as TJSONObject;
+    lJResp := lProxy.ConvertToXLSX(lToken, lJSONData);
+    try
+      { Base64StringToFile is declared in MVCFramework.Commons.pas }
+      Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
+    finally
+      lJResp.Free;
+    end;
+  finally
+    lProxy.Free;
+  end;
+  ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
+
 end;
 
 function TMainForm.GetEndPoint: string;
@@ -675,18 +683,14 @@ begin
   try
     for I := 1 to 5000 do
     begin
-      lDateTimeUTC := TTimeZone.Local.ToLocalTime(EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1)
-        + EncodeTime(I mod 24, I mod 60, I mod 60, 0));
+      lDateTimeUTC := TTimeZone.Local.ToLocalTime(EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1) +
+        EncodeTime(I mod 24, I mod 60, I mod 60, 0));
       dsAllTypes.AppendRecord([I, Random(I * 10000) / 10, Random(I * 10000) / 10, Random(100000) / 1000,
         EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1), EncodeTime(I mod 24, I mod 60, I mod 60, 0),
-        lDateTimeUTC,
-        lDateTimeUTC,
-        Random(10) < 5, Format('=Sum(A%d,B%d)', [I + 1, I + 1])]);
+        lDateTimeUTC, lDateTimeUTC, Random(10) < 5, Format('=Sum(A%d,B%d)', [I + 1, I + 1])]);
       dsAllFormattedFields.AppendRecord([I, Random(I * 10000) / 10, Random(I * 10000) / 10, Random(100000) / 1000,
         EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1), EncodeTime(I mod 24, I mod 60, I mod 60, 0),
-        lDateTimeUTC,
-        lDateTimeUTC,
-        Random(10) < 5, Format('=Sum(A%d,B%d)', [I + 1, I + 1])]);
+        lDateTimeUTC, lDateTimeUTC, Random(10) < 5, Format('=Sum(A%d,B%d)', [I + 1, I + 1])]);
     end;
     dsAllTypes.First;
     dsAllFormattedFields.First;
