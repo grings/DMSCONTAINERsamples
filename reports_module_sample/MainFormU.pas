@@ -79,7 +79,6 @@ type
     FDStanStorageJSONLink1: TFDStanStorageJSONLink;
     btnTable: TButton;
     btnHTMLCustomers: TButton;
-    Panel7: TPanel;
     dsCustomersBig: TFDMemTable;
     btnBig: TButton;
     btnFilters: TButton;
@@ -102,8 +101,8 @@ type
     Panel1: TPanel;
     Button1: TButton;
     Button2: TButton;
-    Button3: TButton;
     Label1: TLabel;
+    Label2: TLabel;
     procedure btnReport1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -129,7 +128,6 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure lbxAsyReportsCreatedDblClick(Sender: TObject);
     procedure Button2Click(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
   private
     fPDFViewer: TPdfControl;
     fProxy: TReportsRPCProxy;
@@ -151,8 +149,8 @@ type
       aJSONData: TJDOJSONObject; const aOutputFileName: string);
 
     procedure RefreshList;
-    procedure LoadQueueName;
-    procedure SaveQueueName;
+    procedure LoadConf;
+    procedure SaveConf;
     function GetQueueName: string;
     procedure SetQueueName(value: string);
 
@@ -356,11 +354,6 @@ begin
     BuildReportAsync();
   end;
 
-end;
-
-procedure TMainForm.Button3Click(Sender: TObject);
-begin
-  RestartAsync('__last__');
 end;
 
 function SortDesc(List: TStringList; Index1, Index2: Integer): Integer;
@@ -581,7 +574,7 @@ var
   lJSON: TJsonObject;
 begin
   FAsyncReports := TStringList.Create;
-  LoadQueueName;;
+  LoadConf;;
   dsCustomers.LoadFromFile(TPath.Combine(TPath.GetDirectoryName(ParamStr(0)),
     'customers.json'), sfJSON);
   InstallFont(self);
@@ -621,7 +614,7 @@ begin
   btnTableHTML.Caption := fa_table + ' ' + btnTableHTML.Caption;
   btnHTMLCustomers.Caption := fa_html5 + ' ' + btnHTMLCustomers.Caption;
 
-  RestartAsync();
+  RestartAsync(LastMgsID);
 
 end;
 
@@ -742,6 +735,8 @@ begin
   System.TMonitor.Enter(self);
   try
     Result := FLastMgsID;
+    if Result.IsEmpty then
+      Result := '__last__';
   finally
     System.TMonitor.exit(self);
   end;
@@ -840,7 +835,7 @@ begin
   Accepted := true;
 end;
 
-procedure TMainForm.LoadQueueName;
+procedure TMainForm.LoadConf;
 
 begin
   with TStringList.Create do
@@ -849,6 +844,7 @@ begin
       if FileExists('reports.conf') then
 
         LoadFromFile('reports.conf');
+      LastMgsID := Values['lastmsgid'];
       QueueName := Values['queuename'];
 
     finally
@@ -858,13 +854,14 @@ begin
   end;
 end;
 
-procedure TMainForm.SaveQueueName;
+procedure TMainForm.SaveConf;
 begin
   with TStringList.Create do
   begin
     try
-      if FileExists('reports.conf') then
-        Values['queuename'] := QueueName;
+
+      Values['queuename'] := QueueName;
+      Values['lastmsgid'] := LastMgsID;
       SaveToFile('reports.conf');
     finally
       Free;
@@ -907,8 +904,6 @@ begin
 end;
 
 procedure TMainForm.RestartAsync(const LastMessage: string);
-var
-  lLastMgsID: string;
 begin
   if assigned(FThrState) then
   begin
@@ -920,8 +915,7 @@ begin
     FAsyncReports.Clear;
     lbxAll.Clear;
   end;
-
-  lLastMgsID := LastMessage;
+  LastMgsID := LastMessage;
 
   FThrState := TThread.CreateAnonymousThread(
     procedure
@@ -932,7 +926,7 @@ begin
       lProxy: TEventStreamsRPCProxy;
       lQueueName: string;
     begin
-    TThread.NameThreadForDebugging('QueueThread');
+      TThread.NameThreadForDebugging('QueueThread');
 
       lProxy := TEventStreamsRPCProxy.Create('https://' + SERVERNAME + '/eventstreamsrpc');
       try
@@ -955,7 +949,7 @@ begin
 
             try
               lJObjResp := lProxy.
-                DequeueMultipleMessage(fToken, lQueueName, lLastMgsID, 1, 10);
+                DequeueMultipleMessage(fToken, lQueueName, LastMgsID, 1, 10);
               try
                 if lJObjResp.A['data'].Count > 0 then
                 begin
@@ -974,7 +968,7 @@ begin
 
                       end);
                   end;
-                  lLastMgsID := lObjQueueItem.S['messageid'];
+                  LastMgsID := lObjQueueItem.S['messageid'];
                 end;
 
                 // end;
@@ -1006,10 +1000,10 @@ end;
 
 procedure TMainForm.SetLastMgsID(const value: string);
 begin
-
   System.TMonitor.Enter(self);
   try
     FLastMgsID := value;
+    SaveConf;
   finally
     System.TMonitor.exit(self);
   end;
@@ -1026,7 +1020,7 @@ begin
       lbxAsyReportsCreated.Clear;
       lbxAsyncReportsDeleted.Clear;
       FQueueName := value;
-      SaveQueueName();
+      SaveConf();
     end;
   finally
     System.TMonitor.exit(self);
