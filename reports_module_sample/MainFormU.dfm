@@ -1,7 +1,7 @@
 object MainForm: TMainForm
   Left = 0
   Top = 0
-  Caption = 'DMSContainer3 - reportjob - Sample'
+  Caption = 'Report Module'
   ClientHeight = 706
   ClientWidth = 1282
   Color = clBtnFace
@@ -14,15 +14,37 @@ object MainForm: TMainForm
   Position = poScreenCenter
   OnClose = FormClose
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 16
-  object Splitter1: TSplitter
-    Left = 185
-    Top = 127
-    Height = 560
-    ExplicitLeft = 360
-    ExplicitTop = 176
-    ExplicitHeight = 100
+  object Splitter2: TSplitter
+    Left = 0
+    Top = 527
+    Width = 1282
+    Height = 3
+    Cursor = crVSplit
+    Align = alTop
+    ExplicitLeft = 3
+    ExplicitTop = 492
+  end
+  object Label1: TLabel
+    Left = 0
+    Top = 530
+    Width = 1282
+    Height = 21
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Async Reports'
+    Color = clHighlight
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -21
+    Font.Name = 'FontAwesome'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+    Transparent = False
+    ExplicitWidth = 118
   end
   object StatusBar1: TStatusBar
     Left = 0
@@ -34,155 +56,14 @@ object MainForm: TMainForm
         Width = 200
       end>
   end
-  object Panel1: TPanel
-    Left = 188
-    Top = 127
-    Width = 1094
-    Height = 560
-    Align = alClient
-    BevelOuter = bvNone
-    TabOrder = 1
-    object RzPageControl1: TPageControl
-      Left = 0
-      Top = 0
-      Width = 1094
-      Height = 560
-      ActivePage = tsData
-      Align = alClient
-      TabOrder = 0
-      TabWidth = 120
-      object tsData: TTabSheet
-        Caption = 'Data'
-        object DBGrid1: TDBGrid
-          Left = 0
-          Top = 0
-          Width = 1086
-          Height = 528
-          Align = alClient
-          DataSource = DataSource1
-          TabOrder = 0
-          TitleFont.Charset = DEFAULT_CHARSET
-          TitleFont.Color = clWindowText
-          TitleFont.Height = -16
-          TitleFont.Name = 'FontAwesome'
-          TitleFont.Style = []
-        end
-      end
-      object tsPDFViewer: TTabSheet
-        Caption = 'Report'
-        object Panel4: TPanel
-          Left = 0
-          Top = 41
-          Width = 1086
-          Height = 487
-          Align = alClient
-          BevelOuter = bvNone
-          Caption = 'Panel4'
-          TabOrder = 0
-        end
-        object Panel5: TPanel
-          Left = 0
-          Top = 0
-          Width = 1086
-          Height = 41
-          Align = alTop
-          BevelOuter = bvNone
-          TabOrder = 1
-          object btnNext: TButton
-            AlignWithMargins = True
-            Left = 927
-            Top = 3
-            Width = 75
-            Height = 35
-            Align = alRight
-            Caption = '>>'
-            TabOrder = 0
-            OnClick = btnNextClick
-          end
-          object btnPrev: TButton
-            AlignWithMargins = True
-            Left = 846
-            Top = 3
-            Width = 75
-            Height = 35
-            Align = alRight
-            Caption = '<<'
-            TabOrder = 1
-            OnClick = btnPrevClick
-          end
-          object btnScale: TButton
-            AlignWithMargins = True
-            Left = 589
-            Top = 3
-            Width = 170
-            Height = 35
-            Align = alRight
-            Caption = 'Scale'
-            TabOrder = 2
-            OnClick = btnScaleClick
-          end
-          object btnPrint: TButton
-            AlignWithMargins = True
-            Left = 541
-            Top = 3
-            Width = 42
-            Height = 35
-            Align = alRight
-            Caption = 'X'
-            TabOrder = 3
-            OnClick = btnPrintClick
-          end
-          object ScrollBar1: TScrollBar
-            AlignWithMargins = True
-            Left = 3
-            Top = 10
-            Width = 485
-            Height = 21
-            Margins.Top = 10
-            Margins.Right = 50
-            Margins.Bottom = 10
-            Align = alClient
-            Max = 300
-            Min = 20
-            PageSize = 0
-            Position = 20
-            TabOrder = 4
-            OnChange = ScrollBar1Change
-          end
-          object btnLast: TButton
-            AlignWithMargins = True
-            Left = 1008
-            Top = 3
-            Width = 75
-            Height = 35
-            Align = alRight
-            Caption = '>|'
-            TabOrder = 5
-            OnClick = btnLastClick
-          end
-          object btnFirst: TButton
-            AlignWithMargins = True
-            Left = 765
-            Top = 3
-            Width = 75
-            Height = 35
-            Align = alRight
-            Caption = '|<'
-            TabOrder = 6
-            OnClick = btnFirstClick
-          end
-        end
-      end
-    end
-  end
-  object Panel2: TPanel
+  object pnlTool: TPanel
     Left = 0
     Top = 65
     Width = 1282
     Height = 62
     Align = alTop
     BevelOuter = bvNone
-    TabOrder = 2
+    TabOrder = 1
     object btnReport1: TButton
       AlignWithMargins = True
       Left = 3
@@ -292,82 +173,6 @@ object MainForm: TMainForm
       OnClick = btnOffLineInvoceClick
     end
   end
-  object Panel3: TPanel
-    Left = 0
-    Top = 127
-    Width = 185
-    Height = 560
-    Align = alLeft
-    BevelOuter = bvNone
-    Caption = 'Panel3'
-    TabOrder = 3
-    object ListBox1: TListBox
-      Left = 0
-      Top = 41
-      Width = 185
-      Height = 279
-      Align = alClient
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -21
-      Font.Name = 'FontAwesome'
-      Font.Style = []
-      ItemHeight = 21
-      ParentFont = False
-      TabOrder = 0
-      OnDblClick = ListBox1DblClick
-    end
-    object Panel7: TPanel
-      Left = 0
-      Top = 0
-      Width = 185
-      Height = 41
-      Align = alTop
-      BevelOuter = bvNone
-      Caption = 'Generated Reports'
-      TabOrder = 1
-    end
-    object Panel8: TPanel
-      Left = 0
-      Top = 320
-      Width = 185
-      Height = 240
-      Align = alBottom
-      BevelOuter = bvNone
-      Caption = 'Panel3'
-      TabOrder = 2
-      object lbxAsyncReports: TListBox
-        Left = 0
-        Top = 52
-        Width = 185
-        Height = 188
-        Align = alClient
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -21
-        Font.Name = 'FontAwesome'
-        Font.Style = []
-        ItemHeight = 21
-        ParentFont = False
-        Sorted = True
-        TabOrder = 0
-        OnDblClick = lbxAsyncReportsDblClick
-        OnDrawItem = lbxAsyncReportsDrawItem
-      end
-      object Button1: TButton
-        AlignWithMargins = True
-        Left = 3
-        Top = 3
-        Width = 179
-        Height = 46
-        Align = alTop
-        Caption = 'GenReport Async'
-        TabOrder = 1
-        WordWrap = True
-        OnClick = Button1Click
-      end
-    end
-  end
   object Panel6: TPanel
     Left = 0
     Top = 0
@@ -375,7 +180,7 @@ object MainForm: TMainForm
     Height = 65
     Align = alTop
     BevelOuter = bvNone
-    TabOrder = 4
+    TabOrder = 2
     object Image1: TImage
       Left = 953
       Top = 0
@@ -887,6 +692,362 @@ object MainForm: TMainForm
       ExplicitHeight = 56
     end
   end
+  object pnlAsync: TPanel
+    Left = 0
+    Top = 551
+    Width = 1282
+    Height = 136
+    Align = alClient
+    Caption = 'pnlAsync'
+    TabOrder = 3
+    ExplicitTop = 530
+    ExplicitHeight = 157
+    object PageControl1: TPageControl
+      Left = 186
+      Top = 1
+      Width = 1095
+      Height = 134
+      ActivePage = TabSheet4
+      Align = alClient
+      TabOrder = 0
+      ExplicitHeight = 155
+      object TabSheet4: TTabSheet
+        Caption = 'ALL'
+        ImageIndex = 3
+        ExplicitHeight = 123
+        object lbxAll: TListBox
+          Left = 0
+          Top = 0
+          Width = 1087
+          Height = 102
+          Style = lbOwnerDrawFixed
+          Align = alClient
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -21
+          Font.Name = 'FontAwesome'
+          Font.Style = []
+          ItemHeight = 21
+          ParentFont = False
+          TabOrder = 0
+          OnDblClick = lbxAsyReportsCreatedDblClick
+          OnDrawItem = lbxAsyncReportsToCreateDrawItem
+          ExplicitLeft = 1
+          ExplicitTop = -1
+          ExplicitHeight = 123
+        end
+      end
+      object TabSheet1: TTabSheet
+        Caption = 'TO CREATE'
+        ExplicitHeight = 123
+        object lbxAsyncReportsToCreate: TListBox
+          Left = 0
+          Top = 0
+          Width = 1087
+          Height = 102
+          Style = lbOwnerDrawFixed
+          Align = alClient
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -21
+          Font.Name = 'FontAwesome'
+          Font.Style = []
+          ItemHeight = 21
+          ParentFont = False
+          TabOrder = 0
+          OnDrawItem = lbxAsyncReportsToCreateDrawItem
+          ExplicitHeight = 123
+        end
+      end
+      object TabSheet2: TTabSheet
+        Caption = 'CREATED'
+        ImageIndex = 1
+        ExplicitHeight = 123
+        object lbxAsyReportsCreated: TListBox
+          Left = 0
+          Top = 0
+          Width = 1087
+          Height = 102
+          Style = lbOwnerDrawFixed
+          Align = alClient
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -21
+          Font.Name = 'FontAwesome'
+          Font.Style = []
+          ItemHeight = 21
+          ParentFont = False
+          TabOrder = 0
+          OnDblClick = lbxAsyReportsCreatedDblClick
+          OnDrawItem = lbxAsyncReportsToCreateDrawItem
+          ExplicitHeight = 123
+        end
+      end
+      object TabSheet3: TTabSheet
+        Caption = 'DELETED'
+        ImageIndex = 2
+        ExplicitHeight = 123
+        object lbxAsyncReportsDeleted: TListBox
+          Left = 0
+          Top = 0
+          Width = 1087
+          Height = 102
+          Style = lbOwnerDrawFixed
+          Align = alClient
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -21
+          Font.Name = 'FontAwesome'
+          Font.Style = []
+          ItemHeight = 21
+          ParentFont = False
+          TabOrder = 0
+          OnDrawItem = lbxAsyncReportsToCreateDrawItem
+          ExplicitHeight = 123
+        end
+      end
+    end
+    object Panel1: TPanel
+      Left = 1
+      Top = 1
+      Width = 185
+      Height = 134
+      Align = alLeft
+      Caption = 'Panel1'
+      TabOrder = 1
+      ExplicitHeight = 155
+      object Button1: TButton
+        AlignWithMargins = True
+        Left = 4
+        Top = 36
+        Width = 177
+        Height = 44
+        Align = alClient
+        Caption = 'One file, all customers in one  file (Asynchronous)'
+        TabOrder = 0
+        WordWrap = True
+        OnClick = Button1Click
+        ExplicitLeft = 6
+        ExplicitTop = 5
+        ExplicitHeight = 97
+      end
+      object Button2: TButton
+        Left = 1
+        Top = 83
+        Width = 183
+        Height = 50
+        Align = alBottom
+        Caption = 'Create 10 Reports Async'
+        TabOrder = 1
+        OnClick = Button2Click
+        ExplicitTop = 104
+      end
+      object Button3: TButton
+        Left = 1
+        Top = 1
+        Width = 183
+        Height = 32
+        Align = alTop
+        Caption = 'Reset Async Queue'
+        TabOrder = 2
+        OnClick = Button3Click
+        ExplicitLeft = 0
+      end
+    end
+  end
+  object pnlCenter: TPanel
+    Left = 0
+    Top = 127
+    Width = 1282
+    Height = 400
+    Align = alTop
+    Caption = 'pnlCenter'
+    TabOrder = 4
+    object Splitter1: TSplitter
+      Left = 186
+      Top = 1
+      Height = 398
+      ExplicitLeft = 195
+      ExplicitHeight = 199
+    end
+    object pnlGenReports: TPanel
+      Left = 1
+      Top = 1
+      Width = 185
+      Height = 398
+      Align = alLeft
+      BevelOuter = bvNone
+      Caption = 'pnlGenReports'
+      TabOrder = 0
+      object ListBox1: TListBox
+        Left = 0
+        Top = 41
+        Width = 185
+        Height = 357
+        Align = alClient
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -21
+        Font.Name = 'FontAwesome'
+        Font.Style = []
+        ItemHeight = 21
+        ParentFont = False
+        TabOrder = 0
+        OnDblClick = ListBox1DblClick
+      end
+      object Panel7: TPanel
+        Left = 0
+        Top = 0
+        Width = 185
+        Height = 41
+        Align = alTop
+        BevelOuter = bvNone
+        Caption = 'Generated Reports'
+        TabOrder = 1
+      end
+    end
+    object pnlDati: TPanel
+      Left = 189
+      Top = 1
+      Width = 1092
+      Height = 398
+      Align = alClient
+      BevelOuter = bvNone
+      TabOrder = 1
+      object RzPageControl1: TPageControl
+        Left = 0
+        Top = 0
+        Width = 1092
+        Height = 398
+        ActivePage = tsData
+        Align = alClient
+        TabOrder = 0
+        TabWidth = 120
+        object tsData: TTabSheet
+          Caption = 'Data'
+          object DBGrid1: TDBGrid
+            Left = 0
+            Top = 0
+            Width = 1084
+            Height = 366
+            Align = alClient
+            DataSource = DataSource1
+            TabOrder = 0
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -16
+            TitleFont.Name = 'FontAwesome'
+            TitleFont.Style = []
+          end
+        end
+        object tsPDFViewer: TTabSheet
+          Caption = 'Report'
+          object Panel4: TPanel
+            Left = 0
+            Top = 41
+            Width = 1084
+            Height = 325
+            Align = alClient
+            BevelOuter = bvNone
+            Caption = 'Panel4'
+            TabOrder = 0
+          end
+          object Panel5: TPanel
+            Left = 0
+            Top = 0
+            Width = 1084
+            Height = 41
+            Align = alTop
+            BevelOuter = bvNone
+            TabOrder = 1
+            object btnNext: TButton
+              AlignWithMargins = True
+              Left = 925
+              Top = 3
+              Width = 75
+              Height = 35
+              Align = alRight
+              Caption = '>>'
+              TabOrder = 0
+              OnClick = btnNextClick
+            end
+            object btnPrev: TButton
+              AlignWithMargins = True
+              Left = 844
+              Top = 3
+              Width = 75
+              Height = 35
+              Align = alRight
+              Caption = '<<'
+              TabOrder = 1
+              OnClick = btnPrevClick
+            end
+            object btnScale: TButton
+              AlignWithMargins = True
+              Left = 587
+              Top = 3
+              Width = 170
+              Height = 35
+              Align = alRight
+              Caption = 'Scale'
+              TabOrder = 2
+              OnClick = btnScaleClick
+            end
+            object btnPrint: TButton
+              AlignWithMargins = True
+              Left = 539
+              Top = 3
+              Width = 42
+              Height = 35
+              Align = alRight
+              Caption = 'X'
+              TabOrder = 3
+              OnClick = btnPrintClick
+            end
+            object ScrollBar1: TScrollBar
+              AlignWithMargins = True
+              Left = 3
+              Top = 10
+              Width = 483
+              Height = 21
+              Margins.Top = 10
+              Margins.Right = 50
+              Margins.Bottom = 10
+              Align = alClient
+              Max = 300
+              Min = 20
+              PageSize = 0
+              Position = 20
+              TabOrder = 4
+              OnChange = ScrollBar1Change
+            end
+            object btnLast: TButton
+              AlignWithMargins = True
+              Left = 1006
+              Top = 3
+              Width = 75
+              Height = 35
+              Align = alRight
+              Caption = '>|'
+              TabOrder = 5
+              OnClick = btnLastClick
+            end
+            object btnFirst: TButton
+              AlignWithMargins = True
+              Left = 763
+              Top = 3
+              Width = 75
+              Height = 35
+              Align = alRight
+              Caption = '|<'
+              TabOrder = 6
+              OnClick = btnFirstClick
+            end
+          end
+        end
+      end
+    end
+  end
   object DataSource1: TDataSource
     AutoEdit = False
     DataSet = dsCustomers
@@ -895,7 +1056,7 @@ object MainForm: TMainForm
   end
   object FDPhysFBDriverLink1: TFDPhysFBDriverLink
     Left = 544
-    Top = 288
+    Top = 232
   end
   object FDGUIxWaitCursor1: TFDGUIxWaitCursor
     Provider = 'Forms'
@@ -989,7 +1150,7 @@ object MainForm: TMainForm
     Left = 280
     Top = 224
     Content = {
-      414442530F003728A10E0000FF00010001FF02FF03040016000000460044004D
+      414442530F004408A10E0000FF00010001FF02FF03040016000000460044004D
       0065006D005400610062006C006500310005000A0000005400610062006C0065
       00060000000000070000080032000000090000FF0AFF0B04000E000000430055
       00530054005F004E004F0005000E00000043005500530054005F004E004F000C
@@ -1217,7 +1378,7 @@ object MainForm: TMainForm
     Left = 280
     Top = 280
     Content = {
-      414442530F003728FF050000FF00010001FF02FF0304001C0000006400730043
+      414442530F004408FF050000FF00010001FF02FF0304001C0000006400730043
       007500730074006F006D0065007200730042006900670005000A000000540061
       0062006C006500060000000000070000080032000000090000FF0AFF0B04000E
       00000043005500530054005F004E004F0005000E00000043005500530054005F
