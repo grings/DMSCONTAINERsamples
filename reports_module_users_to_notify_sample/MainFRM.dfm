@@ -22,7 +22,6 @@ object frmMain: TfrmMain
     Height = 428
     Align = alLeft
     TabOrder = 0
-    ExplicitHeight = 258
     object Label1: TLabel
       Left = 10
       Top = 20
@@ -100,8 +99,6 @@ object frmMain: TfrmMain
     Height = 428
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 496
-    ExplicitHeight = 258
     object Panel2: TPanel
       Left = 1
       Top = 1
@@ -109,10 +106,8 @@ object frmMain: TfrmMain
       Height = 426
       Align = alClient
       TabOrder = 0
-      ExplicitWidth = 494
-      ExplicitHeight = 256
       object Splitter1: TSplitter
-        Left = 637
+        Left = 387
         Top = 1
         Height = 424
         Align = alRight
@@ -122,93 +117,94 @@ object frmMain: TfrmMain
       inline framePDF1: TframePDF
         Left = 1
         Top = 1
-        Width = 636
+        Width = 386
         Height = 424
         Align = alClient
         TabOrder = 0
+        ExplicitLeft = 1
         ExplicitTop = 1
-        ExplicitWidth = 636
+        ExplicitWidth = 386
         ExplicitHeight = 424
         inherited Panel5: TPanel
-          Width = 636
+          Width = 386
           ExplicitLeft = 0
-          ExplicitWidth = 756
+          ExplicitWidth = 386
           inherited btnNext: TButton
-            Left = 477
+            Left = 227
             Font.Charset = ANSI_CHARSET
             Font.Height = -13
             Font.Name = 'FontAwesome'
             ParentFont = False
-            ExplicitLeft = 597
+            ExplicitLeft = 227
           end
           inherited btnPrev: TButton
-            Left = 396
+            Left = 146
             Font.Charset = ANSI_CHARSET
             Font.Height = -13
             Font.Name = 'FontAwesome'
             ParentFont = False
-            ExplicitLeft = 516
+            ExplicitLeft = 146
           end
           inherited btnScale: TButton
-            Left = 139
+            Left = -111
             Font.Charset = ANSI_CHARSET
             Font.Height = -13
             Font.Name = 'FontAwesome'
             ParentFont = False
-            ExplicitLeft = 259
+            ExplicitLeft = -111
           end
           inherited btnPrint: TButton
-            Left = 91
+            Left = -159
             Font.Charset = ANSI_CHARSET
             Font.Height = -13
             Font.Name = 'FontAwesome'
             ParentFont = False
-            ExplicitLeft = 211
+            ExplicitLeft = -159
           end
           inherited ScrollBar1: TScrollBar
             Width = 35
             ExplicitTop = 10
+            ExplicitWidth = 35
           end
           inherited btnLast: TButton
-            Left = 558
+            Left = 308
             Font.Charset = ANSI_CHARSET
             Font.Height = -13
             Font.Name = 'FontAwesome'
             ParentFont = False
-            ExplicitLeft = 678
+            ExplicitLeft = 308
           end
           inherited btnFirst: TButton
-            Left = 315
+            Left = 65
             Font.Charset = ANSI_CHARSET
             Font.Height = -13
             Font.Name = 'FontAwesome'
             ParentFont = False
-            ExplicitLeft = 435
+            ExplicitLeft = 65
           end
         end
         inherited StatusBar1: TStatusBar
           Top = 405
-          Width = 636
+          Width = 386
           ExplicitLeft = 0
-          ExplicitWidth = 756
+          ExplicitTop = 405
+          ExplicitWidth = 386
         end
         inherited pnlGenReports: TPanel
           Height = 364
-          ExplicitLeft = 0
-          ExplicitTop = 41
-          ExplicitHeight = 317
+          ExplicitHeight = 364
           inherited Label2: TLabel
             Font.Color = clBlack
             Transparent = True
           end
           inherited ListBox1: TListBox
             Height = 343
-            ExplicitTop = 21
+            ExplicitHeight = 343
           end
         end
       end
       object Panel4: TPanel
-        Left = 640
+        Left = 390
         Top = 1
         Width = 228
         Height = 424
@@ -246,8 +242,6 @@ object frmMain: TfrmMain
           ParentFont = False
           TabOrder = 0
           OnDblClick = ListBox1DblClick
-          ExplicitLeft = 3
-          ExplicitTop = 94
         end
         object Panel3: TPanel
           Left = 1
@@ -262,7 +256,6 @@ object frmMain: TfrmMain
           Font.Style = []
           ParentFont = False
           TabOrder = 1
-          ExplicitWidth = 183
           object Label5: TLabel
             Left = 312
             Top = 8
@@ -285,25 +278,67 @@ object frmMain: TfrmMain
             ParentFont = False
             TabOrder = 0
             WordWrap = True
-            ExplicitHeight = 39
           end
-          object Button2: TButton
-            Left = 150
+          object btnShare: TButton
+            Left = 128
             Top = 1
-            Width = 75
+            Width = 97
             Height = 62
             Align = alRight
-            Caption = 'share '#61921
+            Caption = 'Notify To '#61921
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
-            Font.Height = -16
+            Font.Height = -19
             Font.Name = 'FontAwesome'
             Font.Style = []
             ParentFont = False
             TabOrder = 1
-            ExplicitLeft = 107
-            ExplicitTop = 2
-            ExplicitHeight = 39
+            OnClick = btnShareClick
+          end
+        end
+      end
+      object pnlUserShared: TPanel
+        Left = 618
+        Top = 1
+        Width = 250
+        Height = 424
+        Align = alRight
+        Caption = 'pnlUserShared'
+        TabOrder = 2
+        object CheckListBox1: TCheckListBox
+          Left = 1
+          Top = 65
+          Width = 248
+          Height = 358
+          Align = alClient
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -27
+          Font.Name = 'FontAwesome'
+          Font.Style = []
+          ItemHeight = 27
+          ParentFont = False
+          TabOrder = 0
+        end
+        object Panel5: TPanel
+          Left = 1
+          Top = 1
+          Width = 248
+          Height = 64
+          Align = alTop
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          object Label6: TLabel
+            Left = 312
+            Top = 8
+            Width = 73
+            Height = 27
+            AutoSize = False
           end
         end
       end
@@ -316,12 +351,11 @@ object frmMain: TfrmMain
     Height = 76
     Align = alTop
     TabOrder = 2
-    ExplicitWidth = 809
     object Label4: TLabel
       AlignWithMargins = True
       Left = 11
       Top = 4
-      Width = 840
+      Width = 713
       Height = 68
       Margins.Left = 10
       Align = alClient
@@ -337,7 +371,7 @@ object frmMain: TfrmMain
       ExplicitHeight = 56
     end
     object Image1: TImage
-      Left = 854
+      Left = 727
       Top = 1
       Width = 329
       Height = 74
@@ -824,7 +858,26 @@ object frmMain: TfrmMain
         45428789E35CE7CEC5FE3D33DB499DF4F79239B6B1F68EC5FCBDD409EC4EEAA4
         0E522BD8EEA44EEAA417803AB1DD499DF4625227B63BA9935E4CEAC4762775D2
         8B49FF078D922D30664498990000000049454E44AE426082}
-      ExplicitLeft = 312
+      ExplicitLeft = 757
+      ExplicitTop = 0
+    end
+    object btnLogOut: TButton
+      Left = 1056
+      Top = 1
+      Width = 127
+      Height = 74
+      Action = actLogout
+      Align = alRight
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'FontAwesome'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      WordWrap = True
+      ExplicitLeft = 1062
+      ExplicitTop = -1
     end
   end
   object ActionList1: TActionList
@@ -838,6 +891,10 @@ object frmMain: TfrmMain
     object actGenAsyncReport: TAction
       Caption = 'Generate Async Report'
       OnExecute = actGenAsyncReportExecute
+    end
+    object actLogout: TAction
+      Caption = 'Log Out User'
+      OnExecute = actLogoutExecute
     end
   end
 end

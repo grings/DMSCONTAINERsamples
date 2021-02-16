@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls,
   ReportsRPCProxy, JsonDataObjects, System.Net.URLClient, System.Actions,
   Vcl.ActnList, Vcl.Imaging.pngimage, System.IOUtils, FontAwesomeU,
-  FontAwesomeCodes, PdfFrame;
+  FontAwesomeCodes, PdfFrame, Vcl.CheckLst;
 
 type
   TfrmMain = class(TForm)
@@ -32,14 +32,23 @@ type
     Panel3: TPanel;
     Label5: TLabel;
     Button1: TButton;
-    Button2: TButton;
+    btnShare: TButton;
     Splitter1: TSplitter;
+    pnlUserShared: TPanel;
+    CheckListBox1: TCheckListBox;
+    Panel5: TPanel;
+    Label6: TLabel;
+    btnLogOut: TButton;
+    actLogout: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure actLoginExecute(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure actGenAsyncReportExecute(Sender: TObject);
     procedure ListBox1DblClick(Sender: TObject);
+    procedure btnShareClick(Sender: TObject);
+    procedure GenterateReports(UsersToNotify: TJsonArray);
+    procedure actLogoutExecute(Sender: TObject);
 
   private
     { Private declarations }
@@ -47,14 +56,17 @@ type
     FToken: string;
     FThrState: TThread;
     FUserName: string;
+    FOutputDir: string;
     procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
       const Certificate: TCertificate; var Accepted: Boolean);
-    function GetJSONData: TJDOJSONObject;
     procedure RestartAsync(const LastMessage: string = '__first__');
     procedure ResetFolder;
+    procedure GetUsers;
+    function GetSelectedUsers: TJsonArray;
 
   public
     { Public declarations }
+
   end;
 
 var
@@ -64,13 +76,13 @@ const
   SERVERNAME = 'localhost';
   fa_pdf = Char($F1C1);
   fa_magic = Char($F0D0);
-  OUTPUT_DIR = 'output_pdf';
 
 implementation
 
 uses
   MVCFramework.Logger, MVCFramework.JSONRPC, EventStreamsRPCProxy, sevenzip,
-  MVCFramework.Serializer.Commons, MVCFramework.Commons, System.character;
+  MVCFramework.Serializer.Commons, MVCFramework.Commons, System.character,
+  AuthRPCProxy;
 
 {$R *.dfm}
 
@@ -94,7 +106,7 @@ begin
   end;
 end;
 
-procedure TfrmMain.actGenAsyncReportExecute(Sender: TObject);
+procedure TfrmMain.GenterateReports(UsersToNotify: TJsonArray);
 var
   lJTemplateData: TJDOJSONObject;
   lJResp: TJsonObject;
@@ -123,7 +135,7 @@ begin
 
       FUserName + '_' +
       lRepName, lJTemplateData,
-      lJData, 'pdf');
+      lJData, UsersToNotify, 'pdf');
     try
       if not lJResp.IsNull('error') then
       begin
@@ -136,6 +148,11 @@ begin
   finally
     System.TMonitor.exit(fProxy);
   end;
+end;
+
+procedure TfrmMain.actGenAsyncReportExecute(Sender: TObject);
+begin
+  GenterateReports(GetSelectedUsers);
 
 end;
 
@@ -146,6 +163,13 @@ begin
     (edtPassord.Text <> '');
   pnlLogin.Visible := FToken.IsEmpty;
   pnlCenter.Visible := not FToken.IsEmpty;
+  if not FToken.IsEmpty then
+    btnLogOut.Width := 130
+  else
+    btnLogOut.Width := 1;
+
+  btnLogOut.Caption := 'Log out ' + FUserName;
+
 end;
 
 procedure TfrmMain.actLoginExecute(Sender: TObject);
@@ -155,6 +179,7 @@ begin
   ResetFolder();
   FToken := '';
   FUserName := '';
+  ListBox1.Clear;
   lJSON := fProxy.Login(edtUser.Text, edtPassord.Text);
   try
     FToken := lJSON.S['token'];
@@ -166,17 +191,42 @@ begin
 
 end;
 
+procedure TfrmMain.actLogoutExecute(Sender: TObject);
+begin
+  FToken := '';
+  FThrState.Terminate;
+  FThrState:= nil;
+end;
+
+procedure TfrmMain.btnShareClick(Sender: TObject);
+begin
+  if pnlUserShared.Width = 1 then
+  begin
+    GetUsers;
+    pnlUserShared.Width := 250;
+
+  end
+  else
+    pnlUserShared.Width := 1
+end;
+
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
+  FOutputDir := TPath.Combine(FOutputDir, FormatDateTime('yyyyddmmhhnnsszzz', now));
+    pnlUserShared.Width := 1;
   pnlLogin.Align := alClient;
   InstallFont(self);
+  btnLogOut.Width := 1;
   fProxy := TReportsRPCProxy.Create('https://' + SERVERNAME + '/reportsrpc');
   fProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
   fProxy.RPCExecutor.SetOnReceiveResponse(
     procedure(ARequest, aResponse: IJSONRPCObject)
     begin
       Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(false), 'trace');
+      Log.Debug('RESPONSE: ' + sLineBreak + aResponse.ToString(false), 'trace');
+
     end);
+
   ResetFolder;
 
 end;
@@ -188,8 +238,45 @@ begin
   fProxy.Free;
 end;
 
-function TfrmMain.GetJSONData: TJDOJSONObject;
+function TfrmMain.GetSelectedUsers: TJsonArray;
+var
+  i: Integer;
 begin
+  Result := TJsonArray.Create;
+  if pnlUserShared.Width > 1 then
+  begin
+    for i := 0 to CheckListBox1.Count - 1 do
+      if CheckListBox1.Checked[i] then
+        Result.Add(CheckListBox1.Items[i]);
+
+  end;
+end;
+
+procedure TfrmMain.GetUsers;
+var
+  lAuthProxy: TAuthRPCProxy;
+  lJResp: TJsonObject;
+  i: Integer;
+begin
+  lAuthProxy := TAuthRPCProxy.Create('https://' + SERVERNAME + '/authrpc');
+  try
+    lAuthProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+    lJResp := lAuthProxy.GetUsers(FToken, nil);
+    if not lJResp.IsNull('error') then
+    begin
+      raise Exception.Create(lJResp.O['error'].S['message']);
+    end;
+    CheckListBox1.Clear;
+    for i := 0 to lJResp.A['items'].Count - 1 do
+    begin
+      if FUserName <> lJResp.A['items'].O[i].S['username'] then
+
+        CheckListBox1.Items.Add(lJResp.A['items'].O[i].S['username']);
+    end;
+
+  finally
+    lAuthProxy.Free;
+  end;
 
 end;
 
@@ -206,7 +293,7 @@ begin
 
     ResetFolder;
     var
-    lReportFileName := TPath.Combine(OUTPUT_DIR, 'output_pdf.zip');
+    lReportFileName := TPath.Combine(FOutputDir, 'output_pdf.zip');
     var
     lJResp := fProxy.GetAsyncReport(FToken, ListBox1.Items.ValueFromIndex[idx]);
     try
@@ -217,9 +304,9 @@ begin
         var
         lArchive := CreateInArchive(CLSID_CFormatZip);
         lArchive.OpenFile(lReportFileName);
-        TDirectory.CreateDirectory(OUTPUT_DIR);
-        lArchive.ExtractTo(OUTPUT_DIR);
-        framePDF1.LoadDirectory(OUTPUT_DIR);
+        TDirectory.CreateDirectory(FOutputDir);
+        lArchive.ExtractTo(FOutputDir);
+        framePDF1.LoadDirectory(FOutputDir);
       end;
     finally
       lJResp.Free;
@@ -241,8 +328,8 @@ var
   lFile: string;
 begin
   framePDF1.Clear;
-  TDirectory.CreateDirectory(OUTPUT_DIR);
-  lFiles := TDirectory.GetFiles(OUTPUT_DIR, '*.pdf');
+  TDirectory.CreateDirectory(FOutputDir);
+  lFiles := TDirectory.GetFiles(FOutputDir, '*.pdf');
   for lFile in lFiles do
   begin
     DeleteFile(lFile);
@@ -267,7 +354,7 @@ begin
     var
       lJObjResp, lJObjMessage, lObjQueueItem: TJsonObject;
 
-      I, idx: Integer;
+      i, idx: Integer;
       lProxy: TEventStreamsRPCProxy;
 
     begin
@@ -329,7 +416,7 @@ begin
                         end
                         else
                         begin
-                          idx := ListBox1.Items.IndexOfName(fa_pdf + lJObjMessage.S['reportname']);
+                          idx := ListBox1.Items.IndexOfName(fa_pdf + ' ' + lJObjMessage.S['reportname']);
                           if idx >= 0 then
                             ListBox1.Items.Delete(idx);
                         end;

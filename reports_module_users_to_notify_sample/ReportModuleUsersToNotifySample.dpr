@@ -6,7 +6,8 @@ uses
   EventStreamsRPCProxy in '..\commons\EventStreamsRPCProxy.pas',
   ReportsRPCProxy in 'ReportsRPCProxy.pas',
   sevenzip in 'sevenzip.pas',
-  PdfFrame in '..\commons\pdfFrame\PdfFrame.pas' {framePDF: TFrame};
+  PdfFrame in '..\commons\pdfFrame\PdfFrame.pas' {framePDF: TFrame},
+  AuthRPCProxy in 'AuthRPCProxy.pas';
 
 {$R *.res}
 
