@@ -125,81 +125,60 @@ object frmMain: TfrmMain
         ExplicitTop = 1
         ExplicitWidth = 386
         ExplicitHeight = 424
-        inherited Panel5: TPanel
-          Width = 386
-          ExplicitLeft = 0
-          ExplicitWidth = 386
-          inherited btnNext: TButton
-            Left = 227
-            Font.Charset = ANSI_CHARSET
-            Font.Height = -13
-            Font.Name = 'FontAwesome'
-            ParentFont = False
-            ExplicitLeft = 227
-          end
-          inherited btnPrev: TButton
-            Left = 146
-            Font.Charset = ANSI_CHARSET
-            Font.Height = -13
-            Font.Name = 'FontAwesome'
-            ParentFont = False
-            ExplicitLeft = 146
-          end
-          inherited btnScale: TButton
-            Left = -111
-            Font.Charset = ANSI_CHARSET
-            Font.Height = -13
-            Font.Name = 'FontAwesome'
-            ParentFont = False
-            ExplicitLeft = -111
-          end
-          inherited btnPrint: TButton
-            Left = -159
-            Font.Charset = ANSI_CHARSET
-            Font.Height = -13
-            Font.Name = 'FontAwesome'
-            ParentFont = False
-            ExplicitLeft = -159
-          end
-          inherited ScrollBar1: TScrollBar
-            Width = 35
-            ExplicitTop = 10
-            ExplicitWidth = 35
-          end
-          inherited btnLast: TButton
-            Left = 308
-            Font.Charset = ANSI_CHARSET
-            Font.Height = -13
-            Font.Name = 'FontAwesome'
-            ParentFont = False
-            ExplicitLeft = 308
-          end
-          inherited btnFirst: TButton
-            Left = 65
-            Font.Charset = ANSI_CHARSET
-            Font.Height = -13
-            Font.Name = 'FontAwesome'
-            ParentFont = False
-            ExplicitLeft = 65
-          end
-        end
         inherited StatusBar1: TStatusBar
           Top = 405
           Width = 386
-          ExplicitLeft = 0
           ExplicitTop = 405
           ExplicitWidth = 386
         end
         inherited pnlGenReports: TPanel
-          Height = 364
-          ExplicitHeight = 364
+          Top = 125
+          Height = 280
+          ExplicitTop = 43
+          ExplicitHeight = 362
           inherited Label2: TLabel
             Font.Color = clBlack
             Transparent = True
           end
           inherited ListBox1: TListBox
-            Height = 343
-            ExplicitHeight = 343
+            Height = 259
+            ExplicitHeight = 341
+          end
+        end
+        inherited FlowPanel1: TFlowPanel
+          Width = 386
+          Height = 125
+          ExplicitWidth = 386
+          ExplicitHeight = 125
+          inherited btnScale: TButton
+            Left = 4
+            Top = 45
+            ExplicitLeft = 4
+            ExplicitTop = 45
+          end
+          inherited btnLast: TButton
+            Left = 180
+            Top = 45
+            ExplicitLeft = 180
+            ExplicitTop = 45
+          end
+          inherited btnPrev: TButton
+            Left = 261
+            Top = 45
+            ExplicitLeft = 261
+            ExplicitTop = 45
+          end
+          inherited btnNext: TButton
+            Left = 4
+            Top = 86
+            ExplicitLeft = 4
+            ExplicitTop = 86
+          end
+          inherited btnFirst: TButton
+            Left = 85
+            Top = 86
+            ExplicitLeft = 85
+            ExplicitTop = 86
           end
         end
       end
@@ -876,8 +855,6 @@ object frmMain: TfrmMain
       ParentFont = False
       TabOrder = 0
       WordWrap = True
-      ExplicitLeft = 1062
-      ExplicitTop = -1
     end
   end
   object ActionList1: TActionList

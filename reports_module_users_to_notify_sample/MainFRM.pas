@@ -176,7 +176,7 @@ procedure TfrmMain.actLoginExecute(Sender: TObject);
 var
   lJSON: TJsonObject;
 begin
-  ResetFolder();
+
   FToken := '';
   FUserName := '';
   ListBox1.Clear;
@@ -185,6 +185,8 @@ begin
     FToken := lJSON.S['token'];
     FUserName := edtUser.Text;
     RestartAsync('__last__');
+    FOutputDir := TPath.Combine(FOutputDir, FUserName+'_temp');
+    ResetFolder();
   finally
     lJSON.Free;
   end;
@@ -195,7 +197,7 @@ procedure TfrmMain.actLogoutExecute(Sender: TObject);
 begin
   FToken := '';
   FThrState.Terminate;
-  FThrState:= nil;
+  FThrState := nil;
 end;
 
 procedure TfrmMain.btnShareClick(Sender: TObject);
@@ -212,8 +214,7 @@ end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  FOutputDir := TPath.Combine(FOutputDir, FormatDateTime('yyyyddmmhhnnsszzz', now));
-    pnlUserShared.Width := 1;
+  pnlUserShared.Width := 1;
   pnlLogin.Align := alClient;
   InstallFont(self);
   btnLogOut.Width := 1;
@@ -226,8 +227,6 @@ begin
       Log.Debug('RESPONSE: ' + sLineBreak + aResponse.ToString(false), 'trace');
 
     end);
-
-  ResetFolder;
 
 end;
 
@@ -284,34 +283,39 @@ procedure TfrmMain.ListBox1DblClick(Sender: TObject);
 var
   idx: Integer;
 begin
-  idx := TListBox(Sender).ItemIndex;
-  if idx >= 0 then
-  begin
+  System.TMonitor.Enter(ListBox1);
+  try
+    idx := TListBox(Sender).ItemIndex;
+    if idx >= 0 then
+    begin
 
-    if not TListBox(Sender).Items[idx].Contains(fa_pdf) then
-      exit;
+      if not TListBox(Sender).Items[idx].Contains(fa_pdf) then
+        exit;
 
-    ResetFolder;
-    var
-    lReportFileName := TPath.Combine(FOutputDir, 'output_pdf.zip');
-    var
-    lJResp := fProxy.GetAsyncReport(FToken, ListBox1.Items.ValueFromIndex[idx]);
-    try
-      if lJResp.IsNull('error') then
-      begin
+      ResetFolder;
+      var
+      lReportFileName := TPath.Combine(FOutputDir, 'output_pdf.zip');
+      var
+      lJResp := fProxy.GetAsyncReport(FToken, ListBox1.Items.ValueFromIndex[idx]);
+      try
+        if lJResp.IsNull('error') then
+        begin
 
-        Base64StringToFile(lJResp.S['zipfile'], lReportFileName);
-        var
-        lArchive := CreateInArchive(CLSID_CFormatZip);
-        lArchive.OpenFile(lReportFileName);
-        TDirectory.CreateDirectory(FOutputDir);
-        lArchive.ExtractTo(FOutputDir);
-        framePDF1.LoadDirectory(FOutputDir);
+          Base64StringToFile(lJResp.S['zipfile'], lReportFileName);
+          var
+          lArchive := CreateInArchive(CLSID_CFormatZip);
+          lArchive.OpenFile(lReportFileName);
+          TDirectory.CreateDirectory(FOutputDir);
+          lArchive.ExtractTo(FOutputDir);
+          framePDF1.LoadDirectory(FOutputDir);
+        end;
+      finally
+        lJResp.Free;
       end;
-    finally
-      lJResp.Free;
-    end;
 
+    end;
+  finally
+    System.TMonitor.exit(ListBox1);
   end;
 end;
 
@@ -382,6 +386,11 @@ begin
               lJObjResp := lProxy.
                 DequeueMultipleMessage(FToken, lQueueName, lLastMgsID, 1, 10);
               try
+                if not lJObjResp.IsNull('error') then
+                begin
+                  Log.Error(lJObjResp.ToJSON(), 'trace');
+                end;
+
                 if lJObjResp.A['data'].Count > 0 then
                 begin
                   lObjQueueItem := lJObjResp.A['data'].O[0];
@@ -395,30 +404,37 @@ begin
                         lState: string;
                         litem: string;
                       begin
-                        lState := lJObjMessage.S['state'];
+                        System.TMonitor.Enter(ListBox1);
+                        try
 
-                        if lState = 'TO_CREATE' then
-                          ListBox1.Items.Values[fa_magic + lJObjMessage.S['reportname']] :=
-                            lJObjMessage.S['reportid']
+                          lState := lJObjMessage.S['state'];
 
-                        else
-                          if lState = 'CREATED' then
-                        begin
-                          litem := format('%s=%s', [
-                            fa_pdf + ' ' + lJObjMessage.S['reportname'],
-                            lJObjMessage.S['reportid']]);
-                          idx := ListBox1.Items.IndexOfName(fa_magic + lJObjMessage.S['reportname']);
-                          if idx >= 0 then
-                            ListBox1.Items[idx] := litem
+                          if lState = 'TO_CREATE' then
+                            ListBox1.Items.Values[fa_magic + lJObjMessage.S['reportname']] :=
+                              lJObjMessage.S['reportid']
+
                           else
-                            ListBox1.Items.Add(litem);
+                            if lState = 'CREATED' then
+                          begin
+                            litem := format('%s=%s', [
+                              fa_pdf + ' ' + lJObjMessage.S['reportname'],
+                              lJObjMessage.S['reportid']]);
+                            idx := ListBox1.Items.IndexOfName(fa_magic + lJObjMessage.S['reportname']);
+                            if idx >= 0 then
+                              ListBox1.Items[idx] := litem
+                            else
+                              ListBox1.Items.Add(litem);
 
-                        end
-                        else
-                        begin
-                          idx := ListBox1.Items.IndexOfName(fa_pdf + ' ' + lJObjMessage.S['reportname']);
-                          if idx >= 0 then
-                            ListBox1.Items.Delete(idx);
+                          end
+                          else
+                          begin
+                            idx := ListBox1.Items.IndexOfName(fa_pdf + ' ' + lJObjMessage.S['reportname']);
+                            if idx >= 0 then
+                              ListBox1.Items.Delete(idx);
+                          end;
+                        finally
+                          System.TMonitor.exit(ListBox1);
+
                         end;
 
                       end);
@@ -433,7 +449,7 @@ begin
             except
               on E: Exception do
               begin
-
+                Log.Error(E.Message, 'trace');
                 Sleep(1000);
               end;
             end;

@@ -1,134 +1,31 @@
 object framePDF: TframePDF
   Left = 0
   Top = 0
-  Width = 756
+  Width = 768
   Height = 377
   TabOrder = 0
-  object Panel5: TPanel
-    Left = 0
-    Top = 0
-    Width = 756
-    Height = 41
-    Align = alTop
-    BevelOuter = bvNone
-    TabOrder = 0
-    ExplicitLeft = -377
-    ExplicitWidth = 871
-    object btnNext: TButton
-      AlignWithMargins = True
-      Left = 597
-      Top = 3
-      Width = 75
-      Height = 35
-      Align = alRight
-      Caption = '>>'
-      TabOrder = 0
-      OnClick = btnNextClick
-      ExplicitLeft = 712
-    end
-    object btnPrev: TButton
-      AlignWithMargins = True
-      Left = 516
-      Top = 3
-      Width = 75
-      Height = 35
-      Align = alRight
-      Caption = '<<'
-      TabOrder = 1
-      OnClick = btnPrevClick
-      ExplicitLeft = 631
-    end
-    object btnScale: TButton
-      AlignWithMargins = True
-      Left = 259
-      Top = 3
-      Width = 170
-      Height = 35
-      Align = alRight
-      Caption = 'Scale'
-      TabOrder = 2
-      OnClick = btnScaleClick
-      ExplicitLeft = 374
-    end
-    object btnPrint: TButton
-      AlignWithMargins = True
-      Left = 211
-      Top = 3
-      Width = 42
-      Height = 35
-      Align = alRight
-      Caption = 'X'
-      TabOrder = 3
-      OnClick = btnPrintClick
-      ExplicitLeft = 326
-    end
-    object ScrollBar1: TScrollBar
-      AlignWithMargins = True
-      Left = 3
-      Top = 10
-      Width = 155
-      Height = 21
-      Margins.Top = 10
-      Margins.Right = 50
-      Margins.Bottom = 10
-      Align = alClient
-      Max = 300
-      Min = 20
-      PageSize = 0
-      Position = 20
-      TabOrder = 4
-      OnChange = ScrollBar1Change
-      ExplicitTop = 7
-    end
-    object btnLast: TButton
-      AlignWithMargins = True
-      Left = 678
-      Top = 3
-      Width = 75
-      Height = 35
-      Align = alRight
-      Caption = '>|'
-      TabOrder = 5
-      OnClick = btnLastClick
-      ExplicitLeft = 793
-    end
-    object btnFirst: TButton
-      AlignWithMargins = True
-      Left = 435
-      Top = 3
-      Width = 75
-      Height = 35
-      Align = alRight
-      Caption = '|<'
-      TabOrder = 6
-      OnClick = btnFirstClick
-      ExplicitLeft = 550
-    end
-  end
   object StatusBar1: TStatusBar
     Left = 0
     Top = 358
-    Width = 756
+    Width = 768
     Height = 19
     Panels = <
       item
         Width = 200
       end>
-    ExplicitLeft = -526
-    ExplicitWidth = 1282
+    ExplicitWidth = 756
   end
   object pnlGenReports: TPanel
     Left = 0
-    Top = 41
+    Top = 43
     Width = 185
-    Height = 317
+    Height = 315
     Align = alLeft
     BevelOuter = bvNone
     Caption = 'pnlGenReports'
-    TabOrder = 2
-    ExplicitLeft = 1
-    ExplicitTop = -181
-    ExplicitHeight = 558
+    TabOrder = 1
+    ExplicitTop = 41
+    ExplicitHeight = 317
     object Label2: TLabel
       Left = 0
       Top = 0
@@ -152,7 +49,7 @@ object framePDF: TframePDF
       Left = 0
       Top = 21
       Width = 185
-      Height = 296
+      Height = 294
       Style = lbOwnerDrawFixed
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
@@ -165,6 +62,99 @@ object framePDF: TframePDF
       TabOrder = 0
       OnDblClick = ListBox1DblClick
       OnDrawItem = ListBox1DrawItem
+      ExplicitHeight = 296
+    end
+  end
+  object FlowPanel1: TFlowPanel
+    Left = 0
+    Top = 0
+    Width = 768
+    Height = 43
+    Align = alTop
+    AutoSize = True
+    TabOrder = 2
+    object ScrollBar1: TScrollBar
+      AlignWithMargins = True
+      Left = 4
+      Top = 11
+      Width = 155
+      Height = 21
+      Margins.Top = 10
+      Margins.Right = 50
+      Margins.Bottom = 10
+      Align = alClient
+      Max = 300
+      Min = 20
+      PageSize = 0
+      Position = 20
+      TabOrder = 0
+      OnChange = ScrollBar1Change
+    end
+    object Button1: TButton
+      AlignWithMargins = True
+      Left = 212
+      Top = 4
+      Width = 42
+      Height = 35
+      Align = alRight
+      Caption = 'X'
+      TabOrder = 1
+      OnClick = btnPrintClick
+    end
+    object btnScale: TButton
+      AlignWithMargins = True
+      Left = 260
+      Top = 4
+      Width = 170
+      Height = 35
+      Align = alRight
+      Caption = 'Scale'
+      TabOrder = 2
+      OnClick = btnScaleClick
+    end
+    object btnLast: TButton
+      AlignWithMargins = True
+      Left = 436
+      Top = 4
+      Width = 75
+      Height = 35
+      Align = alRight
+      Caption = '|<'
+      TabOrder = 3
+      OnClick = btnFirstClick
+    end
+    object btnPrev: TButton
+      AlignWithMargins = True
+      Left = 517
+      Top = 4
+      Width = 75
+      Height = 35
+      Align = alRight
+      Caption = '<<'
+      TabOrder = 4
+      OnClick = btnPrevClick
+    end
+    object btnNext: TButton
+      AlignWithMargins = True
+      Left = 598
+      Top = 4
+      Width = 75
+      Height = 35
+      Align = alRight
+      Caption = '>>'
+      TabOrder = 5
+      OnClick = btnNextClick
+    end
+    object btnFirst: TButton
+      AlignWithMargins = True
+      Left = 679
+      Top = 4
+      Width = 75
+      Height = 35
+      Align = alRight
+      Caption = '>|'
+      TabOrder = 6
+      OnClick = btnLastClick
     end
   end
   object PrintDialog1: TPrintDialog

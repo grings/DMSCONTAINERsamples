@@ -9,19 +9,19 @@ uses
 
 type
   TframePDF = class(TFrame)
-    Panel5: TPanel;
-    btnNext: TButton;
-    btnPrev: TButton;
-    btnScale: TButton;
-    btnPrint: TButton;
-    ScrollBar1: TScrollBar;
-    btnLast: TButton;
-    btnFirst: TButton;
     StatusBar1: TStatusBar;
     PrintDialog1: TPrintDialog;
     pnlGenReports: TPanel;
     Label2: TLabel;
     ListBox1: TListBox;
+    FlowPanel1: TFlowPanel;
+    ScrollBar1: TScrollBar;
+    Button1: TButton;
+    btnScale: TButton;
+    btnLast: TButton;
+    btnPrev: TButton;
+    btnNext: TButton;
+    btnFirst: TButton;
     procedure btnPrevClick(Sender: TObject);
     procedure btnPrintClick(Sender: TObject);
     procedure btnScaleClick(Sender: TObject);
