@@ -121,6 +121,7 @@ begin
   fPDFViewer.Color := clGray;
   fPDFViewer.ScaleMode := smFitWidth;
   fPDFViewer.PageColor := RGB(255, 255, 200);
+  fPDFViewer.AllowUserTextSelection:= false;
   UpdateGUI;
 end;
 

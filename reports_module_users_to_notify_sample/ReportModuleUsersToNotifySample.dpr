@@ -7,7 +7,8 @@ uses
   ReportsRPCProxy in 'ReportsRPCProxy.pas',
   sevenzip in 'sevenzip.pas',
   PdfFrame in '..\commons\pdfFrame\PdfFrame.pas' {framePDF: TFrame},
-  AuthRPCProxy in 'AuthRPCProxy.pas';
+  AuthRPCProxy in 'AuthRPCProxy.pas',
+  NotifyUsersFrm in 'NotifyUsersFrm.pas' {frmSelectUsers};
 
 {$R *.res}
 

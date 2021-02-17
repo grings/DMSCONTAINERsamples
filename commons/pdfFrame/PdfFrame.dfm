@@ -13,7 +13,6 @@ object framePDF: TframePDF
       item
         Width = 200
       end>
-    ExplicitWidth = 756
   end
   object pnlGenReports: TPanel
     Left = 0
@@ -24,8 +23,6 @@ object framePDF: TframePDF
     BevelOuter = bvNone
     Caption = 'pnlGenReports'
     TabOrder = 1
-    ExplicitTop = 41
-    ExplicitHeight = 317
     object Label2: TLabel
       Left = 0
       Top = 0
@@ -62,7 +59,6 @@ object framePDF: TframePDF
       TabOrder = 0
       OnDblClick = ListBox1DblClick
       OnDrawItem = ListBox1DrawItem
-      ExplicitHeight = 296
     end
   end
   object FlowPanel1: TFlowPanel

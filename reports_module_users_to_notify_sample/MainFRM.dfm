@@ -1,7 +1,7 @@
 object frmMain: TfrmMain
   Left = 0
   Top = 0
-  Caption = 'frmMain'
+  Caption = 'DMS Container Report Notify'
   ClientHeight = 504
   ClientWidth = 1184
   Color = clBtnFace
@@ -107,7 +107,7 @@ object frmMain: TfrmMain
       Align = alClient
       TabOrder = 0
       object Splitter1: TSplitter
-        Left = 387
+        Left = 637
         Top = 1
         Height = 424
         Align = alRight
@@ -117,7 +117,7 @@ object frmMain: TfrmMain
       inline framePDF1: TframePDF
         Left = 1
         Top = 1
-        Width = 386
+        Width = 636
         Height = 424
         Align = alClient
         TabOrder = 0
@@ -127,26 +127,26 @@ object frmMain: TfrmMain
         ExplicitHeight = 424
         inherited StatusBar1: TStatusBar
           Top = 405
-          Width = 386
+          Width = 636
           ExplicitTop = 405
           ExplicitWidth = 386
         end
         inherited pnlGenReports: TPanel
           Top = 125
           Height = 280
-          ExplicitTop = 43
-          ExplicitHeight = 362
+          ExplicitTop = 125
+          ExplicitHeight = 280
           inherited Label2: TLabel
             Font.Color = clBlack
             Transparent = True
           end
           inherited ListBox1: TListBox
             Height = 259
-            ExplicitHeight = 341
+            ExplicitHeight = 259
           end
         end
         inherited FlowPanel1: TFlowPanel
-          Width = 386
+          Width = 636
           Height = 125
           ExplicitWidth = 386
           ExplicitHeight = 125
@@ -183,13 +183,14 @@ object frmMain: TfrmMain
         end
       end
       object Panel4: TPanel
-        Left = 390
+        Left = 640
         Top = 1
         Width = 228
         Height = 424
         Align = alRight
         Caption = 'Panel4'
         TabOrder = 1
+        ExplicitLeft = 390
         object Label3: TLabel
           Left = 1
           Top = 65
@@ -235,6 +236,8 @@ object frmMain: TfrmMain
           Font.Style = []
           ParentFont = False
           TabOrder = 1
+          ExplicitLeft = -3
+          ExplicitTop = 3
           object Label5: TLabel
             Left = 312
             Top = 8
@@ -257,67 +260,23 @@ object frmMain: TfrmMain
             ParentFont = False
             TabOrder = 0
             WordWrap = True
+            ExplicitLeft = 2
+            ExplicitTop = 2
           end
-          object btnShare: TButton
-            Left = 128
-            Top = 1
-            Width = 97
-            Height = 62
-            Align = alRight
-            Caption = 'Notify To '#61921
-            Font.Charset = ANSI_CHARSET
+          object chkNotifyUsers: TCheckBox
+            Left = 120
+            Top = 16
+            Width = 101
+            Height = 33
+            Caption = 'Notify To Users'
+            Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
-            Font.Height = -19
-            Font.Name = 'FontAwesome'
+            Font.Height = -15
+            Font.Name = 'Tahoma'
             Font.Style = []
             ParentFont = False
             TabOrder = 1
-            OnClick = btnShareClick
-          end
-        end
-      end
-      object pnlUserShared: TPanel
-        Left = 618
-        Top = 1
-        Width = 250
-        Height = 424
-        Align = alRight
-        Caption = 'pnlUserShared'
-        TabOrder = 2
-        object CheckListBox1: TCheckListBox
-          Left = 1
-          Top = 65
-          Width = 248
-          Height = 358
-          Align = alClient
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -27
-          Font.Name = 'FontAwesome'
-          Font.Style = []
-          ItemHeight = 27
-          ParentFont = False
-          TabOrder = 0
-        end
-        object Panel5: TPanel
-          Left = 1
-          Top = 1
-          Width = 248
-          Height = 64
-          Align = alTop
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          TabOrder = 1
-          object Label6: TLabel
-            Left = 312
-            Top = 8
-            Width = 73
-            Height = 27
-            AutoSize = False
+            WordWrap = True
           end
         end
       end

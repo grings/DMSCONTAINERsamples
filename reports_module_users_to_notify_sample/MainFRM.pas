@@ -32,21 +32,16 @@ type
     Panel3: TPanel;
     Label5: TLabel;
     Button1: TButton;
-    btnShare: TButton;
     Splitter1: TSplitter;
-    pnlUserShared: TPanel;
-    CheckListBox1: TCheckListBox;
-    Panel5: TPanel;
-    Label6: TLabel;
     btnLogOut: TButton;
     actLogout: TAction;
+    chkNotifyUsers: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure actLoginExecute(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure actGenAsyncReportExecute(Sender: TObject);
     procedure ListBox1DblClick(Sender: TObject);
-    procedure btnShareClick(Sender: TObject);
     procedure GenterateReports(UsersToNotify: TJsonArray);
     procedure actLogoutExecute(Sender: TObject);
 
@@ -61,7 +56,6 @@ type
       const Certificate: TCertificate; var Accepted: Boolean);
     procedure RestartAsync(const LastMessage: string = '__first__');
     procedure ResetFolder;
-    procedure GetUsers;
     function GetSelectedUsers: TJsonArray;
 
   public
@@ -82,7 +76,7 @@ implementation
 uses
   MVCFramework.Logger, MVCFramework.JSONRPC, EventStreamsRPCProxy, sevenzip,
   MVCFramework.Serializer.Commons, MVCFramework.Commons, System.character,
-  AuthRPCProxy;
+  AuthRPCProxy, NotifyUsersFrm;
 
 {$R *.dfm}
 
@@ -185,7 +179,7 @@ begin
     FToken := lJSON.S['token'];
     FUserName := edtUser.Text;
     RestartAsync('__last__');
-    FOutputDir := TPath.Combine(FOutputDir, FUserName+'_temp');
+    FOutputDir := TPath.Combine(FOutputDir, FUserName + '_temp');
     ResetFolder();
   finally
     lJSON.Free;
@@ -200,21 +194,8 @@ begin
   FThrState := nil;
 end;
 
-procedure TfrmMain.btnShareClick(Sender: TObject);
-begin
-  if pnlUserShared.Width = 1 then
-  begin
-    GetUsers;
-    pnlUserShared.Width := 250;
-
-  end
-  else
-    pnlUserShared.Width := 1
-end;
-
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  pnlUserShared.Width := 1;
   pnlLogin.Align := alClient;
   InstallFont(self);
   btnLogOut.Width := 1;
@@ -239,44 +220,54 @@ end;
 
 function TfrmMain.GetSelectedUsers: TJsonArray;
 var
-  i: Integer;
-begin
-  Result := TJsonArray.Create;
-  if pnlUserShared.Width > 1 then
-  begin
-    for i := 0 to CheckListBox1.Count - 1 do
-      if CheckListBox1.Checked[i] then
-        Result.Add(CheckListBox1.Items[i]);
 
-  end;
-end;
-
-procedure TfrmMain.GetUsers;
-var
   lAuthProxy: TAuthRPCProxy;
   lJResp: TJsonObject;
   i: Integer;
 begin
-  lAuthProxy := TAuthRPCProxy.Create('https://' + SERVERNAME + '/authrpc');
-  try
-    lAuthProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lJResp := lAuthProxy.GetUsers(FToken, nil);
-    if not lJResp.IsNull('error') then
-    begin
-      raise Exception.Create(lJResp.O['error'].S['message']);
-    end;
-    CheckListBox1.Clear;
-    for i := 0 to lJResp.A['items'].Count - 1 do
-    begin
-      if FUserName <> lJResp.A['items'].O[i].S['username'] then
 
-        CheckListBox1.Items.Add(lJResp.A['items'].O[i].S['username']);
+  Result := nil;
+
+  if chkNotifyUsers.Checked then
+  begin
+    lAuthProxy := TAuthRPCProxy.Create('https://' + SERVERNAME + '/authrpc');
+    try
+      lAuthProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+      lJResp := lAuthProxy.GetUsers(FToken, nil);
+      if not lJResp.IsNull('error') then
+      begin
+        raise Exception.Create(lJResp.O['error'].S['message']);
+      end;
+      frmSelectUsers := TfrmSelectUsers.Create(nil);
+      try
+
+        frmSelectUsers.chklistUsers.Clear;
+        for i := 0 to lJResp.A['items'].Count - 1 do
+        begin
+          if FUserName <> lJResp.A['items'].O[i].S['username'] then
+
+            frmSelectUsers.chklistUsers.Items.Add(lJResp.A['items'].O[i].S['username']);
+        end;
+
+        if frmSelectUsers.ShowModal = mrOk then
+        begin
+          Result := TJsonArray.Create;
+          for i := 0 to frmSelectUsers.chklistUsers.Count - 1 do
+          begin
+            if frmSelectUsers.chklistUsers.Checked[i] then
+              Result.Add(frmSelectUsers.chklistUsers.Items[i]);
+          end;
+        end;
+
+      finally
+        frmSelectUsers.Free;
+      end;
+
+    finally
+      lAuthProxy.Free;
     end;
 
-  finally
-    lAuthProxy.Free;
   end;
-
 end;
 
 procedure TfrmMain.ListBox1DblClick(Sender: TObject);
