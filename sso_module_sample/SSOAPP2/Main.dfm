@@ -32,7 +32,7 @@ object MainFrm: TMainFrm
       Left = 699
       Top = 11
       Width = 54
-      Height = 51
+      Height = 23
       Margins.Left = 10
       Margins.Top = 10
       Margins.Right = 10
@@ -46,13 +46,12 @@ object MainFrm: TMainFrm
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      ExplicitHeight = 23
     end
     object Image1: TImage
       Left = 1
       Top = 1
       Width = 329
-      Height = 71
+      Height = 64
       Align = alLeft
       AutoSize = True
       Center = True

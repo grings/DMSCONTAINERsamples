@@ -98,3 +98,6 @@ reports_module_sample/bin/output_pdf.zip
 *.~18~
 event_streams_module_tutorial/__history/
 excel_module_sample/__history/
+reports_module_sample/bin/reports.conf
+sso_configuration_provider/delphi_desktop_app/__history/
+sso_configuration_provider/delphi_desktop_app/bin/

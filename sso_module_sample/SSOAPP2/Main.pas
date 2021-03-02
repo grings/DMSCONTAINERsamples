@@ -94,7 +94,7 @@ var
   lJSONUserData: TJsonObject;
 begin
   lJSONUserData := GetUIDataAsJSONObject;
-  fAuthService.SaveUserData(fUserContextID, lJSONUserData);
+  fAuthService.SaveUserData(fUserContextID, CONTEXT_NAME, lJSONUserData);
 end;
 
 procedure TMainFrm.FormClose(Sender: TObject; var Action: TCloseAction);

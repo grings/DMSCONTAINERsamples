@@ -184,12 +184,11 @@ var
   I: Integer;
   lJSystemData: TJsonObject;
 begin
-
   lbRoles.Items.Clear;
   if fIsAuth then
   begin
     lJSystemData := fJCustomValue.O['systemdata'];
-    Label1.Caption := Format('Welcome %s %s ', [lJSystemData.S['nome'],
+    Label1.Caption := Format('Welcome %s %s ', [lJSystemData.S['first_name'],
       lJSystemData.S['last_name']]);
     edtName.Text := lJSystemData.S['first_name'];
     edtSurname.Text := lJSystemData.S['last_name'];
@@ -198,7 +197,6 @@ begin
     btnAction.Caption := fa_lock + ' ' + btnAction.Caption;
     for I := 0 to lARuoli.Count - 1 do
       lbRoles.AddItem(lARuoli[I].Value, nil);
-
   end
   else
   begin

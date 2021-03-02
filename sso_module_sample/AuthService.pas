@@ -11,7 +11,7 @@ Type
     function CheckIsSSOAuth(AContextName: String; out ASSOData: TJsonObject): Boolean;
     procedure Logout;
     function Login(AUser, APWD: String): Boolean;
-    procedure SaveUserData(AIDUserContext: Integer; AUserData: TJsonObject);
+    procedure SaveUserData(AIDUserContext: Integer; ContextName: String; AUserData: TJsonObject);
   End;
 
   TAuthService = class(TInterfacedObject, IAuthService)
@@ -26,7 +26,7 @@ Type
   public
     function CheckIsSSOAuth(AContextName: String; out ASSOData: TJsonObject): Boolean;
     function Login(AUser, APWD: String): Boolean;
-    procedure SaveUserData(AIDUserContext: Integer; AUserData: TJsonObject);
+    procedure SaveUserData(AIDUserContext: Integer; ContextName: String; AUserData: TJsonObject);
     procedure Logout;
     constructor Create;
     destructor Destroy; override;
@@ -54,14 +54,9 @@ begin
     Exit(False);
 
   try
-    lJResult := fAuthRPCProxy.IsAuthForContext(lToken, AContextName);
+    lJResult := fAuthRPCProxy.GetAllMyContextInfoByContextName(lToken, AContextName);
     try
-      ASSOData := nil;
-      Result := lJResult.B['return'];
-      if Result then
-      begin
-        ASSOData := lJResult.O['data'].Clone as TJsonObject;
-      end;
+      ASSOData := lJResult.Clone as TJsonObject;
     finally
       lJResult.Free;
     end;
@@ -75,9 +70,9 @@ begin
   TFile.WriteAllText(getTokenPathFile, FToken, TEncoding.ASCII);
 end;
 
-procedure TAuthService.SaveUserData(AIDUserContext: Integer; AUserData: TJsonObject);
+procedure TAuthService.SaveUserData(AIDUserContext: Integer; ContextName: String; AUserData: TJsonObject);
 begin
-  fAuthRPCProxy.UpdateContextUserData(FToken, AIDUserContext, AUserData);
+  fAuthRPCProxy.SetMyUserDataByContextName(FToken, ContextName, AUserData);
 end;
 
 function TAuthService.getTokenPathFile: String;
