@@ -32,7 +32,7 @@ object MainFrm: TMainFrm
       Left = 699
       Top = 11
       Width = 54
-      Height = 23
+      Height = 51
       Margins.Left = 10
       Margins.Top = 10
       Margins.Right = 10
@@ -46,12 +46,13 @@ object MainFrm: TMainFrm
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
+      ExplicitHeight = 23
     end
     object Image1: TImage
       Left = 1
       Top = 1
       Width = 329
-      Height = 64
+      Height = 71
       Align = alLeft
       AutoSize = True
       Center = True
@@ -611,9 +612,16 @@ object MainFrm: TMainFrm
     object Label7: TLabel
       Left = 14
       Top = 344
-      Width = 252
-      Height = 16
-      Caption = 'SystemData (This User for This Context [R/O])'
+      Width = 216
+      Height = 38
+      Caption = 'SystemData'#13'(This User for This Context [R/O])'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'FontAwesome'
+      Font.Style = []
+      ParentFont = False
+      WordWrap = True
     end
     object edtName: TEdit
       Left = 14
@@ -697,9 +705,16 @@ object MainFrm: TMainFrm
     object Label8: TLabel
       Left = 16
       Top = 344
-      Width = 240
-      Height = 16
-      Caption = 'UserData (This User for This Context [R/W])'
+      Width = 218
+      Height = 38
+      Caption = 'UserData'#13'(This User for This Context [R/W])'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'FontAwesome'
+      Font.Style = []
+      ParentFont = False
+      WordWrap = True
     end
     object btnRefresh: TButton
       Left = 288
