@@ -319,10 +319,9 @@ begin
         lJData := GetJSONDataMulti(dsCustomers);
         lJData.O['meta'].S['title'] := 'Customer List ' + DateTimeToStr(now);
         lJResp := fProxy.GenerateMultipleReportAsync(fToken,
-
           TPath.GetFileNameWithoutExtension(lModelFileName) + '_' +
           lRepName, lJTemplateData,
-          lJData, 'pdf');
+          lJData, nil, 'pdf');
         try
           if not lJResp.IsNull('error') then
           begin

@@ -11,7 +11,7 @@ uses
   MainFormU in 'MainFormU.pas' {MainForm},
   UnZipUtilsU in 'UnZipUtilsU.pas',
   sevenzip in 'sevenzip.pas',
-  ReportsRPCProxy in 'ReportsRPCProxy.pas',
+  ReportsRPCProxy in '..\commons\ReportsRPCProxy.pas',
   Vcl.Themes,
   Vcl.Styles,
   PdfiumCore in 'lib\PdfiumCore.pas',

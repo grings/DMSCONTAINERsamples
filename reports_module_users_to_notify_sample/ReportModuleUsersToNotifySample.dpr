@@ -4,11 +4,11 @@ uses
   Vcl.Forms,
   MainFRM in 'MainFRM.pas' {frmMain},
   EventStreamsRPCProxy in '..\commons\EventStreamsRPCProxy.pas',
-  ReportsRPCProxy in 'ReportsRPCProxy.pas',
   sevenzip in 'sevenzip.pas',
   PdfFrame in '..\commons\pdfFrame\PdfFrame.pas' {framePDF: TFrame},
-  AuthRPCProxy in 'AuthRPCProxy.pas',
-  NotifyUsersFrm in 'NotifyUsersFrm.pas' {frmSelectUsers};
+  NotifyUsersFrm in 'NotifyUsersFrm.pas' {frmSelectUsers},
+  AuthRPCProxy in '..\commons\AuthRPCProxy.pas',
+  ReportsRPCProxy in '..\commons\ReportsRPCProxy.pas';
 
 {$R *.res}
 

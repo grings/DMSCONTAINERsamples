@@ -109,18 +109,18 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\commons\EventStreamsRPCProxy.pas"/>
-        <DCCReference Include="ReportsRPCProxy.pas"/>
         <DCCReference Include="sevenzip.pas"/>
         <DCCReference Include="..\commons\pdfFrame\PdfFrame.pas">
             <Form>framePDF</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="AuthRPCProxy.pas"/>
         <DCCReference Include="NotifyUsersFrm.pas">
             <Form>frmSelectUsers</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\commons\AuthRPCProxy.pas"/>
+        <DCCReference Include="..\commons\ReportsRPCProxy.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -2,12 +2,14 @@ program ExcelModuleSample;
 
 
 
+{$R *.dres}
+
 uses
   Vcl.Forms,
   MainFormU in 'MainFormU.pas' {MainForm},
-  ExcelRPCProxy in 'ExcelRPCProxy.pas',
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  ExcelRPCProxy in '..\commons\ExcelRPCProxy.pas';
 
 {$R *.res}
 

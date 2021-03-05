@@ -812,8 +812,6 @@ object MainForm: TMainForm
         TabOrder = 0
         WordWrap = True
         OnClick = Button1Click
-        ExplicitLeft = 2
-        ExplicitTop = 6
       end
       object Button2: TButton
         Left = 1
@@ -824,7 +822,6 @@ object MainForm: TMainForm
         Caption = 'Create 10 Reports Async'
         TabOrder = 1
         OnClick = Button2Click
-        ExplicitTop = 51
       end
     end
   end
@@ -924,6 +921,10 @@ object MainForm: TMainForm
         end
         object tsPDFViewer: TTabSheet
           Caption = 'Report'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object Panel4: TPanel
             Left = 0
             Top = 41
@@ -1132,7 +1133,7 @@ object MainForm: TMainForm
     Left = 280
     Top = 224
     Content = {
-      414442530F00E925A10E0000FF00010001FF02FF03040016000000460044004D
+      414442530F00FB2AA10E0000FF00010001FF02FF03040016000000460044004D
       0065006D005400610062006C006500310005000A0000005400610062006C0065
       00060000000000070000080032000000090000FF0AFF0B04000E000000430055
       00530054005F004E004F0005000E00000043005500530054005F004E004F000C
@@ -1360,7 +1361,7 @@ object MainForm: TMainForm
     Left = 280
     Top = 280
     Content = {
-      414442530F00E925FF050000FF00010001FF02FF0304001C0000006400730043
+      414442530F00FB2AFF050000FF00010001FF02FF0304001C0000006400730043
       007500730074006F006D0065007200730042006900670005000A000000540061
       0062006C006500060000000000070000080032000000090000FF0AFF0B04000E
       00000043005500530054005F004E004F0005000E00000043005500530054005F

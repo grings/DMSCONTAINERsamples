@@ -7,11 +7,11 @@ program SSOModuleSampleApp2;
 uses
   Vcl.Forms,
   Main in 'Main.pas' {MainFrm},
-  AuthRPCProxy in '..\AuthRPCProxy.pas',
   AuthService in '..\AuthService.pas',
   LoginFormU in '..\LoginFormU.pas' {LoginForm},
   FontAwesomeCodes in '..\..\commons\FontAwesomeCodes.pas',
-  FontAwesomeU in '..\..\commons\FontAwesomeU.pas';
+  FontAwesomeU in '..\..\commons\FontAwesomeU.pas',
+  AuthRPCProxy in '..\..\commons\AuthRPCProxy.pas';
 
 {$R *.res}
 

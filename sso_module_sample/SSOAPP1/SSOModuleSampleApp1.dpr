@@ -10,10 +10,10 @@ uses
   Vcl.Forms,
   Main in 'Main.pas' {MainFrm},
   AuthService in '..\AuthService.pas',
-  AuthRPCProxy in '..\AuthRPCProxy.pas',
   LoginFormU in '..\LoginFormU.pas' {LoginForm},
   FontAwesomeU in '..\..\commons\FontAwesomeU.pas',
-  FontAwesomeCodes in '..\..\commons\FontAwesomeCodes.pas';
+  FontAwesomeCodes in '..\..\commons\FontAwesomeCodes.pas',
+  AuthRPCProxy in '..\..\commons\AuthRPCProxy.pas';
 
 {$R *.res}
 
