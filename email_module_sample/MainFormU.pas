@@ -85,7 +85,7 @@ type
   private
     fRPCExecutor: IMVCJSONRPCExecutor;
     fToken: string;
-    fEmailRPCProxy: TEmailRPCProxy;
+    fEmailRPCProxy: IEmailRPCProxy;
     procedure FillWithAttachments(aMetaMessage: TJSONObject);
     procedure CreateMemTableStructure;
     procedure AdjustColumns;
@@ -713,7 +713,7 @@ end;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  fEmailRPCProxy.Free;
+//  fEmailRPCProxy.Free;
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);

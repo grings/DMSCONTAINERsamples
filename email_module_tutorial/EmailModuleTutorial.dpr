@@ -3,7 +3,7 @@ program EmailModuleTutorial;
 uses
   Vcl.Forms,
   MainFormU in 'MainFormU.pas' {MainForm},
-  EmailRPCProxy in 'EmailRPCProxy.pas';
+  EmailRPCProxy in '..\commons\EmailRPCProxy.pas';
 
 {$R *.res}
 

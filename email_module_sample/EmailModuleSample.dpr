@@ -8,7 +8,7 @@ uses
   ConstsU in 'ConstsU.pas',
   Vcl.Themes,
   Vcl.Styles,
-  EmailRPCProxy in 'EmailRPCProxy.pas',
+  EmailRPCProxy in '..\commons\EmailRPCProxy.pas',
   UtilsU in '..\commons\UtilsU.pas';
 
 {$R *.res}

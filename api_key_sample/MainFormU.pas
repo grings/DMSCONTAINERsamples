@@ -71,7 +71,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnRawJSONClick(Sender: TObject);
   private
-    fProxy: TExcelRPCProxy;
+    fProxy: IExcelRPCProxy;
     fToken: string;
     function DelphiDataTypeToExcel(const DataType: TFieldType): string;
     procedure ResetFolder;
@@ -229,12 +229,12 @@ begin
   except
     // do nothing
   end;
-  fProxy.Free;
+//  fProxy.Free;
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  dsCustomers.LoadFromFile(TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), 'customers.json'), sfJSON);
+  dsCustomers.LoadFromFile(TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), '..\..\data\customers.json'), sfJSON);
   InstallFont(Self);
   ResetFolder;
   fProxy := TExcelRPCProxy.Create(GetEndPoint);

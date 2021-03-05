@@ -21,7 +21,7 @@ type
     procedure Button1Click(Sender: TObject);
   private
     fUserName: string;
-    fProxy: TEventStreamsRPCProxy;
+    fProxy: IEventStreamsRPCProxy;
     fToken: string;
     fReceiveTask: ITask;
     procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;

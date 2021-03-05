@@ -645,7 +645,6 @@ object MainForm: TMainForm
       Font.Name = 'FontAwesome'
       Font.Style = []
       ParentFont = False
-      ExplicitTop = 413
       ExplicitWidth = 81
     end
     object Label2: TLabel
@@ -700,7 +699,6 @@ object MainForm: TMainForm
       Font.Name = 'FontAwesome'
       Font.Style = []
       ParentFont = False
-      ExplicitTop = 573
       ExplicitWidth = 81
     end
     object btnStatus: TButton
@@ -718,7 +716,6 @@ object MainForm: TMainForm
       TabOrder = 0
       WordWrap = True
       OnClick = btnStatusClick
-      ExplicitTop = 442
     end
     object btnGetMyMessages: TButton
       AlignWithMargins = True
@@ -735,7 +732,6 @@ object MainForm: TMainForm
       TabOrder = 1
       WordWrap = True
       OnClick = btnGetMyMessagesClick
-      ExplicitTop = 500
     end
     object btnLoginAsSender: TButton
       AlignWithMargins = True
@@ -809,7 +805,6 @@ object MainForm: TMainForm
       TabOrder = 5
       WordWrap = True
       OnClick = btnRefreshTokenClick
-      ExplicitTop = 602
     end
     object Panel5: TPanel
       Left = 0
@@ -879,9 +874,6 @@ object MainForm: TMainForm
         TabOrder = 0
         WordWrap = True
         OnClick = btnSendBulkMessagesClick
-        ExplicitLeft = 185
-        ExplicitTop = 6
-        ExplicitHeight = 54
       end
       object btnSendText: TButton
         AlignWithMargins = True
@@ -898,8 +890,6 @@ object MainForm: TMainForm
         TabOrder = 1
         WordWrap = True
         OnClick = btnSendTextClick
-        ExplicitLeft = 13
-        ExplicitTop = 10
       end
     end
   end

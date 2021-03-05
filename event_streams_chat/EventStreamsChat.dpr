@@ -3,8 +3,8 @@ program EventStreamsChat;
 uses
   Vcl.Forms,
   MainFormU in 'MainFormU.pas' {MainForm},
-  EventStreamsRPCProxy in 'EventStreamsRPCProxy.pas',
-  EmojiSupportU in 'EmojiSupportU.pas';
+  EmojiSupportU in 'EmojiSupportU.pas',
+  EventStreamsRPCProxy in '..\commons\EventStreamsRPCProxy.pas';
 
 {$R *.res}
 

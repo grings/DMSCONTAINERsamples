@@ -2,10 +2,12 @@ program APIKeySample;
 
 
 
+{$R *.dres}
+
 uses
   Vcl.Forms,
   MainFormU in 'MainFormU.pas' {MainForm},
-  ExcelRPCProxy in 'ExcelRPCProxy.pas',
+  ExcelRPCProxy in '..\commons\ExcelRPCProxy.pas',
   Vcl.Themes,
   Vcl.Styles;
 

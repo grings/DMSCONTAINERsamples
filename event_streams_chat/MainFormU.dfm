@@ -30,7 +30,6 @@ object MainForm: TMainForm
     ParentFont = False
     ReadOnly = True
     TabOrder = 0
-    ExplicitHeight = 450
   end
   object Panel1: TPanel
     Left = 0
@@ -77,7 +76,6 @@ object MainForm: TMainForm
       ParentFont = False
       TabOrder = 1
       OnClick = btnSendClick
-      ExplicitHeight = 28
     end
     object Button1: TButton
       AlignWithMargins = True
@@ -95,7 +93,6 @@ object MainForm: TMainForm
       ParentFont = False
       TabOrder = 2
       OnClick = Button1Click
-      ExplicitHeight = 28
     end
   end
 end
