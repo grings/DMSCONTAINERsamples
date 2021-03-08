@@ -2,7 +2,7 @@ program calculator_vcl_client;
 
 uses
   Vcl.Forms,
-  MainFormU in 'MainFormU.pas' {Form3},
+  MainFormU in 'MainFormU.pas' {MainForm},
   CalculatorRPCProxy in 'CalculatorRPCProxy.pas';
 
 {$R *.res}
@@ -10,6 +10,6 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TForm3, Form3);
+  Application.CreateForm(TMainForm, MainForm);
   Application.Run;
 end.
