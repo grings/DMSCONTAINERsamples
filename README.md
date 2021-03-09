@@ -15,7 +15,7 @@ This repository contains all the officially supported samples used by [bit Time 
 
 * Just clone the repository and you can use the samples on your running DMSContainer instance
 * If you want to try the power of DMSContainer [ask for a free trial licence](mailto:professionals@bittime.it?subject=Free%20DMSContainer%20Trial%20License)
-* Download an Add DelphiMVCFramework to your Delphi Library Path:
+*  Download and Add DelphiMVCFramework to your Delphi Library Path:
   - you can download it at the following [link] (https://github.com/danieleteti/delphimvcframework)
   - Add these folder with your Delphi IDE (tools => options => Delphi => languages => Path): 
 	* sources
@@ -32,11 +32,18 @@ This repository contains all the officially supported samples used by [bit Time 
 ## api_key_sample ##
 
 #### what's the use? ####  
+
 Api keys sample shows us how DMSContainer gives the possibility to use jwt authentication without necessarily making a login.
 
-You can generate a unique api key for some user, by the AdminGUI, and using that token can make any requests and access various services for example (export data to excel)
+You can generate a unique api key for some user, by the AdminGUI, and using that token can make any requests and access various services for example (export data to excel).
 
-Read the `User API Key Management` documentation for more information http://dmscontainer.bittimeprofessionals.com/dmsadmingui/usersmanagement/#create-manage-api-key
+this test proposes two pdf export options:
+
+* with the 1st Tab button we can export the data present in the grid to an excel file (data displayed in the grid are in a json file `customers.json` saved in the folder `DMScontainersamples\data`) 
+
+* with the raw json button we export the data in a json input( already present in the const `JSON` ) to an excel file.
+
+Read the [User API Key Management](http://dmscontainer.bittimeprofessionals.com/dmsadmingui/usersmanagement/#create-manage-api-key) documentation for more information.
 
 
 By starting the program and selecting 1St Tab an excel file will be generated containing the data present in the grid.
@@ -50,13 +57,12 @@ By starting the program and selecting 1St Tab an excel file will be generated co
 >for run the sample
 
 
-
 ## custom_job_examples ##
 This example is intended to demonstrate the possibility of creating a custom job and using it in DMSContainer.
 
-For more information, I recommend that you follow the `official DMSContainer documentation` http://dmscontainer.bittimeprofessionals.com 
+For more information, I recommend that you follow the [official DMSContainer documentation](http://dmscontainer.bittimeprofessionals.com)
 or 
-`watch the videos in the Tutorial section` http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials/
+[watch the videos in the Tutorial section](http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials)
 
 #### Step to start the example `calculator_rpc`:
 1. Stop the DMSContainer service
@@ -95,18 +101,23 @@ Steps to execute first to run the programm:
 
 in the following sample we can access with various login credentials and various modes of sending messages including:
 
-* Simple messagge with no attachments (TEXT+HTML)
-* Simple messagge with no attachments (TEXT Only)
-* Message with attachments 
-* Send Bulk messagge
+* button  `Simple messagge with no attachments "text+html"` (sends an email with simple text or html in it, with no attachments)
+
+* button  `Simple messagge with no attachments "text only" `(sends an email with simple text only, with no attachments)
+
+* button `Message with attachments` (send an email with attachments) 
+
+* button `Send Bulk messagge` (Send a large number of messages in a short period of time, or to a large number of recipients)
 
 with the possibility to visualize in the Get my Messagge section all the messages, and in the Get Pending Messagges section all the pending messages.
 
 There are also other additional tools such as sending RQL messages.
 
 
+Read the [Email Module](http://dmscontainer.bittimeprofessionals.com/builtinjobs/emailmodule/) documentation for more information
+or 
+[watch the videos in the Tutorial section](http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials)
 
-A reference to follow the [official DMSContainer documentation](http://dmscontainer.bittimeprofessionals.com) or [watch the video tutorials](http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials/.)
 
 
 ## email_module_tutorial ##
@@ -114,11 +125,12 @@ A reference to follow the [official DMSContainer documentation](http://dmscontai
 
 After configuring everything in the ADMINGUi, in the example in question we find the possibility to send messages of various types :
 
-* Send a simple mail 
-* send email with attachment 
-* send bulk messages 
+* button `send a simple mail` (send an email with simple text or html in it, with no attachments)
+* button  `send email with attachment` (send an email with attachments) 
+* button  `send bulk messages` (send a large number of messages in a short period of time, or to a large number of recipients)
 
-to test the example, we need to change the email inserted in the attribute of the object lJMsg: TJSONObject in the following way :
+
+to test the example, we need to change the email inserted in the attribute of the object `lJMsg` in the following way :
 
 >Insert your email test in the 
 >```pascal
@@ -128,8 +140,10 @@ to test the example, we need to change the email inserted in the attribute of th
 >```
 >for run the sample
 
+Read the [Email Module](http://dmscontainer.bittimeprofessionals.com/builtinjobs/emailmodule/) documentation for more information
+or 
+[watch the videos in the Tutorial section](http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials)
 
-A reference to follow the [official DMSContainer documentation](http://dmscontainer.bittimeprofessionals.com) or [watch the video tutorials](http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials/.)
 
 ## event_streams_chat ##
 
@@ -183,6 +197,10 @@ Here are the features present in the example:
 You can see all messages also in the ADMINGui, by the Events menu
 {{% /Notice %}}
 
+Read the [Event Streams](http://dmscontainer.bittimeprofessionals.com/builtinjobs/eventstreams/) documentation for more information
+or 
+[watch the videos in the Tutorial section](http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials)
+
 
 ## event_streams_producer_consumer ##
 
@@ -218,6 +236,10 @@ They will show the number of messages that the consumer has read
 
 By sending a series of messages through the producer you will be able to notice the speed with which these are dequeued
 
+Read the [Event Streams](http://dmscontainer.bittimeprofessionals.com/builtinjobs/eventstreams/) documentation for more information
+or 
+[watch the videos in the Tutorial section](http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials)
+
 
 ## event_streams_sample_worker ##
 In this example there is a simple application console that dequeue a Multiple Message from a specific queue (by parameter)
@@ -240,21 +262,34 @@ Steps to execute first to run the programm:
 
 DMSContainer gives us the possibility to export our data in many ways including :
 
-* Simple Data
-* All Data Types
-* All Data Types with formatting
-* All in one workbook
-* Huge workbook 
-* Simple JSON
-* JSON with formatting
-* JSON with formulas 
-* Sparkline
-* Showcase
+* button "Simple Data" (can export in excel simple date without currencies and special characters)
+* button  "All Data Types" (can export in excel all types of data without formatting the file)
+* button  "All Data Types with formatting" (can export in excel all types of data with formatting the file)
+
+* button  "All in one workbook" (can export in excel worbook and saving the data in various sheets respectively divided by Customers, All Types, All Types with Formatting, inside you will find the same data seen in the previous examples all enclosed in a single file.)
+
+* button  "Huge workbook" (provides a huge data in excel)
+
+* button  "Simple JSON" (takes a json input and exports it to excel without formatting it)
+
+* button "JSON with formatting" (takes a json input and exports it to excel and formats it)
+
+* button  "JSON with formulas" (can export in excel a json file containing mathematical formulas, in this case "SUM", and restore them in the exported file)
+
+* button "Sparkline" (can  exports in excel the required data with sparkline representation, small graph representing the trend of something)
+
+* button  "Showcase" (exports in excel the required data with Showcase representation, for example underlined values in another color)
+
+Read the [Excel Module](http://dmscontainer.bittimeprofessionals.com/builtinjobs/excelmodule/) documentation for more information
+or 
+[watch the videos in the Tutorial section](http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials)
+
+
 
 ## methods_invocation_without_proxies ##
 
 This example shown the possibility to invoke methods without proxies.
-In the specific case it is made a login request, where in the memo field is returned an access token (jwt). 
+In the specific case it is made a login request, where in the memo fieinvoices ld is returned an access token (jwt). 
 
 
 ## reports_module_sample ##
@@ -263,21 +298,31 @@ this test proposes us a practical example of like being able to exploit the even
 
 Let's see what other specific ways DMSContainer uses to export data :
 
-* Many Files one customer per file 
-* One File, all customers in one file
-* Tabular report
-* HTML tabuler report
-* One File, all customers in one HTML file
-* Generate report for 
-* Invoces
-* Filter Sample 
-* Offline Invoces
+* button `Many Files, one customer per file` (exports as many pdf files as there are customers )
+* button `One File, all customers in one file` (exports a pdf file with all customers inside )
+* button `Tabular report` (generates a tabular pdf with all customers)
+* button `HTML tabuler report` (generates a tabular HTML with all customers)
+* button `One File, all customers in one HTML file` (generates an html file with all 'inside all the information divided by individual customer on a single file)
+* button `Generate report for 1500 customer` (generate 100 reports and then create a zipper file with all the files)
+* button ` Invoces` (exports the detail of an invoice)
+* button `Filter Sample` (export of various filter examples) 
+* button `Offline Invoces` (export of unpaid invoices )
 
 moreover the example shows us a practical scenario where to use the events, in the section Async Report we can test how to export data in background.
+
+Read the [Report Module](http://dmscontainer.bittimeprofessionals.com/builtinjobs/reportmodule/) documentation for more information
+or 
+[watch the videos in the Tutorial section](http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials)
+
+
 
 ## reports_module_users_to_notify_sample ##
 
 this example proposes us a practical example of like being able to exploit the events, the following test carries out in vare modality of the reports, moreover in the section Async Report the events in order to be able to draw up report in background, but with the addition of the notification of completion to the user previously selected in the list. 
+
+Read the [Report Module](http://dmscontainer.bittimeprofessionals.com/builtinjobs/reportmodule/) documentation for more information
+or 
+[watch the videos in the Tutorial section](http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials)
 
 
 ## sso_configuration_provider ##
@@ -304,6 +349,10 @@ These preferences can be changed, while those of the `system_data` are read-only
 {{% notice note%}}
 You need to create two contexts APP1 and APP2 by the ADMINGui 
 {{% notice%}}
+
+Read the [SINGLE-SIGN-ON MODULE](http://dmscontainer.bittimeprofessionals.com/builtinjobs/ssomodule/) documentation for more information
+or 
+[watch the videos in the Tutorial section](http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials)
 
 
 ## tictactoe_eventstream_sample ##
