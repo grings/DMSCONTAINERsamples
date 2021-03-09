@@ -15,8 +15,14 @@ This repository contains all the officially supported samples used by [bit Time 
 
 * Just clone the repository and you can use the samples on your running DMSContainer instance
 * If you want to try the power of DMSContainer [ask for a free trial licence](mailto:professionals@bittime.it?subject=Free%20DMSContainer%20Trial%20License)
-
-
+* Download an Add DelphiMVCFramework to your Delphi Library Path:
+  - you can download it at the following [link] (https://github.com/danieleteti/delphimvcframework)
+  - Add these folder with your Delphi IDE (tools => options => Delphi => languages => Path): 
+	* sources
+	* lib\dmustache
+	* lib\loggerpro
+	* lib\swagdoc\Source 
+    
 
 ### Examples 
 
@@ -69,14 +75,6 @@ or
 4. Set to `enabled: true` the `jobname: "beeper"`
 5. Start the DMSContainer service
 6. Now yuo can listen a windows beep and can read a log in the `dms_00.beeper.log file`
-
-
-## dms_jobs_quickstart ##
-Like the 2° example in these, you can try the power of custom jobs (RPC or only scheduled) 
-
-Also here, I recommend that you follow the `official DMSContainer documentation` http://dmscontainer.bittimeprofessionals.com 
-or 
-`watch the videos in the Tutorial section` http://dmscontainer.bittimeprofessionals.com/tutorials/video_tutorials/
 
 
 ## dms_jobs_quickstart ##
