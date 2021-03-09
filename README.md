@@ -143,6 +143,28 @@ In this example we can see all the qualities of the event streams.
 To run the program you need to enable the user_event user by the ADMINGui, and change the `const DMS_SERVER_URL` in case the DMSContainer service is not running locally
 {{% /Notice %}}
 
+The components in the main form are:
+* Edit with label "Queue Name" => write here the queue name (default queue.test1)
+* Edit with label "Last Know ID" => there is the last ID read by the dequeue
+* Button with caption "Dequeue __first__ Message" => call the method for dequeue the first message of the queue 
+* Button with caption "Dequeue __last__ Message" => call the method for dequeue the last message of the queue 
+* Button with caption "Dequeue Next Message" => call the method for dequeue the next message of the queue 
+* Check box "Update LKID" => if check the last id read from the queue will saved in the edit "Last Know ID"
+* Edit with label "Dequeue Timeout" => there is the timeout for the dequeu, in seconds (default 10)
+* Button with caption "Delete Queue" => delete the queue with the name write in the Edit "Queue Name"
+* Button with caption "Queue Size" => write in the memo the size of the queue
+* Memo "Logs" => read here all the dequeue message from the queue write in the Edit "Queue Name"
+* Group Box "Single Message"
+	* Edit with caption "Message Value" => write here the message that you want send (default 1 and auto increment)
+	* Button with caption "Send Message" => send the message
+* Group Box "Single Huge Message"
+	* Button with caption "Send Huge Message" => send an hard coded message of huge dimension
+* Group Box "Messages with TTL" (Time To Live)
+	* Edit with caption "TTL (min)" => the value expressed in minute of the Time To Live (TTL) of message (default 1)
+	* Button with caption "Send Single Message" => send a Message, write in the edit "Message Value", with a TTL defined in the edit "TTL"
+	* Button with caption "Send Multiple Messages" => send 10 Messages, with a TTL defined in the edit "TTL", in a queue named "queue.sample"
+
+
 Here are the features present in the example:
 * Create one or more queue
 * Send Message
@@ -164,7 +186,37 @@ You can see all messages also in the ADMINGui, by the Events menu
 
 ## event_streams_producer_consumer ##
 
+In this example we can demostrate the speed of DMSContainer to dequeue the messange by EventStream.
+There are 3 project:
 
+** EventStreamsProducer **
+He do create messages in a queue.
+
+The components in the main form are:
+* an edit where put the name of the queue to can write (default queue.test1)
+* a memo where insert the message (in JSON format) to send (default {"name": "Value"})
+* button with caption "Delete Queue" => delete the queue
+* button with caption "X 100" => starts a task with 100 messages
+* button with caption "X 10" => starts a task with 10 messages
+* button with caption "X 1" => starts a task with only 1 message
+* label with the number of running tasks
+
+** EventStreamsConsumer **
+It does the dequeu of a queue
+
+The components present in the main form are:
+* an edit where put the name of the queue to can read (default queue.test1)
+* a button to start or stop reading
+* a memo where he writes the messages arriving from that queue
+
+** Event_stream_monitor **
+Demonstrate the speed of dequeue
+
+The form contains a grid with 48 cells that each represent a consumer
+
+They will show the number of messages that the consumer has read
+
+By sending a series of messages through the producer you will be able to notice the speed with which these are dequeued
 
 
 ## event_streams_sample_worker ##
