@@ -27,8 +27,6 @@ type
   private
     fCellFontSize, fLastGoodFontSize: Integer;
     fTotalMessageCount : Integer;
-    fProxy: TEventStreamsRPCProxy;
-    fToken: string;
     fTasks: TArray<TConsumerThread>;
     fQueue: TThreadedQueue<TPair<Integer, String>>;
     procedure UpdateCell(const Index: Integer; const Value: string);
@@ -51,9 +49,6 @@ const
 
 procedure TMainForm.btnStartClick(Sender: TObject);
 var
-  lJObj: TJsonObject;
-  lProc: TProc<Integer>;
-  lMakeHandler: TFunc<Integer, TProc>;
   lQueueName: string;
   lValues: TArray<string>;
 begin

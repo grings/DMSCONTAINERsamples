@@ -1,7 +1,7 @@
-object Form3: TForm3
+object MainForm: TMainForm
   Left = 0
   Top = 0
-  Caption = 'Form3'
+  Caption = 'MainForm'
   ClientHeight = 299
   ClientWidth = 635
   Color = clBtnFace
@@ -13,13 +13,13 @@ object Form3: TForm3
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
-  object Button1: TButton
-    Left = 32
+  object btnCalc: TButton
+    Left = 24
     Top = 24
-    Width = 75
-    Height = 25
-    Caption = 'Button1'
+    Width = 129
+    Height = 41
+    Caption = 'Do Some Calc'
     TabOrder = 0
-    OnClick = Button1Click
+    OnClick = btnCalcClick
   end
 end

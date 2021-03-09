@@ -16,9 +16,9 @@ uses
   System.Net.URLClient;
 
 type
-  TForm3 = class(TForm)
-    Button1: TButton;
-    procedure Button1Click(Sender: TObject);
+  TMainForm = class(TForm)
+    btnCalc: TButton;
+    procedure btnCalcClick(Sender: TObject);
   private
     procedure OnValidateCertificate(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;
       var Accepted: Boolean);
@@ -27,7 +27,7 @@ type
   end;
 
 var
-  Form3: TForm3;
+  MainForm: TMainForm;
 
 implementation
 
@@ -37,21 +37,17 @@ implementation
 uses
   CalculatorRPCProxy;
 
-procedure TForm3.Button1Click(Sender: TObject);
+procedure TMainForm.btnCalcClick(Sender: TObject);
 var
-  lProxy: TCalculatorRPCProxy;
+  lProxy: ICalculatorRPCProxy;
 begin
   lProxy := TCalculatorRPCProxy.Create('https://localhost/calculatorrpc');
-  try
-    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCertificate);
-    ShowMessage(lProxy.Sum(10, 40).ToString);
-//    ShowMessage(lProxy.Diff(40, 30).ToString);
-  finally
-    lProxy.Free;
-  end;
+  lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCertificate);
+  ShowMessage('15 + 23 = ' + lProxy.Sum(15, 23).ToString);
+  ShowMessage('40 - 32 = ' + lProxy.Diff(40, 32).ToString);
 end;
 
-procedure TForm3.OnValidateCertificate(const Sender: TObject;
+procedure TMainForm.OnValidateCertificate(const Sender: TObject;
   const ARequest: TURLRequest; const Certificate: TCertificate;
   var Accepted: Boolean);
 begin
