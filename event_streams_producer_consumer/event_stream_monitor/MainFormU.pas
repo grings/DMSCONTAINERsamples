@@ -27,7 +27,6 @@ type
   private
     fCellFontSize, fLastGoodFontSize: Integer;
     fTotalMessageCount : Integer;
-    fToken: string;
     fTasks: TArray<TConsumerThread>;
     fQueue: TThreadedQueue<TPair<Integer, String>>;
     procedure UpdateCell(const Index: Integer; const Value: string);

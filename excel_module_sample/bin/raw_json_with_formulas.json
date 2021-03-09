@@ -1,47 +1,54 @@
 {
     "worksheets": [{
-            "name": "My First Worksheet",
+            "name": "Test Worksheet",
             "columns": [{
-                    "title": "Product Name",
-                    "type": "general",
-                    "width": 100,
+                    "title": "Product",
+                    "type": "text",
+					"width": 50,
                     "header_options": {
-                        "font_color": "red",
-                        "font_size": 18
-                    },
-                    "options": {
-                        "font_size": 14
+                        "bold": true
                     }
                 }, {
                     "title": "Price",
                     "type": "number",
                     "format": "€ #,##0.00",
                     "header_options": {
-                        "font_color": "green",
-                        "font_size": 18
-                    },
-                    "options": {
-                        "font_size": 14
+						"align":"right",
+                        "bold": true
                     }
                 }
-
             ],
             "data": [
-                ["Pizza Margherita", 5.00],
-                ["Pizza Napoli", {
-                        "value": 5.00,
+                [
+                    "Pepperoni", {
+                        "value": 10,
+                        "options": {
+                            "bold": true
+                        }
+                    }
+                ],
+                [
+                    "Diavola",
+                    12
+                ],
+                [
+                    "Golden Pizza from the white house", {
+                        "value": 1120
+                    }
+                ],
+                [{
+                        "value": "Total",
+                        "options": {
+                            "bold": true
+                        }
+                    }, {
+                        "value": "=SUM(B2:B4)",
+                        "type": "formula",
                         "options": {
                             "font_color": "red"
                         }
                     }
-                ],
-                ["Pizza 4 Formaggi", 6.50],
-                [{
-                        "value": "Pizza Porcini e Salsiccia",
-                        "options": {
-                            "bold": True
-                        }
-                    }, 10.50]
+                ]
             ]
         }
     ]

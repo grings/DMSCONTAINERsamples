@@ -243,7 +243,6 @@ object MainForm: TMainForm
       TabOrder = 2
       WordWrap = True
       OnClick = btnAllTabsClick
-      ExplicitLeft = 351
     end
     object btnThirdTab: TButton
       AlignWithMargins = True
@@ -268,7 +267,6 @@ object MainForm: TMainForm
       TabOrder = 4
       WordWrap = True
       OnClick = btnHugeClick
-      ExplicitLeft = 467
     end
     object btnRawJSON: TButton
       AlignWithMargins = True
@@ -281,7 +279,6 @@ object MainForm: TMainForm
       TabOrder = 5
       WordWrap = True
       OnClick = btnRawJSONClick
-      ExplicitLeft = 583
     end
     object btnSparkline: TButton
       AlignWithMargins = True
@@ -294,8 +291,6 @@ object MainForm: TMainForm
       TabOrder = 6
       WordWrap = True
       OnClick = btnSparklineClick
-      ExplicitLeft = 911
-      ExplicitTop = 6
     end
     object btnRawWithFormulas: TButton
       AlignWithMargins = True
@@ -308,7 +303,6 @@ object MainForm: TMainForm
       TabOrder = 7
       WordWrap = True
       OnClick = btnRawWithFormulasClick
-      ExplicitLeft = 815
     end
     object btnRawWithFormatting: TButton
       AlignWithMargins = True
@@ -321,7 +315,6 @@ object MainForm: TMainForm
       TabOrder = 8
       WordWrap = True
       OnClick = btnRawWithFormattingClick
-      ExplicitLeft = 699
     end
     object btnShowcase: TButton
       AlignWithMargins = True
@@ -334,8 +327,6 @@ object MainForm: TMainForm
       TabOrder = 9
       WordWrap = True
       OnClick = btnShowcaseClick
-      ExplicitLeft = 1047
-      ExplicitTop = 6
     end
   end
   object Panel6: TPanel

@@ -101,3 +101,6 @@ excel_module_sample/__history/
 reports_module_sample/bin/reports.conf
 sso_configuration_provider/delphi_desktop_app/__history/
 sso_configuration_provider/delphi_desktop_app/bin/
+tictactoe_eventstream_sample/matcher_client/__pycache__/
+custom_job_examples/calculator_rpc/python_client/__pycache__/
+custom_job_examples/calculator_rpc/python_client/.idea/

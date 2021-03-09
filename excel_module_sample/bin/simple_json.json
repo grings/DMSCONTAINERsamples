@@ -24,14 +24,14 @@
                         "font_size": 14
                     }
                 }
-
             ],
             "data": [
                 ["Pizza Margherita", 5.00],
                 ["Pizza Napoli", {
                         "value": 5.00,
                         "options": {
-                            "font_color": "red"
+                            "font_color": "blue",
+                            "font_size": 14
                         }
                     }
                 ],
@@ -39,10 +39,10 @@
                 [{
                         "value": "Pizza Porcini e Salsiccia",
                         "options": {
-                            "bold": True
+                            "bold": True,
+							"italic": True
                         }
-                    }, 10.50]
-            ]
+                    }, 10.50]]
         }
     ]
 }

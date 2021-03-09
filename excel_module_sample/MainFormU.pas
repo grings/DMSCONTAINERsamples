@@ -120,13 +120,14 @@ type
     procedure ResetFolder;
     function Folder(aFolder: string): string;
     function GetEndPoint: string;
-    procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;
-      var Accepted: Boolean);
+    procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
+      const Certificate: TCertificate; var Accepted: Boolean);
     procedure GenerateExcelFileFromRawJSONFile(const FileName: String);
     function GetJSONData(const WorkSheetName: string; const DataSet: TDataSet): TJDOJSONObject;
-    function GetWorkbookJSONData(const WorkSheetsName: array of string; const DataSets: array of TDataSet)
-      : TJDOJSONObject;
-    procedure InternalGetJSONData(const WorkBook: TJSONObject; const WorkSheetName: string; const DataSet: TDataSet);
+    function GetWorkbookJSONData(const WorkSheetsName: array of string;
+      const DataSets: array of TDataSet): TJDOJSONObject;
+    procedure InternalGetJSONData(const WorkBook: TJSONObject; const WorkSheetName: string;
+      const DataSet: TDataSet);
   public
   end;
 
@@ -162,173 +163,117 @@ procedure TMainForm.btnAllTabsClick(Sender: TObject);
 var
   lJResp: TJSONObject;
   lOutputFileName: string;
-  lProxy: TExcelRPCProxy;
+  lProxy: IExcelRPCProxy;
   lToken: string;
 begin
   ResetFolder;
   lOutputFileName := 'all_in_one_workbook.xlsx';
   lProxy := TExcelRPCProxy.Create(GetEndPoint);
-  try
-    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lProxy.RPCExecutor.SetOnReceiveResponse(
-      procedure(ARequest, aResponse: IJSONRPCObject)
-      begin
-        Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
-      end);
 
-    lJResp := lProxy.Login('user_report', 'pwd1');
-    try
-      lToken := lJResp.S['token'];
-    finally
-      lJResp.Free;
-    end;
-    lJResp := lProxy.ConvertToXLSX(lToken, GetWorkbookJSONData(['Customers', 'All Types', 'All Types with Formatting'],
-      [dsCustomers, dsAllTypes, dsAllFormattedFields]));
-    try
-      Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
-    finally
-      lJResp.Free;
-    end;
-    ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
+  lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+  lProxy.RPCExecutor.SetOnReceiveResponse(
+    procedure(ARequest, aResponse: IJSONRPCObject)
+    begin
+      Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
+    end);
+
+  lJResp := lProxy.Login('user_report', 'pwd1');
+  try
+    lToken := lJResp.S['token'];
   finally
-    lProxy.Free;
+    lJResp.Free;
   end;
+  lJResp := lProxy.ConvertToXLSX(lToken, GetWorkbookJSONData(['Customers', 'All Types',
+    'All Types with Formatting'], [dsCustomers, dsAllTypes, dsAllFormattedFields]));
+  try
+    Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
+  finally
+    lJResp.Free;
+  end;
+  ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
 
 procedure TMainForm.btnAllTypesClick(Sender: TObject);
 var
   lJResp: TJSONObject;
   lOutputFileName: string;
-  lProxy: TExcelRPCProxy;
+  lProxy: IExcelRPCProxy;
   lToken: string;
 begin
   ResetFolder;
   lOutputFileName := 'alltypes.xlsx';
   lProxy := TExcelRPCProxy.Create(GetEndPoint);
+
+  lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+  lProxy.RPCExecutor.SetOnReceiveResponse(
+    procedure(ARequest, aResponse: IJSONRPCObject)
+    begin
+      Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
+    end);
+
+  lJResp := lProxy.Login('user_report', 'pwd1');
   try
-    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lProxy.RPCExecutor.SetOnReceiveResponse(
-      procedure(ARequest, aResponse: IJSONRPCObject)
-      begin
-        Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
-      end);
-
-    lJResp := lProxy.Login('user_report', 'pwd1');
-    try
-      lToken := lJResp.S['token'];
-    finally
-      lJResp.Free;
-    end;
-
-    lJResp := lProxy.ConvertToXLSX(lToken, GetJSONData('All Types', dsAllTypes));
-    try
-      Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
-    finally
-      lJResp.Free;
-    end;
-    ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
+    lToken := lJResp.S['token'];
   finally
-    lProxy.Free;
+    lJResp.Free;
   end;
+
+  lJResp := lProxy.ConvertToXLSX(lToken, GetJSONData('All Types', dsAllTypes));
+  try
+    Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
+  finally
+    lJResp.Free;
+  end;
+  ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
 
 procedure TMainForm.btnHugeClick(Sender: TObject);
 var
   lJResp: TJSONObject;
   lOutputFileName: string;
-  lProxy: TExcelRPCProxy;
+  lProxy: IExcelRPCProxy;
   lToken: string;
 begin
   ResetFolder;
   lOutputFileName := 'huge_all_in_one_workbook.xlsx';
   lProxy := TExcelRPCProxy.Create(GetEndPoint);
-  try
-    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lProxy.RPCExecutor.SetOnReceiveResponse(
-      procedure(ARequest, aResponse: IJSONRPCObject)
-      begin
-        Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
-      end);
+  lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+  lProxy.RPCExecutor.SetOnReceiveResponse(
+    procedure(ARequest, aResponse: IJSONRPCObject)
+    begin
+      Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
+    end);
 
-    lJResp := lProxy.Login('user_report', 'pwd1');
-    try
-      lToken := lJResp.S['token'];
-    finally
-      lJResp.Free;
-    end;
-    lJResp := lProxy.ConvertToXLSX(lToken, GetWorkbookJSONData(['Customers0', 'All Types0',
-      'All Types with Formatting0', 'Customers1', 'All Types1', 'All Types with Formatting1', 'Customers2',
-      'All Types2', 'All Types with Formatting2', 'Customers3', 'All Types3', 'All Types with Formatting3',
-      'Customers4', 'All Types4', 'All Types with Formatting4'], [dsCustomers, dsAllTypes, dsAllFormattedFields,
-      dsCustomers, dsAllTypes, dsAllFormattedFields, dsCustomers, dsAllTypes, dsAllFormattedFields, dsCustomers,
-      dsAllTypes, dsAllFormattedFields, dsCustomers, dsAllTypes, dsAllFormattedFields]));
-    try
-      Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
-    finally
-      lJResp.Free;
-    end;
-    ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
+  lJResp := lProxy.Login('user_report', 'pwd1');
+  try
+    lToken := lJResp.S['token'];
   finally
-    lProxy.Free;
+    lJResp.Free;
   end;
+  lJResp := lProxy.ConvertToXLSX(lToken, GetWorkbookJSONData(['Customers0', 'All Types0',
+    'All Types with Formatting0', 'Customers1', 'All Types1', 'All Types with Formatting1',
+    'Customers2', 'All Types2', 'All Types with Formatting2', 'Customers3', 'All Types3',
+    'All Types with Formatting3', 'Customers4', 'All Types4', 'All Types with Formatting4'],
+    [dsCustomers, dsAllTypes, dsAllFormattedFields, dsCustomers, dsAllTypes, dsAllFormattedFields,
+    dsCustomers, dsAllTypes, dsAllFormattedFields, dsCustomers, dsAllTypes, dsAllFormattedFields,
+    dsCustomers, dsAllTypes, dsAllFormattedFields]));
+  try
+    Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
+  finally
+    lJResp.Free;
+  end;
+  ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
 
-procedure TMainForm.OnValidateCert(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;
-var Accepted: Boolean);
+procedure TMainForm.OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
+const Certificate: TCertificate; var Accepted: Boolean);
 begin
   Accepted := true;
 end;
 
 procedure TMainForm.btnRawJSONClick(Sender: TObject);
-var
-  lJResp: TJSONObject;
-  lOutputFileName: string;
-  lJSONData: TJSONObject;
-  lToken: string;
-  lProxy: TExcelRPCProxy;
-const
-  JSON = '{ ' +
-         '  "worksheets": [{' +
-         '	"name": "My First Worksheet",' + '	"columns": [' +
-         '		    {"title": "Product Name",  "type": "general", "width": 100, "header_options": {"font_color":"red", "font_size": 18}, "options":{"font_size": 14}},' +
-         '		    {"title": "Price", "type": "number", "format": "€ #,##0.00", "header_options": {"font_color":"green", "font_size": 18}, "options":{"font_size": 14}}' +
-         '            ],' +
-         '	"data": [' +
-         '            ["Pizza Margherita", 5.00],' +
-         '            ["Pizza Napoli", {"value":5.00,"options":{"font_color":"red", "font_size":22}}],' +
-         '        		["Pizza 4 Formaggi", 6.50],' +
-         '		   	    [{"value":"Pizza Porcini e Salsiccia","options":{"bold":True}}, 10.50]' +
-         '		      ]' +
-         '}]}';
 begin
-  lProxy := TExcelRPCProxy.Create(GetEndPoint);
-  try
-    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lProxy.RPCExecutor.SetOnReceiveResponse(
-      procedure(ARequest, aResponse: IJSONRPCObject)
-      begin
-        Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
-      end);
-
-    lJResp := lProxy.Login('user_report', 'pwd1');
-    try
-      lToken := lJResp.S['token'];
-    finally
-      lJResp.Free;
-    end;
-    lOutputFileName := 'raw_json.xlsx';
-    lJSONData := TJSONObject.Parse(JSON) as TJSONObject;
-    lJResp := lProxy.ConvertToXLSX(lToken, lJSONData);
-    try
-      { Base64StringToFile is declared in MVCFramework.Commons.pas }
-      Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
-    finally
-      lJResp.Free;
-    end;
-  finally
-    lProxy.Free;
-  end;
-  ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
+  GenerateExcelFileFromRawJSONFile('simple_json');
 end;
 
 procedure TMainForm.btnRawWithFormattingClick(Sender: TObject);
@@ -350,35 +295,31 @@ procedure TMainForm.btnSimpleWorksheetClick(Sender: TObject);
 var
   lJResp: TJSONObject;
   lOutputFileName: string;
-  lProxy: TExcelRPCProxy;
+  lProxy: IExcelRPCProxy;
   lToken: string;
 begin
   ResetFolder;
   lOutputFileName := 'customers.xlsx';
   lProxy := TExcelRPCProxy.Create(GetEndPoint);
+  lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+  lProxy.RPCExecutor.SetOnReceiveResponse(
+    procedure(ARequest, aResponse: IJSONRPCObject)
+    begin
+      Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
+    end);
+  lJResp := lProxy.Login('user_report', 'pwd1');
   try
-    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lProxy.RPCExecutor.SetOnReceiveResponse(
-      procedure(ARequest, aResponse: IJSONRPCObject)
-      begin
-        Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
-      end);
-    lJResp := lProxy.Login('user_report', 'pwd1');
-    try
-      lToken := lJResp.S['token'];
-    finally
-      lJResp.Free;
-    end;
-    lJResp := lProxy.ConvertToXLSX(lToken, GetJSONData('Customers', dsCustomers));
-    try
-      Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
-    finally
-      lJResp.Free;
-    end;
-    ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
+    lToken := lJResp.S['token'];
   finally
-    lProxy.Free
+    lJResp.Free;
   end;
+  lJResp := lProxy.ConvertToXLSX(lToken, GetJSONData('Customers', dsCustomers));
+  try
+    Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
+  finally
+    lJResp.Free;
+  end;
+  ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
 
 procedure TMainForm.btnSparklineClick(Sender: TObject);
@@ -387,7 +328,7 @@ var
   lOutputFileName: string;
   lJSONData: TJSONObject;
   lToken: string;
-  lProxy: TExcelRPCProxy;
+  lProxy: IExcelRPCProxy;
 const
   JSON = '{ ' + '  "worksheets": [{' + '	"name": "My First Worksheet",' + '	"columns": [' +
     '		    {"title": "Jan",  "type": "number", "width": 10},' +
@@ -403,46 +344,43 @@ const
     '		    {"title": "Nov",  "type": "number", "width": 10},' +
     '		    {"title": "Dec",  "type": "number", "width": 10},' +
     '		    {"title": "Trend","type": "sparkline", "width": 15}' + '            ],' + '	"data": [' +
-    '             [5,4,2,6,4,3,2,5,13,19,15,12, {"type":"sparkline", "range":"A2:L2","markers": true}],' +
-    '             [5,4,2,6,4,3,2,5,13,19,15,12, {"type":"sparkline","range":"A3:L3","markers": false}],' +
-    '             [2,2,3,4,5,6,7,8,9,3,1,1, {"type":"sparkline","range":"A4:L4","markers": true}],' +
-    '             [2,1,15,4,2,6,2,8,9,3,5,6, {"type":"sparkline","range":"A5:L5","sparkline_type":"column"}],' +
-    '             [2,1,15,-4,-2,6,2,8,-9,-3,5,6, {"type":"sparkline","range":"A6:L6","sparkline_type":"win_loss", "negative_points":true}],'
-    + '             [2,2,3,4,5,6,7,8,9,3,1,1, {"type":"sparkline","range":"A7:L7","markers": true}],' +
-    '             [2,1,5,4,2,6,2,10,9,1,8,1, {"type":"sparkline","range":"A8:L8","sparkline_type":"column"}],' +
-    '             [2,1,15,-4,-2,6,2,8,-9,-3,5,6, {"type":"sparkline","range":"A9:L9","sparkline_type":"win_loss", "negative_points":true}],'
-    + '             [5,4,2,6,4,3,2,5,13,19,25,12, {"type":"sparkline","range":"A10:L10","markers": true}],' +
-    '             [2,2,3,4,5,6,7,8,9,3,1,8, {"type":"sparkline","range":"A11:L11", "sparkline_type":"column", "style": 12}],' +
-    '             [3,20,-3,-4,2,-2,6,-12,14,-25,16,16, {"type":"sparkline","range":"A12:L12","sparkline_type":"win_loss", "negative_points": true}]'
+    '             [5,4,2,6,4,3,2,5,13,19,15,12, {"type":"sparkline", "range":"A2:L2","markers": true}],'
+    + '             [5,4,2,6,4,3,2,5,13,19,15,12, {"type":"sparkline","range":"A3:L3","markers": false}],'
+    + '             [2,2,3,4,5,6,7,8,9,3,1,1, {"type":"sparkline","range":"A4:L4","markers": true}],'
+    + '             [2,1,15,4,2,6,2,8,9,3,5,6, {"type":"sparkline","range":"A5:L5","sparkline_type":"column"}],'
+    + '             [2,1,15,-4,-2,6,2,8,-9,-3,5,6, {"type":"sparkline","range":"A6:L6","sparkline_type":"win_loss", "negative_points":true}],'
+    + '             [2,2,3,4,5,6,7,8,9,3,1,1, {"type":"sparkline","range":"A7:L7","markers": true}],'
+    + '             [2,1,5,4,2,6,2,10,9,1,8,1, {"type":"sparkline","range":"A8:L8","sparkline_type":"column"}],'
+    + '             [2,1,15,-4,-2,6,2,8,-9,-3,5,6, {"type":"sparkline","range":"A9:L9","sparkline_type":"win_loss", "negative_points":true}],'
+    + '             [5,4,2,6,4,3,2,5,13,19,25,12, {"type":"sparkline","range":"A10:L10","markers": true}],'
+    + '             [2,2,3,4,5,6,7,8,9,3,1,8, {"type":"sparkline","range":"A11:L11", "sparkline_type":"column", "style": 12}],'
+    + '             [3,20,-3,-4,2,-2,6,-12,14,-25,16,16, {"type":"sparkline","range":"A12:L12","sparkline_type":"win_loss", "negative_points": true}]'
     + '		    ]' + '}]}';
 begin
   lProxy := TExcelRPCProxy.Create(GetEndPoint);
-  try
-    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lProxy.RPCExecutor.SetOnReceiveResponse(
-      procedure(ARequest, aResponse: IJSONRPCObject)
-      begin
-        Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
-      end);
 
-    lJResp := lProxy.Login('user_report', 'pwd1');
-    try
-      lToken := lJResp.S['token'];
-    finally
-      lJResp.Free;
-    end;
-    lOutputFileName := 'sparkline_json.xlsx';
-    TFile.WriteAllText(tpath.ChangeExtension(lOutputFileName, '.json'), JSON);
-    lJSONData := TJSONObject.Parse(JSON) as TJSONObject;
-    lJResp := lProxy.ConvertToXLSX(lToken, lJSONData);
-    try
-      { Base64StringToFile is declared in MVCFramework.Commons.pas }
-      Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
-    finally
-      lJResp.Free;
-    end;
+  lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+  lProxy.RPCExecutor.SetOnReceiveResponse(
+    procedure(ARequest, aResponse: IJSONRPCObject)
+    begin
+      Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
+    end);
+
+  lJResp := lProxy.Login('user_report', 'pwd1');
+  try
+    lToken := lJResp.S['token'];
   finally
-    lProxy.Free;
+    lJResp.Free;
+  end;
+  lOutputFileName := 'sparkline_json.xlsx';
+  TFile.WriteAllText(TPath.ChangeExtension(lOutputFileName, '.json'), JSON);
+  lJSONData := TJSONObject.Parse(JSON) as TJSONObject;
+  lJResp := lProxy.ConvertToXLSX(lToken, lJSONData);
+  try
+    { Base64StringToFile is declared in MVCFramework.Commons.pas }
+    Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
+  finally
+    lJResp.Free;
   end;
   ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
@@ -451,36 +389,34 @@ procedure TMainForm.btnThirdTabClick(Sender: TObject);
 var
   lJResp: TJSONObject;
   lOutputFileName: string;
-  lProxy: TExcelRPCProxy;
+  lProxy: IExcelRPCProxy;
   lToken: string;
 begin
   ResetFolder;
   lOutputFileName := 'alltypeswithformatting.xlsx';
   lProxy := TExcelRPCProxy.Create(GetEndPoint);
-  try
-    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lProxy.RPCExecutor.SetOnReceiveResponse(
-      procedure(ARequest, aResponse: IJSONRPCObject)
-      begin
-        Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
-      end);
 
-    lJResp := lProxy.Login('user_report', 'pwd1');
-    try
-      lToken := lJResp.S['token'];
-    finally
-      lJResp.Free;
-    end;
-    lJResp := lProxy.ConvertToXLSX(lToken, GetJSONData('All Types with Formatting', dsAllFormattedFields));
-    try
-      Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
-    finally
-      lJResp.Free;
-    end;
-    ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
+  lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+  lProxy.RPCExecutor.SetOnReceiveResponse(
+    procedure(ARequest, aResponse: IJSONRPCObject)
+    begin
+      Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
+    end);
+
+  lJResp := lProxy.Login('user_report', 'pwd1');
+  try
+    lToken := lJResp.S['token'];
   finally
-    lProxy.Free;
+    lJResp.Free;
   end;
+  lJResp := lProxy.ConvertToXLSX(lToken, GetJSONData('All Types with Formatting',
+    dsAllFormattedFields));
+  try
+    Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
+  finally
+    lJResp.Free;
+  end;
+  ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
 
 function TMainForm.DelphiDataTypeToExcel(const DataType: TFieldType): string;
@@ -488,8 +424,8 @@ begin
   case DataType of
     ftString, ftFixedChar, ftWideString:
       Exit('text');
-    ftSmallint, ftInteger, ftWord, ftCurrency, ftBCD, ftAutoInc, ftLargeint, ftLongWord, ftShortint, ftByte,
-      TFieldType.ftFloat, TFieldType.ftSingle, ftFMTBcd:
+    ftSmallint, ftInteger, ftWord, ftCurrency, ftBCD, ftAutoInc, ftLargeint, ftLongWord, ftShortint,
+      ftByte, TFieldType.ftFloat, TFieldType.ftSingle, ftFMTBcd:
       Exit('number');
     ftBoolean:
       Exit('boolean');
@@ -529,7 +465,8 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  dsCustomers.LoadFromFile(TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), 'customers.json'), sfJSON);
+  dsCustomers.LoadFromFile(TPath.Combine(TPath.GetDirectoryName(ParamStr(0)),
+    'customers.json'), sfJSON);
   LoadAllTypes;
   InstallFont(Self);
   ResetFolder;
@@ -552,37 +489,32 @@ var
   lOutputFileName: string;
   lJSONData: TJSONObject;
   lToken: string;
-  lProxy: TExcelRPCProxy;
+  lProxy: IExcelRPCProxy;
 begin
   lProxy := TExcelRPCProxy.Create(GetEndPoint);
-  try
-    lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
-    lProxy.RPCExecutor.SetOnReceiveResponse(
-      procedure(ARequest, aResponse: IJSONRPCObject)
-      begin
-        Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
-      end);
+  lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+  lProxy.RPCExecutor.SetOnReceiveResponse(
+    procedure(ARequest, aResponse: IJSONRPCObject)
+    begin
+      Log.Debug('REQUEST: ' + sLineBreak + ARequest.ToString(False), 'trace');
+    end);
 
-    lJResp := lProxy.Login('user_report', 'pwd1');
-    try
-      lToken := lJResp.S['token'];
-    finally
-      lJResp.Free;
-    end;
-    lOutputFileName := TPath.ChangeExtension(FileName, '.xlsx');
-    lJSONData := TJSONObject.ParseFromFile(TPath.ChangeExtension(FileName, '.json')) as TJSONObject;
-    lJResp := lProxy.ConvertToXLSX(lToken, lJSONData);
-    try
-      { Base64StringToFile is declared in MVCFramework.Commons.pas }
-      Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
-    finally
-      lJResp.Free;
-    end;
+  lJResp := lProxy.Login('user_report', 'pwd1');
+  try
+    lToken := lJResp.S['token'];
   finally
-    lProxy.Free;
+    lJResp.Free;
+  end;
+  lOutputFileName := TPath.ChangeExtension(FileName, '.xlsx');
+  lJSONData := TJSONObject.ParseFromFile(TPath.ChangeExtension(FileName, '.json')) as TJSONObject;
+  lJResp := lProxy.ConvertToXLSX(lToken, lJSONData);
+  try
+    { Base64StringToFile is declared in MVCFramework.Commons.pas }
+    Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
+  finally
+    lJResp.Free;
   end;
   ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
-
 end;
 
 function TMainForm.GetEndPoint: string;
@@ -590,7 +522,8 @@ begin
   Result := 'https://' + SERVERNAME + '/excelrpc';
 end;
 
-function TMainForm.GetJSONData(const WorkSheetName: string; const DataSet: TDataSet): TJDOJSONObject;
+function TMainForm.GetJSONData(const WorkSheetName: string; const DataSet: TDataSet)
+  : TJDOJSONObject;
 begin
   Result := TJDOJSONObject.Create;
   try
@@ -648,8 +581,8 @@ begin
   end;
 end;
 
-function TMainForm.GetWorkbookJSONData(const WorkSheetsName: array of string; const DataSets: array of TDataSet)
-  : TJDOJSONObject;
+function TMainForm.GetWorkbookJSONData(const WorkSheetsName: array of string;
+const DataSets: array of TDataSet): TJDOJSONObject;
 var
   lDS: TDataSet;
   I: Integer;
@@ -683,14 +616,16 @@ begin
   try
     for I := 1 to 5000 do
     begin
-      lDateTimeUTC := TTimeZone.Local.ToLocalTime(EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1) +
-        EncodeTime(I mod 24, I mod 60, I mod 60, 0));
-      dsAllTypes.AppendRecord([I, Random(I * 10000) / 10, Random(I * 10000) / 10, Random(100000) / 1000,
-        EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1), EncodeTime(I mod 24, I mod 60, I mod 60, 0),
-        lDateTimeUTC, lDateTimeUTC, Random(10) < 5, Format('=Sum(A%d,B%d)', [I + 1, I + 1])]);
-      dsAllFormattedFields.AppendRecord([I, Random(I * 10000) / 10, Random(I * 10000) / 10, Random(100000) / 1000,
-        EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1), EncodeTime(I mod 24, I mod 60, I mod 60, 0),
-        lDateTimeUTC, lDateTimeUTC, Random(10) < 5, Format('=Sum(A%d,B%d)', [I + 1, I + 1])]);
+      lDateTimeUTC := TTimeZone.Local.ToLocalTime(EncodeDate(1900 + I mod 200, (I mod 12) + 1,
+        (I mod 28) + 1) + EncodeTime(I mod 24, I mod 60, I mod 60, 0));
+      dsAllTypes.AppendRecord([I, Random(I * 10000) / 10, Random(I * 10000) / 10,
+        Random(100000) / 1000, EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1),
+        EncodeTime(I mod 24, I mod 60, I mod 60, 0), lDateTimeUTC, lDateTimeUTC, Random(10) < 5,
+        Format('=Sum(A%d,B%d)', [I + 1, I + 1])]);
+      dsAllFormattedFields.AppendRecord([I, Random(I * 10000) / 10, Random(I * 10000) / 10,
+        Random(100000) / 1000, EncodeDate(1900 + I mod 200, (I mod 12) + 1, (I mod 28) + 1),
+        EncodeTime(I mod 24, I mod 60, I mod 60, 0), lDateTimeUTC, lDateTimeUTC, Random(10) < 5,
+        Format('=Sum(A%d,B%d)', [I + 1, I + 1])]);
     end;
     dsAllTypes.First;
     dsAllFormattedFields.First;
