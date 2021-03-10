@@ -41,7 +41,7 @@ implementation
 procedure TMainForm.btnGetAllMyDataClick(Sender: TObject);
 begin
   var lToken: String;
-  var lJObj := fAuthConf.Login('configuration1', 'pwd1');
+  var lJObj := fAuthConf.Login('user_sender', 'pwd1');
   try
     lToken := lJObj.S['token'];
   finally
@@ -59,7 +59,7 @@ end;
 procedure TMainForm.btnGetContextDataClick(Sender: TObject);
 begin
   var lToken: String;
-  var lJObj := fAuthConf.Login('configuration1', 'pwd1');
+  var lJObj := fAuthConf.Login('user_sender', 'pwd1');
   try
     lToken := lJObj.S['token'];
   finally
@@ -77,7 +77,7 @@ end;
 procedure TMainForm.btnGetSystemDataClick(Sender: TObject);
 begin
   var lToken: String;
-  var lJObj := fAuthConf.Login('configuration1', 'pwd1');
+  var lJObj := fAuthConf.Login('user_sender', 'pwd1');
   try
     lToken := lJObj.S['token'];
   finally
@@ -96,7 +96,7 @@ end;
 procedure TMainForm.btnGetUserDataClick(Sender: TObject);
 begin
   var lToken: String;
-  var lJObj := fAuthConf.Login('configuration1', 'pwd1');
+  var lJObj := fAuthConf.Login('user_sender', 'pwd1');
   try
     lToken := lJObj.S['token'];
   finally
@@ -114,7 +114,7 @@ end;
 procedure TMainForm.btnSetUserDataClick(Sender: TObject);
 begin
   var lToken: String;
-  var lJObj := fAuthConf.Login('configuration1', 'pwd1');
+  var lJObj := fAuthConf.Login('user_sender', 'pwd1');
   try
     lToken := lJObj.S['token'];
   finally

@@ -13,22 +13,21 @@ object MainForm: TMainForm
   OldCreateOrder = False
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Panel2: TPanel
     Left = 0
     Top = 42
     Width = 1373
-    Height = 457
+    Height = 478
     Align = alClient
     TabOrder = 0
-    ExplicitTop = 44
-    ExplicitWidth = 531
-    ExplicitHeight = 393
+    ExplicitHeight = 457
     object Splitter1: TSplitter
       Left = 329
       Top = 1
-      Height = 455
+      Height = 476
       ExplicitLeft = 408
       ExplicitTop = 144
       ExplicitHeight = 100
@@ -37,7 +36,7 @@ object MainForm: TMainForm
       Left = 1
       Top = 1
       Width = 328
-      Height = 455
+      Height = 476
       Align = alLeft
       Columns = <
         item
@@ -58,39 +57,34 @@ object MainForm: TMainForm
       TabOrder = 0
       ViewStyle = vsReport
       OnSelectItem = lvProcessSelectItem
+      ExplicitHeight = 455
     end
     object Panel1: TPanel
       Left = 332
       Top = 1
       Width = 1040
-      Height = 455
+      Height = 476
       Align = alClient
       Caption = 'Panel1'
       TabOrder = 1
-      ExplicitLeft = 320
-      ExplicitTop = 176
-      ExplicitWidth = 185
-      ExplicitHeight = 41
+      ExplicitHeight = 455
       object pcLogs: TPageControl
         Left = 1
         Top = 1
         Width = 1038
-        Height = 453
+        Height = 474
         ActivePage = tsAll
         Align = alClient
         TabOrder = 0
         OnChange = pcLogsChange
-        ExplicitWidth = 554
-        ExplicitHeight = 348
+        ExplicitHeight = 453
         object tsAll: TTabSheet
           Caption = 'All'
-          ExplicitWidth = 546
-          ExplicitHeight = 361
-          object DBGrid2: TDBGrid
+          object DBGridAll: TDBGrid
             Left = 0
             Top = 0
             Width = 1030
-            Height = 425
+            Height = 446
             Align = alClient
             DataSource = DataSource1
             Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
@@ -100,23 +94,18 @@ object MainForm: TMainForm
             TitleFont.Height = -11
             TitleFont.Name = 'Tahoma'
             TitleFont.Style = []
-            OnDrawColumnCell = DBGrid2DrawColumnCell
+            OnDrawColumnCell = DBGridAllDrawColumnCell
             Columns = <
               item
                 Expanded = False
                 FieldName = 'id'
-                Font.Charset = DEFAULT_CHARSET
-                Font.Color = clWindowText
-                Font.Height = -11
-                Font.Name = 'Tahoma'
-                Font.Style = []
                 Title.Caption = 'ID'
                 Title.Font.Charset = DEFAULT_CHARSET
                 Title.Font.Color = clWindowText
                 Title.Font.Height = -16
                 Title.Font.Name = 'Tahoma'
                 Title.Font.Style = []
-                Width = 200
+                Width = 295
                 Visible = True
               end
               item
@@ -128,7 +117,7 @@ object MainForm: TMainForm
                 Title.Font.Height = -16
                 Title.Font.Name = 'Tahoma'
                 Title.Font.Style = []
-                Width = 265
+                Width = 192
                 Visible = True
               end
               item
@@ -170,14 +159,11 @@ object MainForm: TMainForm
         object tsDebug: TTabSheet
           Caption = 'Debug'
           ImageIndex = 5
-          ExplicitLeft = 5
-          ExplicitWidth = 546
-          ExplicitHeight = 320
-          object DBGrid3: TDBGrid
+          object DBGridDebug: TDBGrid
             Left = 0
             Top = 0
             Width = 1030
-            Height = 425
+            Height = 446
             Align = alClient
             DataSource = DataSource1
             Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
@@ -197,7 +183,7 @@ object MainForm: TMainForm
                 Title.Font.Height = -16
                 Title.Font.Name = 'Tahoma'
                 Title.Font.Style = []
-                Width = 101
+                Width = 250
                 Visible = True
               end
               item
@@ -209,6 +195,7 @@ object MainForm: TMainForm
                 Title.Font.Height = -16
                 Title.Font.Name = 'Tahoma'
                 Title.Font.Style = []
+                Width = 200
                 Visible = True
               end
               item
@@ -239,14 +226,11 @@ object MainForm: TMainForm
         object tsInfo: TTabSheet
           Caption = 'Info'
           ImageIndex = 4
-          ExplicitLeft = 5
-          ExplicitWidth = 546
-          ExplicitHeight = 320
-          object DBGrid4: TDBGrid
+          object DBGridInfo: TDBGrid
             Left = 0
             Top = 0
             Width = 1030
-            Height = 425
+            Height = 446
             Align = alClient
             DataSource = DataSource1
             Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
@@ -307,14 +291,11 @@ object MainForm: TMainForm
         object tsWarning: TTabSheet
           Caption = 'Warning'
           ImageIndex = 3
-          ExplicitLeft = 5
-          ExplicitWidth = 546
-          ExplicitHeight = 320
-          object DBGrid5: TDBGrid
+          object DBGridWarning: TDBGrid
             Left = 0
             Top = 0
             Width = 1030
-            Height = 425
+            Height = 446
             Align = alClient
             DataSource = DataSource1
             Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
@@ -374,13 +355,11 @@ object MainForm: TMainForm
         object tsError: TTabSheet
           Caption = 'Error'
           ImageIndex = 1
-          ExplicitWidth = 546
-          ExplicitHeight = 361
-          object DBGrid1: TDBGrid
+          object DBGridError: TDBGrid
             Left = 0
             Top = 0
             Width = 1030
-            Height = 425
+            Height = 446
             Align = alClient
             DataSource = DataSource1
             Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
@@ -439,13 +418,11 @@ object MainForm: TMainForm
         end
         object TabSheet1: TTabSheet
           Caption = 'Text Log'
-          ExplicitWidth = 281
-          ExplicitHeight = 165
           object MemoMessage: TMemo
             Left = 0
             Top = 0
             Width = 1030
-            Height = 425
+            Height = 446
             Align = alClient
             BevelInner = bvLowered
             BevelOuter = bvNone
@@ -459,10 +436,9 @@ object MainForm: TMainForm
             Font.Style = []
             ParentCtl3D = False
             ParentFont = False
+            ScrollBars = ssBoth
             TabOrder = 0
-            ExplicitLeft = 1
-            ExplicitWidth = 546
-            ExplicitHeight = 361
+            WordWrap = False
           end
         end
       end
@@ -475,12 +451,11 @@ object MainForm: TMainForm
     Height = 42
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 531
     object EditQueueName: TEdit
       AlignWithMargins = True
       Left = 6
       Top = 6
-      Width = 1244
+      Width = 1153
       Height = 30
       Margins.Left = 5
       Margins.Top = 5
@@ -495,14 +470,14 @@ object MainForm: TMainForm
       ParentFont = False
       TabOrder = 0
       Text = 'logs.logsproducersample.monitor'
-      ExplicitWidth = 402
+      ExplicitWidth = 1244
       ExplicitHeight = 27
     end
     object btnStartStop: TButton
       AlignWithMargins = True
-      Left = 1259
+      Left = 1168
       Top = 5
-      Width = 109
+      Width = 200
       Height = 32
       Margins.Left = 4
       Margins.Top = 4
@@ -518,19 +493,15 @@ object MainForm: TMainForm
       ParentFont = False
       TabOrder = 1
       OnClick = Button2Click
-      ExplicitLeft = 417
     end
   end
   object Panel4: TPanel
     Left = 0
-    Top = 499
+    Top = 520
     Width = 1373
-    Height = 41
+    Height = 20
     Align = alBottom
     TabOrder = 2
-    ExplicitLeft = 328
-    ExplicitTop = 216
-    ExplicitWidth = 185
   end
   object dsLogs: TFDMemTable
     FieldDefs = <>

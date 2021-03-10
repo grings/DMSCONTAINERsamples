@@ -3,7 +3,7 @@
         <ProjectGuid>{EAED2291-BC92-4B41-B278-70CE88B50744}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="LogsProducerSample\LogsProducerSample.dproj">
+        <Projects Include="logs_producer_app\LogsProducerSample.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="EventStreamsLoggerMonitor.dproj">
@@ -18,13 +18,13 @@
         </BorlandProject>
     </ProjectExtensions>
     <Target Name="LogsProducerSample">
-        <MSBuild Projects="LogsProducerSample\LogsProducerSample.dproj"/>
+        <MSBuild Projects="logs_producer_app\LogsProducerSample.dproj"/>
     </Target>
     <Target Name="LogsProducerSample:Clean">
-        <MSBuild Projects="LogsProducerSample\LogsProducerSample.dproj" Targets="Clean"/>
+        <MSBuild Projects="logs_producer_app\LogsProducerSample.dproj" Targets="Clean"/>
     </Target>
     <Target Name="LogsProducerSample:Make">
-        <MSBuild Projects="LogsProducerSample\LogsProducerSample.dproj" Targets="Make"/>
+        <MSBuild Projects="logs_producer_app\LogsProducerSample.dproj" Targets="Make"/>
     </Target>
     <Target Name="EventStreamsLoggerMonitor">
         <MSBuild Projects="EventStreamsLoggerMonitor.dproj"/>

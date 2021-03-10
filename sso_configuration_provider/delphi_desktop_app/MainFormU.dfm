@@ -1,7 +1,9 @@
 object MainForm: TMainForm
   Left = 0
   Top = 0
-  Caption = 'SSO::Configuration Provider Sample'
+  Caption = 
+    'SSO::Configuration Provider Sample (DMSContainer user: user_send' +
+    'er | context: contexts.erp.rome)'
   ClientHeight = 341
   ClientWidth = 912
   Color = clBtnFace

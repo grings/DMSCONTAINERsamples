@@ -3,7 +3,7 @@ unit MainFormU;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, LoggerPro, Vcl.ExtCtrls;
 
@@ -34,27 +34,26 @@ implementation
 
 {$R *.dfm}
 
-
-uses LoggerProConfig;
+uses LoggerProConfig, Winapi.Windows;
 
 procedure TMainForm.Button1Click(Sender: TObject);
 begin
-  Log.DebugFmt('This is a debug message with MONITOR (%s)', [fContext], 'MONITOR');
+  Log.Debug('This is a debug message with MONITOR (%s)', [fContext], 'MONITOR');
 end;
 
 procedure TMainForm.Button2Click(Sender: TObject);
 begin
-  Log.InfoFmt('This is a info message with MONITOR (%s)', [fContext], 'MONITOR');
+  Log.Info('This is a info message with MONITOR (%s)', [fContext], 'MONITOR');
 end;
 
 procedure TMainForm.Button3Click(Sender: TObject);
 begin
-  Log.WarnFmt('This is a warning message with MONITOR (%s)', [fContext], 'MONITOR');
+  Log.Warn('This is a warning message with MONITOR (%s)', [fContext], 'MONITOR');
 end;
 
 procedure TMainForm.Button4Click(Sender: TObject);
 begin
-  Log.ErrorFmt('This is a error message with MONITOR (%s)', [fContext], 'MONITOR');
+  Log.Error('This is a error message with MONITOR (%s)', [fContext], 'MONITOR');
 end;
 
 procedure TMainForm.Button5Click(Sender: TObject);
@@ -69,14 +68,14 @@ begin
       lThreadID := IntToStr(TThread.Current.ThreadID);
       for I := 1 to 100 do
       begin
-        Log.Debug('log message ' + TimeToStr(now),// + ' ThreadID: ' + lThreadID,
-          'MULTITHREADING');
-        Log.Info('log message ' + TimeToStr(now),// + ' ThreadID: ' + lThreadID,
-          'MULTITHREADING');
-        Log.Warn('log message ' + TimeToStr(now),// + ' ThreadID: ' + lThreadID,
-          'MULTITHREADING');
-        Log.Error('log message ' + TimeToStr(now),// + ' ThreadID: ' + lThreadID,
-          'MULTITHREADING');
+        Log.Debug('log message ' + TimeToStr(now), // + ' ThreadID: ' + lThreadID,
+          'MONITOR');
+        Log.Info('log message ' + TimeToStr(now), // + ' ThreadID: ' + lThreadID,
+          'MONITOR');
+        Log.Warn('log message ' + TimeToStr(now), // + ' ThreadID: ' + lThreadID,
+          'MONITOR');
+        Log.Error('log message ' + TimeToStr(now), // + ' ThreadID: ' + lThreadID,
+          'MONITOR');
       end;
     end;
   TThread.CreateAnonymousThread(lThreadProc).Start;
@@ -92,7 +91,7 @@ begin
   iLen := 256;
   Result := StringOfChar(#0, iLen);
   GetUserName(PChar(Result), iLen);
-  SetLength(Result, iLen-1);
+  SetLength(Result, iLen - 1);
 end;
 
 function GetComputerNameFromWindows: string;
@@ -108,6 +107,7 @@ end;
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   fContext := GetUserFromWindows + '@' + GetComputerNameFromWindows;
+  Caption := Caption + ' - PID: ' + IntToStr(GetCurrentProcessId);
 end;
 
 end.

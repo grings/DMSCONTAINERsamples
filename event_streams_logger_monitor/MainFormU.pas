@@ -25,18 +25,18 @@ type
     TabSheet1: TTabSheet;
     MemoMessage: TMemo;
     tsError: TTabSheet;
-    DBGrid1: TDBGrid;
+    DBGridError: TDBGrid;
     dsLogs: TFDMemTable;
     DataSource1: TDataSource;
     tsAll: TTabSheet;
-    DBGrid2: TDBGrid;
+    DBGridAll: TDBGrid;
     Panel4: TPanel;
     tsWarning: TTabSheet;
     tsInfo: TTabSheet;
     tsDebug: TTabSheet;
-    DBGrid3: TDBGrid;
-    DBGrid4: TDBGrid;
-    DBGrid5: TDBGrid;
+    DBGridDebug: TDBGrid;
+    DBGridInfo: TDBGrid;
+    DBGridWarning: TDBGrid;
     dsLogsid: TStringField;
     dsLogstimestamp: TStringField;
     dsLogstext: TStringField;
@@ -46,11 +46,11 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
-    procedure lvProcessSelectItem(Sender: TObject; Item: TListItem;
-      Selected: Boolean);
+    procedure lvProcessSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure pcLogsChange(Sender: TObject);
-    procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
-      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridAllDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer;
+      Column: TColumn; State: TGridDrawState);
+    procedure FormShow(Sender: TObject);
   private
     fProxy: IEventStreamsRPCProxy;
     fToken: string;
@@ -66,8 +66,7 @@ type
     procedure DequeueMessage(const QueueName, LastKnownID: String);
     procedure AddProcessItem(const info: TJsonObject);
     procedure PopulateDataSet(const Msg: TJsonObject);
-    procedure CreateMainDataSet();
-    function CreateUniqueKey(const info: TJsonObject): string;
+    function BuildUniqueKey(const info: TJsonObject): string;
     procedure FilterDataset;
   public
     { Public declarations }
@@ -78,9 +77,9 @@ var
 
 const
   ENDPOINT = 'https://localhost/eventstreamsrpc';
-
-  SYM_START = 'Start ▶';
-  SYM_STOP = 'Stop ⏹';
+  SYM_START = 'Start Monitor ▶';
+  SYM_STOP = 'Stop Monitor ⏹';
+  SHOW_ALL_INSTANCES = '<Show All Instances>';
 
 implementation
 
@@ -110,52 +109,15 @@ begin
     btnStartStop.Caption := SYM_STOP;
     lvProcess.Items.Clear;
     lListItem := lvProcess.Items.Add;
-    lListItem.Caption := 'All';
+    lListItem.Caption := SHOW_ALL_INSTANCES;
   end;
 end;
 
-procedure TMainForm.CreateMainDataSet;
-begin
-  with dsLogs.FieldDefs do
-  begin
-    with AddFieldDef do
-    begin
-      Name := 'id';
-      DataType := ftString;
-      Size := 50;
-    end;
-    with AddFieldDef do
-    begin
-      Name := 'timestamp';
-      DataType := ftString;
-      Size := 50;
-    end;
-    with AddFieldDef do
-    begin
-      Name := 'text';
-      DataType := ftString;
-      Size := 1000;
-    end;
-    with AddFieldDef do
-    begin
-      Name := 'type';
-      DataType := ftString;
-      Size := 50;
-    end;
-    with AddFieldDef do
-    begin
-      Name := 'tid';
-      DataType := ftInteger;
-    end;
-  end;
-
-end;
-
-function TMainForm.CreateUniqueKey(const info: TJsonObject): string;
+function TMainForm.BuildUniqueKey(const info: TJsonObject): string;
 begin
   // username@computername(processname)[pid]
-  Result := info.S['username'] + '@' + info.S['computername'] + '(' +
-    info.S['processname'] + ')[' + info.I['pid'].ToString + ']';
+  Result := info.S['username'] + '@' + info.S['computername'] + '(' + info.S['processname'] + ')[' +
+    info.I['pid'].ToString + ']';
 end;
 
 procedure TMainForm.FilterDataset;
@@ -197,18 +159,43 @@ begin
   fFilterId := '1 = 1 ';
 end;
 
-procedure TMainForm.DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
-  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+
+procedure AssignColumnSize(DBGridSrc, DBGridDest: TDBGrid);
+var
+  I: Integer;
 begin
+  for I := 0 to DBGridDest.Columns.Count-1 do
+  begin
+    DBGridDest.Columns[I].Width := DBGridSrc.Columns[I].Width;
+  end;
+end;
+
+procedure TMainForm.FormShow(Sender: TObject);
+begin
+  pcLogs.ActivePageIndex := 0;
+  AssignColumnSize(DBGridDebug, DBGridInfo);
+  AssignColumnSize(DBGridDebug, DBGridWarning);
+  AssignColumnSize(DBGridDebug, DBGridError);
+end;
+
+procedure TMainForm.DBGridAllDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer;
+  Column: TColumn; State: TGridDrawState);
+var
+  lCanvas: TCanvas;
+begin
+  lCanvas := (Sender as TDBGrid).Canvas;
   if dsLogs.FieldByName('type').AsString = 'DEBUG' then
-    DBGrid2.Canvas.Brush.Color := clCream;
+    lCanvas.Brush.Color := clCream;
   if dsLogs.FieldByName('type').AsString = 'INFO' then
-    DBGrid2.Canvas.Brush.Color := clHighlight;
+    lCanvas.Brush.Color := clHighlight;
   if dsLogs.FieldByName('type').AsString = 'WARNING' then
-    DBGrid2.Canvas.Brush.Color := clYellow;
+    lCanvas.Brush.Color := clYellow;
   if dsLogs.FieldByName('type').AsString = 'ERROR' then
-    DBGrid2.Canvas.Brush.Color := clRed;
-  DBGrid2.DefaultDrawColumnCell(Rect, DataCol, Column, State);
+  begin
+    lCanvas.Brush.Color := clRed; // RGB($ff,$c0,$c0);
+    lCanvas.Font.Color := clWhite; // RGB($ff,$c0,$c0);
+  end;
+  DBGridAll.DefaultDrawColumnCell(Rect, DataCol, Column, State);
 end;
 
 procedure TMainForm.DequeueMessage(const QueueName, LastKnownID: String);
@@ -218,8 +205,7 @@ var
 begin
   lLastMgsID := LastKnownID;
   try
-    lJMessage := fProxy.DequeueMultipleMessage(fToken, QueueName,
-      lLastMgsID, 1, 10);
+    lJMessage := fProxy.DequeueMultipleMessage(fToken, QueueName, lLastMgsID, 1, 10);
     try
       if lJMessage.B['timeout'] then
       begin
@@ -252,13 +238,16 @@ begin
     procedure
     begin
       MemoMessage.Lines.Add(lStr);
+      if MemoMessage.Lines.Count > 5000 then
+      begin
+        MemoMessage.Lines.Clear; //it's just a demo :-)
+      end;
     end);
 end;
 
-procedure TMainForm.lvProcessSelectItem(Sender: TObject; Item: TListItem;
-Selected: Boolean);
+procedure TMainForm.lvProcessSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 begin
-  if Item.Caption = 'All' then
+  if Item.Caption = SHOW_ALL_INSTANCES then
     fFilterId := ''
   else
     fFilterId := 'id = ' + QuotedStr(Item.Caption) + '';
@@ -271,7 +260,7 @@ var
   lListItem: TListItem;
   lid: string;
 begin
-  lid := CreateUniqueKey(info);
+  lid := BuildUniqueKey(info);
   lListItem := lvProcess.FindCaption(0, lid, False, True, True);
   if not Assigned(lListItem) then
   begin
@@ -294,11 +283,10 @@ begin
       try
         lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
         lLastKnownID := '__last__';
-        while TTask.CurrentTask.Status <> TTaskStatus.Canceled do
+        while (TTask.CurrentTask.Status <> TTaskStatus.Canceled) do
         begin
           try
-            lJSON := lProxy.DequeueMultipleMessage(Token, QueueName,
-              lLastKnownID, 10, 10);
+            lJSON := lProxy.DequeueMultipleMessage(Token, QueueName, lLastKnownID, 20, 10);
             try
               if TTask.CurrentTask.Status = TTaskStatus.Canceled then
               begin
@@ -318,10 +306,8 @@ begin
                   TThread.Synchronize(nil,
                     Procedure
                     begin
-                      AddProcessItem(lJSON.A['data'][I].ObjectValue.O['message']
-                        .O['info']);
-                      PopulateDataSet(lJSON.A['data'][I].ObjectValue.O
-                        ['message']);
+                      AddProcessItem(lJSON.A['data'][I].ObjectValue.O['message'].O['info']);
+                      PopulateDataSet(lJSON.A['data'][I].ObjectValue.O['message']);
                     end);
                 end;
               end;
@@ -338,9 +324,8 @@ begin
     end;
 end;
 
-procedure TMainForm.OnValidateCert(const Sender: TObject;
-const ARequest: TURLRequest; const Certificate: TCertificate;
-var Accepted: Boolean);
+procedure TMainForm.OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
+const Certificate: TCertificate; var Accepted: Boolean);
 begin
   Accepted := True;
 end;
@@ -370,7 +355,7 @@ begin
   begin
     Open;
     Append;
-    Fields[0].AsString := CreateUniqueKey(Msg.O['info']);
+    Fields[0].AsString := BuildUniqueKey(Msg.O['info']);
     Fields[1].AsString := Msg.S['timestamp'];
     Fields[2].AsString := Msg.S['text'];
     Fields[3].AsString := Msg.S['type'];
@@ -394,8 +379,7 @@ begin
   begin
     MemoMessage.Lines.Add('** CONSUMER STOP **');
     fCurrentTask.Cancel;
-    while not(fCurrentTask.Status in [TTaskStatus.Completed,
-      TTaskStatus.Canceled]) do
+    while not(fCurrentTask.Status in [TTaskStatus.Completed, TTaskStatus.Canceled]) do
     begin
       Sleep(200);
       Application.ProcessMessages;

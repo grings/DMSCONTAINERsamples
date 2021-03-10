@@ -146,8 +146,6 @@ begin
 end;
 
 function TLoggerProDMSContainerAppender.CreateData(const SrcLogItem: TLogItem): TJSONObject;
-var
-  lLog: TJSONObject;
 begin
   Result := nil;
   try
@@ -295,7 +293,6 @@ procedure TLoggerProDMSContainerAppender.InternalWriteLog(const aLogItem: TLogIt
   const aJSONObject: TJSONObject);
 var
   lRetryCount: Integer;
-  lResp: IHTTPResponse;
   lJSONResp: TJSONObject;
 const
   MAX_RETRY_COUNT = 5;
@@ -331,9 +328,7 @@ end;
 
 procedure TLoggerProDMSContainerAppender.WriteLog(const aLogItem: TLogItem);
 var
-  lData: TJSONObject;
   lRetryCount: Integer;
-  lResp: IHTTPResponse;
   lJSONResp: TJSONObject;
   lQueueName: string;
 const
