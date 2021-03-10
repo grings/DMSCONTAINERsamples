@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{EAED2291-BC92-4B41-B278-70CE88B50744}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="LogsProducerSample\LogsProducerSample.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="EventStreamsLoggerMonitor.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="LogsProducerSample">
+        <MSBuild Projects="LogsProducerSample\LogsProducerSample.dproj"/>
+    </Target>
+    <Target Name="LogsProducerSample:Clean">
+        <MSBuild Projects="LogsProducerSample\LogsProducerSample.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LogsProducerSample:Make">
+        <MSBuild Projects="LogsProducerSample\LogsProducerSample.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="EventStreamsLoggerMonitor">
+        <MSBuild Projects="EventStreamsLoggerMonitor.dproj"/>
+    </Target>
+    <Target Name="EventStreamsLoggerMonitor:Clean">
+        <MSBuild Projects="EventStreamsLoggerMonitor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="EventStreamsLoggerMonitor:Make">
+        <MSBuild Projects="EventStreamsLoggerMonitor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="LogsProducerSample;EventStreamsLoggerMonitor"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="LogsProducerSample:Clean;EventStreamsLoggerMonitor:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="LogsProducerSample:Make;EventStreamsLoggerMonitor:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
