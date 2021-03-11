@@ -2,19 +2,26 @@
     "worksheets": [{
             "name": "Test Worksheet",
             "columns": [{
-                    "title": "Product",
-                    "type": "text",
-					"width": 50,
+                    "title": "Product Name",
+                    "type": "general",
+                    "width": 100,
                     "header_options": {
-                        "bold": true
+                        "font_color": "red",
+                        "font_size": 18
+                    },
+                    "options": {
+                        "font_size": 14
                     }
                 }, {
                     "title": "Price",
                     "type": "number",
                     "format": "€ #,##0.00",
                     "header_options": {
-						"align":"right",
-                        "bold": true
+                        "font_color": "green",
+                        "font_size": 18
+                    },
+                    "options": {
+                        "font_size": 14
                     }
                 }
             ],
