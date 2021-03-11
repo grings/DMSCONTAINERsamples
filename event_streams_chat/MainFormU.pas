@@ -3,7 +3,8 @@ unit MainFormU;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, EventStreamsRPCProxy, Vcl.StdCtrls,
   Vcl.ExtCtrls, System.Net.URLClient, EmojiSupportU, System.Threading;
 
@@ -24,8 +25,8 @@ type
     fProxy: IEventStreamsRPCProxy;
     fToken: string;
     fReceiveTask: ITask;
-    procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;
-      var Accepted: Boolean);
+    procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest;
+      const Certificate: TCertificate; var Accepted: Boolean);
   public
     { Public declarations }
   end;
@@ -36,7 +37,6 @@ var
 implementation
 
 {$R *.dfm}
-
 
 uses JsonDataObjects, System.SyncObjs, MVCFramework.Logger;
 
@@ -54,6 +54,7 @@ var
 begin
   lJObj := TJsonObject.Create;
   try
+    lJObj.S['createdby'] := fUserName;
     lJObj.S['text'] := Edit1.Text;
     fProxy.EnqueueMessage(fToken, 'queues.mychat', lJObj.Clone);
   finally
@@ -70,6 +71,7 @@ begin
   try
     for I := 1 to 100 do
     begin
+      lJObj.S['createdby'] := fUserName;
       lJObj.S['text'] := Format('%4d: %s', [I, Edit1.Text]);
       fProxy.EnqueueMessage(fToken, 'queues.mychat', lJObj.Clone);
     end;
@@ -97,7 +99,8 @@ procedure TMainForm.FormCreate(Sender: TObject);
 var
   lJObj: TJsonObject;
 begin
-  fUserName := InputBox('User Name', 'Plese, write your user name', 'user_queue1');
+  fUserName := InputBox('User Name', 'Plese, write your user name',
+    'user_queue1');
   fProxy := TEventStreamsRPCProxy.Create('https://localhost/eventstreamsrpc');
   fProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
   lJObj := fProxy.Login(fUserName, 'pwd1');
@@ -114,14 +117,16 @@ begin
       lJObj: TJsonObject;
       lLastMgsID: string;
     begin
-      lProxy := TEventStreamsRPCProxy.Create('https://localhost/eventstreamsrpc');
+      lProxy := TEventStreamsRPCProxy.Create
+        ('https://localhost/eventstreamsrpc');
       try
         lProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
         lLastMgsID := '__last__';
         while TInterlocked.Read(GShutDown) = 0 do
         begin
           try
-            lJObj := lProxy.DequeueMessage(fToken, 'queues.mychat', lLastMgsID, 60);
+            lJObj := lProxy.DequeueMessage(fToken, 'queues.mychat',
+              lLastMgsID, 60);
           except
             Sleep(1000);
             Continue;
@@ -135,14 +140,18 @@ begin
                 TThread.Synchronize(nil,
                   procedure
                   begin
-                    MemoChat.Lines.Add(
-                      lJObj.S['messageid'] + '|' +
-                      lJObj.S['createdby'] + ': ' +
-                      lJObj.O['message'].S['text']);
+                    MemoChat.Lines.Add(lJObj.A['data'][lJObj.A['data'].Count-1].ObjectValue.S['messageid'] + '|' +
+                    lJObj.A['data'][lJObj.A['data'].Count-1].ObjectValue.O['message'].S['createdby']+': '+
+                    lJObj.A['data'][lJObj.A['data'].Count-1].ObjectValue.O['message'].S['text']);
                     ScrollToLastLine(MemoChat);
                   end);
               end;
-              lLastMgsID := lJObj.S['messageid'];
+              TThread.Synchronize(nil,
+                procedure
+                begin
+                  ScrollToLastLine(MemoChat);
+                end);
+              lLastMgsID := lJObj.A['data'][lJObj.A['data'].Count-1].ObjectValue.S['messageid'];
             end;
           finally
             lJObj.Free;
