@@ -45,7 +45,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure Button2Click(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure lvProcessSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure pcLogsChange(Sender: TObject);
     procedure DBGridAllDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer;
@@ -89,11 +88,6 @@ uses System.SyncObjs, MVCFramework.Logger, System.TimeSpan;
 
 var
   GShutDown: Int64 = 0;
-
-procedure TMainForm.Button1Click(Sender: TObject);
-begin
-  DequeueMessage(EditQueueName.Text, '__first__');
-end;
 
 procedure TMainForm.Button2Click(Sender: TObject);
 var
@@ -187,7 +181,10 @@ begin
   if dsLogs.FieldByName('type').AsString = 'DEBUG' then
     lCanvas.Brush.Color := clCream;
   if dsLogs.FieldByName('type').AsString = 'INFO' then
+  begin
     lCanvas.Brush.Color := clHighlight;
+    lCanvas.Font.Color := clWhite;
+  end;
   if dsLogs.FieldByName('type').AsString = 'WARNING' then
     lCanvas.Brush.Color := clYellow;
   if dsLogs.FieldByName('type').AsString = 'ERROR' then
