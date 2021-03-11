@@ -19,7 +19,6 @@ procedure TQuickStart2Job.DoExecute;
 begin
   { write your own job code here }
   Log.Info('Hello! I''m going to play something amazing!!', JobName);
-
 end;
 
 initialization

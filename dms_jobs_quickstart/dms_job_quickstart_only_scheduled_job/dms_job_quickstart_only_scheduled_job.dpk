@@ -30,10 +30,7 @@ package dms_job_quickstart_only_scheduled_job;
 
 requires
   rtl,
-  dmvcframeworkRT,
-  dmsRT,
-  LockBoxDR,
-  loggerproRT;
+  dmsRT;
 
 contains
   Jobs.QuickStart2.Job in 'Jobs.QuickStart2.Job.pas';

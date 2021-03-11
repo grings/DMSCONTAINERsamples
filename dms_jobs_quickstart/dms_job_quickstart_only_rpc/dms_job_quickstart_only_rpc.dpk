@@ -30,10 +30,7 @@ package dms_job_quickstart_only_rpc;
 
 requires
   rtl,
-  dmvcframeworkRT,
-  dmsRT,
-  LockBoxDR,
-  loggerproRT;
+  dmsRT;
 
 contains
   Jobs.QuickStart1.RPC in 'Jobs.QuickStart1.RPC.pas';

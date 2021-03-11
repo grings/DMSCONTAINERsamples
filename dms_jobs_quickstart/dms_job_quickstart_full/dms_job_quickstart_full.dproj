@@ -82,10 +82,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
-        <DCCReference Include="dmvcframeworkRT.dcp"/>
         <DCCReference Include="dmsRT.dcp"/>
-        <DCCReference Include="LockBoxDR.dcp"/>
-        <DCCReference Include="loggerproRT.dcp"/>
         <DCCReference Include="Jobs.QuickStart3.RPC.pas"/>
         <DCCReference Include="Jobs.QuickStart3.Job.pas"/>
         <BuildConfiguration Include="Release">
@@ -133,7 +130,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="C:\bitTimeProfessionals\DMSContainer_4_0_14\jobspackage\dms_job_quickstart_full.bpl" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="C:\bitTimeProfessionals\DMSContainer_4_0_29\jobspackage\dms_job_quickstart_full.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>dms_job_quickstart_full.bpl</RemoteName>
                         <Overwrite>true</Overwrite>

@@ -25,7 +25,6 @@ package dms_job_calculator;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'DMSContainer - Calculator Class Job Sample'}
 {$RUNONLY}
 {$IMPLICITBUILD ON}
 
