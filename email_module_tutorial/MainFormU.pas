@@ -22,9 +22,12 @@ type
     btnSendEmailWithAttachments: TButton;
     btnSendBulkMessages: TButton;
     chkIsTest: TCheckBox;
+    btnSearchForMessage: TButton;
+    Memo1: TMemo;
     procedure btnSendSimpleEmailClick(Sender: TObject);
     procedure btnSendEmailWithAttachmentsClick(Sender: TObject);
     procedure btnSendBulkMessagesClick(Sender: TObject);
+    procedure btnSearchForMessageClick(Sender: TObject);
   private
     procedure ValidateCertificateEvent(const Sender: TObject; const ARequest: TURLRequest;
       const Certificate: TCertificate; var Accepted: Boolean);
@@ -45,11 +48,46 @@ implementation
 
 {$R *.dfm}
 
-
 uses
   EmailRPCProxy,
   System.NetEncoding,
   System.IOUtils;
+
+procedure TMainForm.btnSearchForMessageClick(Sender: TObject);
+var
+  lMetaMessage: TJSONObject;
+  lMessageData: TJSONObject;
+  lRecipient: TJSONObject;
+  lItem: TJSONObject;
+  lDMS: IEmailRPCProxy;
+  lJObj: TJSONObject;
+  lToken: string;
+  lJResp: TJSONObject;
+  lJSON: TJSONObject;
+begin
+  lDMS := TEmailRPCProxy.Create('https://' + SERVERNAME + '/emailrpc');
+
+  // by default the https certificate is self signed... let's igore the CA
+  lDMS.RPCExecutor.SetOnValidateServerCertificate(ValidateCertificateEvent);
+
+  lJObj := lDMS.Login('user_admin', 'pwd1');
+  try
+    lToken := lJObj.S['token'];
+  finally
+    lJObj.Free;
+  end;
+
+  lJSON := TJSONObject.Create;
+
+  //lJSON.S['rql'] := 'in(status,["TO_SEND","ERROR"])';
+  //lJSON.S['rql'] := 'contains(msgtolist,"@bittime.it")';
+  lJResp := lDMS.GetMessagesByRQL(lToken, lJSON);
+  try
+    Memo1.Lines.Text := lJResp.ToJson(false);
+  finally
+    lJResp.Free;
+  end;
+end;
 
 procedure TMainForm.btnSendBulkMessagesClick(Sender: TObject);
 var
@@ -81,8 +119,8 @@ begin
     lMetaMessage.S['msgsubject'] :=
       '{{meta.title}} - This message is for {{data.first_name}} {{data.last_name}}';
     lMetaMessage.S['msgbodyhtml'] := '<h3>Dear {{data.title}} {{data.first_name}} </h3>' +
-      '<p>We are really glad to send this email to you, and we really appreciate a kind reply</p>'
-      + '<p>This email is sent to {{data.title}}{{data.first_name}}{{data.last_name}}</p>';
+      '<p>We are really glad to send this email to you, and we really appreciate a kind reply</p>' +
+      '<p>This email is sent to {{data.title}}{{data.first_name}}{{data.last_name}}</p>';
 
     FillWithAttachments(lMetaMessage);
 
@@ -169,8 +207,7 @@ begin
   // let's prepare the message to send
   lJMsg := TJSONObject.Create;
   try
-    lJMsg.S['msgbody'] := 'This is a text body! The message has been sent at ' +
-      DateTimeToStr(Now);
+    lJMsg.S['msgbody'] := 'This is a text body! The message has been sent at ' + DateTimeToStr(Now);
     lJMsg.S['msgbodyhtml'] := 'This is an HTML body! The message has been sent at ' +
       DateTimeToStr(Now);
     lJMsg.S['msgsubject'] := 'DMSContainer \\ This is the subject';

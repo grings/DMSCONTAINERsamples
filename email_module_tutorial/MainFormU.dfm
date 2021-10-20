@@ -2,7 +2,7 @@ object MainForm: TMainForm
   Left = 0
   Top = 0
   Caption = 'Job Email Tutorial'
-  ClientHeight = 337
+  ClientHeight = 498
   ClientWidth = 576
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -11,6 +11,9 @@ object MainForm: TMainForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  DesignSize = (
+    576
+    498)
   PixelsPerInch = 96
   TextHeight = 13
   object btnSendSimpleEmail: TButton
@@ -47,5 +50,29 @@ object MainForm: TMainForm
     Height = 17
     Caption = 'IsTest'
     TabOrder = 3
+  end
+  object btnSearchForMessage: TButton
+    Left = 16
+    Top = 205
+    Width = 201
+    Height = 52
+    Caption = '4. Search for Messages'
+    TabOrder = 4
+    OnClick = btnSearchForMessageClick
+  end
+  object Memo1: TMemo
+    Left = 16
+    Top = 263
+    Width = 545
+    Height = 218
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Consolas'
+    Font.Style = []
+    ParentFont = False
+    ReadOnly = True
+    TabOrder = 5
   end
 end
