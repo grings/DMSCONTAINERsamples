@@ -8,7 +8,7 @@ uses
   Vcl.Forms,
   Main in 'Main.pas' {MainFrm},
   AuthService in '..\AuthService.pas',
-  LoginFormU in '..\LoginFormU.pas' {LoginForm},
+  LoginFormU in '..\..\commons\LoginFormU.pas' {LoginForm},
   FontAwesomeCodes in '..\..\commons\FontAwesomeCodes.pas',
   FontAwesomeU in '..\..\commons\FontAwesomeU.pas',
   AuthRPCProxy in '..\..\commons\AuthRPCProxy.pas';

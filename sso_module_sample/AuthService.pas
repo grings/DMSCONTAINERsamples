@@ -57,6 +57,7 @@ begin
     lJResult := fAuthRPCProxy.GetAllMyContextInfoByContextName(lToken, AContextName);
     try
       ASSOData := lJResult.Clone as TJsonObject;
+      Result := True;
     finally
       lJResult.Free;
     end;
@@ -98,7 +99,7 @@ function TAuthService.GetTokenByFile: String;
 begin
   Result := '';
   if TFile.Exists(getTokenPathFile) then
-    Result := TFile.ReadAllText(getTokenPathFile);
+    Result := TFile.ReadAllText(getTokenPathFile).Trim;
 
 end;
 

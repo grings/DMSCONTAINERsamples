@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, AuthService, JsonDataObjects,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls,
   System.Actions, Vcl.ActnList, Vcl.Imaging.pngimage, Vcl.Samples.Spin,
-  Vcl.CheckLst, Vcl.Buttons;
+  Vcl.CheckLst, Vcl.Buttons, Vcl.Mask;
 
 type
   TMainFrm = class(TForm)

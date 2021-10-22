@@ -29,6 +29,7 @@ type
     Label2: TLabel;
     Label3: TLabel;
     procedure FormCreate(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -77,6 +78,17 @@ begin
   // OKBtn.Caption := fa_check_square + ' ' + OKBtn.Caption;
   // CancelBtn.Caption := fa_chevron_left + ' ' + CancelBtn.Caption;
   // Shape1.Pen.Color := StyleServices.GetStyleColor(scButtonPressed);
+end;
+
+procedure TLoginForm.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key = VK_F9 then
+  begin
+    edtUsername.Text := 'user_admin';
+    edtPassword.Text := 'pwd1';
+  end;
+  ModalResult := mrOk;
 end;
 
 end.

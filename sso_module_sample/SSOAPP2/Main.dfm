@@ -11,7 +11,6 @@ object MainFrm: TMainFrm
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   Position = poScreenCenter
   OnClose = FormClose
   OnCreate = FormCreate
@@ -747,6 +746,7 @@ object MainFrm: TMainFrm
       Font.Style = []
       ParentFont = False
       TabOrder = 1
+      Text = ''
     end
     object edtDateFormat: TLabeledEdit
       Left = 16
@@ -763,6 +763,7 @@ object MainFrm: TMainFrm
       Font.Style = []
       ParentFont = False
       TabOrder = 2
+      Text = ''
     end
     object rgNotifications: TRadioGroup
       Left = 232

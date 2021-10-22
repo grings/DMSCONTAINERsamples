@@ -10,7 +10,7 @@ uses
   Vcl.Forms,
   Main in 'Main.pas' {MainFrm},
   AuthService in '..\AuthService.pas',
-  LoginFormU in '..\LoginFormU.pas' {LoginForm},
+  LoginFormU in '..\..\commons\LoginFormU.pas' {LoginForm},
   FontAwesomeU in '..\..\commons\FontAwesomeU.pas',
   FontAwesomeCodes in '..\..\commons\FontAwesomeCodes.pas',
   AuthRPCProxy in '..\..\commons\AuthRPCProxy.pas';

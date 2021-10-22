@@ -3,36 +3,36 @@ object LoginForm: TLoginForm
   Top = 0
   BorderIcons = []
   BorderStyle = bsNone
-  BorderWidth = 2
-  Caption = 'DMSAdmin - Login'
-  ClientHeight = 261
-  ClientWidth = 392
-  Color = clBtnFace
+  ClientHeight = 319
+  ClientWidth = 448
+  Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -16
-  Font.Name = 'FontAwesome'
+  Font.Name = 'Segoe UI Light'
   Font.Style = []
-  OldCreateOrder = True
+  KeyPreview = True
   Position = poScreenCenter
   OnCreate = FormCreate
+  OnKeyUp = FormKeyUp
   PixelsPerInch = 96
-  TextHeight = 16
+  TextHeight = 21
   object Shape1: TShape
     Left = 0
     Top = 0
-    Width = 392
-    Height = 261
+    Width = 448
+    Height = 319
     Align = alClient
     Brush.Style = bsClear
-    ExplicitLeft = 144
-    ExplicitTop = 80
-    ExplicitWidth = 65
-    ExplicitHeight = 65
+    Pen.Color = clSilver
+    Pen.Width = 2
+    ExplicitLeft = -8
+    ExplicitTop = -8
+    ExplicitHeight = 295
   end
   object Label1: TLabel
-    Left = 32
-    Top = 93
+    Left = 371
+    Top = 132
     Width = 59
     Height = 64
     Caption = #61742
@@ -45,7 +45,7 @@ object LoginForm: TLoginForm
   end
   object Image1: TImage
     Left = 24
-    Top = 8
+    Top = 19
     Width = 329
     Height = 64
     AutoSize = True
@@ -533,66 +533,68 @@ object LoginForm: TLoginForm
       8B49FF078D922D30664498990000000049454E44AE426082}
   end
   object Label2: TLabel
-    Left = 125
-    Top = 81
-    Width = 58
-    Height = 16
+    Left = 40
+    Top = 100
+    Width = 67
+    Height = 21
     Caption = 'Username'
   end
   object Label3: TLabel
-    Left = 125
-    Top = 135
-    Width = 54
-    Height = 16
+    Left = 40
+    Top = 166
+    Width = 62
+    Height = 21
     Caption = 'Password'
   end
   object edtUsername: TEdit
-    Left = 125
-    Top = 104
-    Width = 249
-    Height = 24
+    Left = 40
+    Top = 127
+    Width = 281
+    Height = 29
     TabOrder = 0
   end
   object edtPassword: TEdit
-    Left = 125
-    Top = 158
-    Width = 249
-    Height = 24
+    Left = 40
+    Top = 193
+    Width = 281
+    Height = 29
     PasswordChar = '*'
     TabOrder = 1
   end
   object Panel1: TPanel
     AlignWithMargins = True
-    Left = 50
-    Top = 202
+    Left = 106
+    Top = 259
     Width = 334
-    Height = 41
+    Height = 46
     BevelOuter = bvNone
     TabOrder = 2
     object OKBtn: TButton
       AlignWithMargins = True
-      Left = 167
+      Left = 125
       Top = 3
-      Width = 75
-      Height = 35
+      Width = 96
+      Height = 40
       Align = alRight
       Caption = 'OK'
       Default = True
       ModalResult = 1
       TabOrder = 0
+      ExplicitHeight = 36
     end
     object CancelBtn: TButton
       AlignWithMargins = True
-      Left = 248
+      Left = 227
       Top = 3
-      Width = 76
-      Height = 35
+      Width = 97
+      Height = 40
       Margins.Right = 10
       Align = alRight
       Cancel = True
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 1
+      ExplicitHeight = 36
     end
   end
 end
