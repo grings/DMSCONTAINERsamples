@@ -1,0 +1,52 @@
+{
+	"meta": {},
+	"items": [
+		{
+			"invNumber": 1234,
+			"invDate": "2021-10-02",
+			"invDueDate": "2021-11-30",
+			"billFromCompany": "bit Time Professionals s.r.l.",
+			"billFromAddress1": "Via di Valle Morta 10",
+			"billFromAddress2": "00132, ROMA, RM",
+			"billFromPhone": "+39 06 99367716",
+			"billToCompany": "ACME INC",
+			"billToAddress1": "2600 Amphitheatre Pkwy",
+			"billToAddress2": "Mountain View, CA 94043, USA",
+			"billToPhone": "+1 555-253-0000",
+			"subTotal": 65.5,
+			"salesTax": 79.91,
+			"handling": 10,
+			"total": 89.91,
+			"rows": [
+				{
+					"id": "01",
+					"description": "Pizza Margherita",
+					"qty": 3,
+					"price": 6,
+					"total": 18
+				},
+				{
+					"id": "02",
+					"description": "Pizza Capricciosa",
+					"qty": 1,
+					"price": 9,
+					"total": 9
+				},
+				{
+					"id": "03",
+					"description": "Pizza 4 Formaggi",
+					"qty": 2,
+					"price": 8,
+					"total": 16
+				},
+				{
+					"id": "04",
+					"description": "Pizza Marinata",
+					"qty": 5,
+					"price": 4.5,
+					"total": 22.50
+				}
+			]
+		}
+	]
+}

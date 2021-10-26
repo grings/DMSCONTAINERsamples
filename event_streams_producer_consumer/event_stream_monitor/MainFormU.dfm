@@ -8,9 +8,8 @@ object MainForm: TMainForm
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'Tahoma'
+  Font.Name = 'Segoe UI Light'
   Font.Style = []
-  OldCreateOrder = False
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -26,11 +25,15 @@ object MainForm: TMainForm
     Align = alClient
     BorderStyle = bsNone
     ColCount = 8
+    Ctl3D = True
     DefaultColWidth = 100
     DefaultRowHeight = 100
+    DrawingStyle = gdsGradient
     FixedCols = 0
     RowCount = 6
     FixedRows = 0
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goFixedRowDefAlign]
+    ParentCtl3D = False
     ScrollBars = ssNone
     TabOrder = 0
     OnDrawCell = sgDrawCell

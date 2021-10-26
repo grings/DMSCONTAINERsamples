@@ -5,8 +5,17 @@ interface
 
 uses DMSCustomRPC;
 
-Type
+// To publish this classjob add the following configuration
+// in the "jobs" array in the "$(DMS_HOME)\conf\jobsmanager.json" file
+//  {
+//    "enabled" : true,
+//    "jobname" : "jobquickstart1rpc",
+//    "jobtype" : "class",
+//    "rpcclass": "Jobs.QuickStart1.RPC.TJobQuickStart1RPC",
+//    "rpcuri"  : "/jobquickstart1rpc"
+//  }
 
+type
   TJobQuickStart1RPC = class(TCustomRPC)
   public
     function Echo(const value: string): string;
@@ -18,7 +27,7 @@ implementation
 
 function TJobQuickStart1RPC.Echo(const value: string): string;
 begin
-  result := value;
+  Result := value;
 end;
 
 initialization

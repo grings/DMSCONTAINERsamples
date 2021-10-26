@@ -18,11 +18,12 @@ object MainForm: TMainForm
   TextHeight = 16
   object Splitter2: TSplitter
     Left = 1053
-    Top = 127
-    Height = 560
+    Top = 158
+    Height = 529
     Align = alRight
     ExplicitLeft = 817
     ExplicitTop = 130
+    ExplicitHeight = 560
   end
   object StatusBar1: TStatusBar
     Left = 0
@@ -30,6 +31,9 @@ object MainForm: TMainForm
     Width = 1282
     Height = 19
     Panels = <
+      item
+        Width = 300
+      end
       item
         Width = 200
       end>
@@ -39,16 +43,17 @@ object MainForm: TMainForm
     Left = 0
     Top = 65
     Width = 1282
-    Height = 62
+    Height = 93
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 62
     object btnReport1: TButton
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 150
-      Height = 56
+      Width = 126
+      Height = 46
       Align = alLeft
       Caption = 'Many files one customer per file'
       TabOrder = 0
@@ -57,82 +62,85 @@ object MainForm: TMainForm
     end
     object btnReport2: TButton
       AlignWithMargins = True
-      Left = 159
+      Left = 135
       Top = 3
-      Width = 150
-      Height = 56
+      Width = 114
+      Height = 46
       Align = alLeft
-      Caption = 'One file, all customers in one file'
+      Caption = 'All customers in one file'
       TabOrder = 1
       WordWrap = True
       OnClick = btnReport2Click
     end
-    object btnTableHTML: TButton
+    object btnTable2: TButton
       AlignWithMargins = True
-      Left = 471
+      Left = 411
       Top = 3
       Width = 150
-      Height = 56
+      Height = 46
       Align = alLeft
-      Caption = 'HTML tabular Report with all customers'
+      Caption = 'Tabular Report with all customers #2'
       TabOrder = 2
       WordWrap = True
-      OnClick = btnTableHTMLClick
+      OnClick = btnTable2Click
+      ExplicitLeft = 471
     end
-    object btnTable: TButton
+    object btnTable1: TButton
       AlignWithMargins = True
-      Left = 315
+      Left = 255
       Top = 3
       Width = 150
-      Height = 56
+      Height = 46
       Align = alLeft
-      Caption = 'Tabular Report with all customers'
+      Caption = 'Tabular Report with all customers #1'
       TabOrder = 3
       WordWrap = True
-      OnClick = btnTableClick
+      OnClick = btnTable1Click
+      ExplicitLeft = 315
     end
-    object btnHTMLCustomers: TButton
+    object btnCustomers: TButton
       AlignWithMargins = True
-      Left = 627
+      Left = 567
       Top = 3
-      Width = 150
-      Height = 56
+      Width = 114
+      Height = 46
       Align = alLeft
-      Caption = 'One file, all customer in one HTML file'
+      Caption = 'All customers in one file'
       TabOrder = 4
       WordWrap = True
-      OnClick = btnHTMLCustomersClick
+      OnClick = btnCustomersClick
     end
     object btnBig: TButton
       AlignWithMargins = True
-      Left = 783
+      Left = 687
       Top = 3
-      Width = 130
-      Height = 56
+      Width = 122
+      Height = 46
       Align = alLeft
-      Caption = 'Generate reports for 1500 customers'
+      Caption = 'A report with 1500 customers'
       TabOrder = 5
       WordWrap = True
       OnClick = btnBigClick
     end
     object btnFilters: TButton
       AlignWithMargins = True
-      Left = 1031
+      Left = 911
       Top = 3
       Width = 86
-      Height = 56
+      Height = 46
       Align = alLeft
       Caption = 'BuiltIn Filters Sample'
       TabOrder = 6
       WordWrap = True
       OnClick = btnFiltersClick
+      ExplicitLeft = 1031
     end
     object btnInvoces: TButton
       AlignWithMargins = True
-      Left = 919
+      Left = 815
       Top = 3
-      Width = 106
-      Height = 56
+      Width = 90
+      Height = 46
       Align = alLeft
       Caption = 'Invoces (M/D)'
       TabOrder = 7
@@ -141,15 +149,72 @@ object MainForm: TMainForm
     end
     object btnOffLineInvoce: TButton
       AlignWithMargins = True
-      Left = 1123
+      Left = 1003
       Top = 3
-      Width = 106
-      Height = 56
+      Width = 94
+      Height = 46
       Align = alLeft
       Caption = 'Offline Invoces (M/D)'
       TabOrder = 8
       WordWrap = True
       OnClick = btnOffLineInvoceClick
+      ExplicitLeft = 1019
+    end
+    object Panel2: TPanel
+      Left = 0
+      Top = 52
+      Width = 1282
+      Height = 41
+      Align = alBottom
+      TabOrder = 9
+      object Label3: TLabel
+        Left = 10
+        Top = 12
+        Width = 75
+        Height = 16
+        Caption = 'Output format'
+      end
+      object cbFormat: TComboBox
+        Left = 159
+        Top = 9
+        Width = 150
+        Height = 24
+        Style = csDropDownList
+        ItemIndex = 0
+        TabOrder = 0
+        Text = 'pdf'
+        OnChange = cbFormatChange
+        Items.Strings = (
+          'pdf'
+          'docx'
+          'html')
+      end
+    end
+    object btnInvoice: TButton
+      AlignWithMargins = True
+      Left = 1171
+      Top = 3
+      Width = 62
+      Height = 46
+      Align = alLeft
+      Caption = 'Invoice #2'
+      TabOrder = 10
+      WordWrap = True
+      OnClick = btnInvoiceClick
+      ExplicitLeft = 1131
+    end
+    object btnInvoice1: TButton
+      AlignWithMargins = True
+      Left = 1103
+      Top = 3
+      Width = 62
+      Height = 46
+      Align = alLeft
+      Caption = 'Invoice #1'
+      TabOrder = 11
+      WordWrap = True
+      OnClick = btnInvoice1Click
+      ExplicitLeft = 1131
     end
   end
   object Panel6: TPanel
@@ -673,20 +738,20 @@ object MainForm: TMainForm
   end
   object pnlAsync: TPanel
     Left = 1056
-    Top = 127
+    Top = 158
     Width = 226
-    Height = 560
+    Height = 529
     Align = alRight
     BevelOuter = bvNone
     Caption = 'pnlAsync'
     TabOrder = 3
-    ExplicitHeight = 557
+    ExplicitHeight = 526
     object Label1: TLabel
       AlignWithMargins = True
       Left = 5
       Top = 5
       Width = 216
-      Height = 38
+      Height = 30
       Margins.Left = 5
       Margins.Top = 5
       Margins.Right = 5
@@ -700,27 +765,24 @@ object MainForm: TMainForm
       Font.Color = clWhite
       Font.Height = -21
       Font.Name = 'FontAwesome'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentColor = False
       ParentFont = False
       Transparent = False
       Layout = tlCenter
       StyleElements = [seClient, seBorder]
-      ExplicitLeft = 1
-      ExplicitTop = 1
-      ExplicitWidth = 208
     end
     object PageControl1: TPageControl
       Left = 0
-      Top = 151
+      Top = 143
       Width = 226
-      Height = 409
+      Height = 386
       ActivePage = TabSheet4
       Align = alClient
       MultiLine = True
       TabOrder = 0
       TabPosition = tpRight
-      ExplicitHeight = 406
+      ExplicitHeight = 383
       object TabSheet4: TTabSheet
         Caption = 'ALL'
         ImageIndex = 3
@@ -728,7 +790,7 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 174
-          Height = 401
+          Height = 378
           Style = lbOwnerDrawFixed
           Align = alClient
           Font.Charset = DEFAULT_CHARSET
@@ -741,7 +803,7 @@ object MainForm: TMainForm
           TabOrder = 0
           OnDblClick = lbxAsyReportsCreatedDblClick
           OnDrawItem = lbxAsyncReportsToCreateDrawItem
-          ExplicitHeight = 398
+          ExplicitHeight = 375
         end
       end
       object TabSheet1: TTabSheet
@@ -750,7 +812,7 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 174
-          Height = 401
+          Height = 378
           Style = lbOwnerDrawFixed
           Align = alClient
           Font.Charset = DEFAULT_CHARSET
@@ -771,7 +833,7 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 174
-          Height = 401
+          Height = 378
           Style = lbOwnerDrawFixed
           Align = alClient
           Font.Charset = DEFAULT_CHARSET
@@ -793,7 +855,7 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 174
-          Height = 401
+          Height = 378
           Style = lbOwnerDrawFixed
           Align = alClient
           Font.Charset = DEFAULT_CHARSET
@@ -810,7 +872,7 @@ object MainForm: TMainForm
     end
     object Panel1: TPanel
       Left = 0
-      Top = 48
+      Top = 40
       Width = 226
       Height = 103
       Align = alTop
@@ -842,18 +904,18 @@ object MainForm: TMainForm
   end
   object pnlCenter: TPanel
     Left = 0
-    Top = 127
+    Top = 158
     Width = 1053
-    Height = 560
+    Height = 529
     Align = alClient
     BevelOuter = bvNone
     Caption = 'pnlCenter'
     TabOrder = 4
-    ExplicitHeight = 557
+    ExplicitHeight = 526
     object Splitter1: TSplitter
       Left = 185
       Top = 0
-      Height = 560
+      Height = 529
       ExplicitLeft = 195
       ExplicitTop = 1
       ExplicitHeight = 199
@@ -862,18 +924,18 @@ object MainForm: TMainForm
       Left = 0
       Top = 0
       Width = 185
-      Height = 560
+      Height = 529
       Align = alLeft
       BevelOuter = bvNone
       Caption = 'pnlGenReports'
       TabOrder = 0
-      ExplicitHeight = 557
+      ExplicitHeight = 526
       object Label2: TLabel
         AlignWithMargins = True
         Left = 5
         Top = 5
         Width = 175
-        Height = 38
+        Height = 30
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -881,13 +943,13 @@ object MainForm: TMainForm
         Align = alTop
         Alignment = taCenter
         AutoSize = False
-        Caption = 'Generated Reports'
+        Caption = 'Reports'
         Color = clHighlight
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWhite
         Font.Height = -21
         Font.Name = 'FontAwesome'
-        Font.Style = [fsBold]
+        Font.Style = []
         ParentColor = False
         ParentFont = False
         Transparent = False
@@ -896,9 +958,9 @@ object MainForm: TMainForm
       end
       object ListBox1: TListBox
         Left = 0
-        Top = 48
+        Top = 40
         Width = 185
-        Height = 512
+        Height = 489
         Align = alClient
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -909,35 +971,35 @@ object MainForm: TMainForm
         ParentFont = False
         TabOrder = 0
         OnDblClick = ListBox1DblClick
-        ExplicitHeight = 509
+        ExplicitHeight = 486
       end
     end
     object pnlDati: TPanel
       Left = 188
       Top = 0
       Width = 865
-      Height = 560
+      Height = 529
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitHeight = 557
+      ExplicitHeight = 526
       object RzPageControl1: TPageControl
         Left = 0
         Top = 0
         Width = 865
-        Height = 560
+        Height = 529
         ActivePage = tsData
         Align = alClient
         TabOrder = 0
         TabWidth = 120
-        ExplicitHeight = 557
+        ExplicitHeight = 526
         object tsData: TTabSheet
           Caption = 'Data'
           object DBGrid1: TDBGrid
             Left = 0
             Top = 0
             Width = 857
-            Height = 528
+            Height = 497
             Align = alClient
             DataSource = DataSource1
             TabOrder = 0
@@ -954,13 +1016,11 @@ object MainForm: TMainForm
             Left = 0
             Top = 41
             Width = 857
-            Height = 487
+            Height = 456
             Align = alClient
             BevelOuter = bvNone
             Caption = 'Panel4'
             TabOrder = 0
-            ExplicitWidth = 871
-            ExplicitHeight = 485
           end
           object Panel5: TPanel
             Left = 0
@@ -970,7 +1030,6 @@ object MainForm: TMainForm
             Align = alTop
             BevelOuter = bvNone
             TabOrder = 1
-            ExplicitWidth = 871
             object btnNext: TButton
               AlignWithMargins = True
               Left = 698
@@ -981,7 +1040,6 @@ object MainForm: TMainForm
               Caption = '>>'
               TabOrder = 0
               OnClick = btnNextClick
-              ExplicitLeft = 712
             end
             object btnPrev: TButton
               AlignWithMargins = True
@@ -993,7 +1051,6 @@ object MainForm: TMainForm
               Caption = '<<'
               TabOrder = 1
               OnClick = btnPrevClick
-              ExplicitLeft = 631
             end
             object btnScale: TButton
               AlignWithMargins = True
@@ -1005,7 +1062,6 @@ object MainForm: TMainForm
               Caption = 'Scale'
               TabOrder = 2
               OnClick = btnScaleClick
-              ExplicitLeft = 374
             end
             object btnPrint: TButton
               AlignWithMargins = True
@@ -1017,7 +1073,6 @@ object MainForm: TMainForm
               Caption = 'X'
               TabOrder = 3
               OnClick = btnPrintClick
-              ExplicitLeft = 326
             end
             object ScrollBar1: TScrollBar
               AlignWithMargins = True
@@ -1035,7 +1090,6 @@ object MainForm: TMainForm
               Position = 20
               TabOrder = 4
               OnChange = ScrollBar1Change
-              ExplicitWidth = 270
             end
             object btnLast: TButton
               AlignWithMargins = True
@@ -1047,7 +1101,6 @@ object MainForm: TMainForm
               Caption = '>|'
               TabOrder = 5
               OnClick = btnLastClick
-              ExplicitLeft = 793
             end
             object btnFirst: TButton
               AlignWithMargins = True
@@ -1059,7 +1112,6 @@ object MainForm: TMainForm
               Caption = '|<'
               TabOrder = 6
               OnClick = btnFirstClick
-              ExplicitLeft = 550
             end
           end
         end

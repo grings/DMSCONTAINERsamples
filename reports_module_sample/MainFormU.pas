@@ -67,7 +67,7 @@ type
     Panel5: TPanel;
     btnNext: TButton;
     btnPrev: TButton;
-    btnTableHTML: TButton;
+    btnTable2: TButton;
     btnScale: TButton;
     btnPrint: TButton;
     PrintDialog1: TPrintDialog;
@@ -77,8 +77,8 @@ type
     Label4: TLabel;
     dsCustomers: TFDMemTable;
     FDStanStorageJSONLink1: TFDStanStorageJSONLink;
-    btnTable: TButton;
-    btnHTMLCustomers: TButton;
+    btnTable1: TButton;
+    btnCustomers: TButton;
     dsCustomersBig: TFDMemTable;
     btnBig: TButton;
     btnFilters: TButton;
@@ -103,6 +103,11 @@ type
     Button2: TButton;
     Label1: TLabel;
     Label2: TLabel;
+    Panel2: TPanel;
+    cbFormat: TComboBox;
+    Label3: TLabel;
+    btnInvoice: TButton;
+    btnInvoice1: TButton;
     procedure btnReport1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -110,12 +115,12 @@ type
     procedure btnReport2Click(Sender: TObject);
     procedure btnNextClick(Sender: TObject);
     procedure btnPrevClick(Sender: TObject);
-    procedure btnTableHTMLClick(Sender: TObject);
+    procedure btnTable2Click(Sender: TObject);
     procedure btnScaleClick(Sender: TObject);
     procedure btnPrintClick(Sender: TObject);
     procedure ScrollBar1Change(Sender: TObject);
-    procedure btnTableClick(Sender: TObject);
-    procedure btnHTMLCustomersClick(Sender: TObject);
+    procedure btnTable1Click(Sender: TObject);
+    procedure btnCustomersClick(Sender: TObject);
     procedure btnBigClick(Sender: TObject);
     procedure btnFiltersClick(Sender: TObject);
     procedure btnLastClick(Sender: TObject);
@@ -128,6 +133,9 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure lbxAsyReportsCreatedDblClick(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure cbFormatChange(Sender: TObject);
+    procedure btnInvoiceClick(Sender: TObject);
+    procedure btnInvoice1Click(Sender: TObject);
   private
     fPDFViewer: TPdfControl;
     fProxy: TReportsRPCProxy;
@@ -137,6 +145,7 @@ type
     FLastRepNo: string;
     FLastMgsID: string;
     FThrState: TThread;
+    fOutputFormat: String;
     procedure UpdateGUI;
     procedure ResetFolder;
     function Folder(aFolder: string): string;
@@ -148,21 +157,20 @@ type
     procedure GenerateReport(const aModelFileName: string; const aFormat: string;
       aJSONData: TJDOJSONObject; const aOutputFileName: string);
 
-    procedure RefreshList;
+    procedure RefreshList(const LoadFirstDocument: Boolean = True);
     procedure LoadConf;
     procedure SaveConf;
     function GetQueueName: string;
     procedure SetQueueName(value: string);
-
+    procedure SetOutputFormat(const Value: String);
+    property OutputFormat: String read fOutputFormat write SetOutputFormat;
     function GetAsyncReportKey(const Data: string; Key: string): string;
     procedure AddReport(ReportName, Data: string);
     function StateToIcon(const State: string): string;
     procedure SetLastMgsID(const value: string);
     function GetLastMgsID: string;
     procedure BuildReportAsync();
-
     property QueueName: string read GetQueueName write SetQueueName;
-
     property LastMgsID: string read GetLastMgsID write SetLastMgsID;
     procedure SortList(lst: TSTrings);
     procedure RestartAsync(const LastMessage: string = '__first__');
@@ -182,6 +190,8 @@ const
   MODEL07 = 'reports\Report07.docx';
   MODEL08 = 'reports\Report08.docx';
   MODEL09 = 'reports\Report09.docx';
+  MODEL10 = 'reports\Invoice2.docx';
+  MODEL11 = 'reports\Invoice1.docx';
 
 var
   MainForm: TMainForm;
@@ -240,8 +250,8 @@ var
   lReportFileName: string;
 begin
   ResetFolder;
-  lReportFileName := Folder('output_pdf.zip');
-  GenerateReport(Folder(MODEL01), 'pdf', GetJSONData, lReportFileName);
+  lReportFileName := Folder('output_' + OutputFormat + '.zip');
+  GenerateReport(Folder(MODEL01), OutputFormat, GetJSONData, lReportFileName);
   RefreshList;
 end;
 
@@ -251,13 +261,13 @@ var
   lReportFileName: string;
 begin
   ResetFolder;
-  lReportFileName := Folder('output_pdf.zip');
-  GenerateReport(Folder(MODEL02), 'pdf', GetJSONDataMulti(dsCustomers),
+  lReportFileName := Folder('output_' + OutputFormat + '.zip');
+  GenerateReport(Folder(MODEL02), OutputFormat, GetJSONDataMulti(dsCustomers),
     lReportFileName);
   lArchive := CreateInArchive(CLSID_CFormatZip);
   lArchive.OpenFile(lReportFileName);
-  TDirectory.CreateDirectory(Folder('output_pdf'));
-  lArchive.ExtractTo(Folder('output_pdf'));
+  TDirectory.CreateDirectory(Folder('output_' + OutputFormat));
+  lArchive.ExtractTo(Folder('output_' + OutputFormat));
   RefreshList;
 end;
 
@@ -270,24 +280,24 @@ begin
   UpdateGUI;
 end;
 
-procedure TMainForm.btnTableClick(Sender: TObject);
+procedure TMainForm.btnTable1Click(Sender: TObject);
 var
   lReportFileName: string;
 begin
   ResetFolder;
-  lReportFileName := Folder('output_pdf.zip');
-  GenerateReport(Folder(MODEL03), 'pdf', GetJSONDataMulti(dsCustomers), lReportFileName);
+  lReportFileName := Folder('output_' + OutputFormat + '.zip');
+  GenerateReport(Folder(MODEL03), OutputFormat, GetJSONDataMulti(dsCustomers), lReportFileName);
   RefreshList;
 end;
 
-procedure TMainForm.btnTableHTMLClick(Sender: TObject);
+procedure TMainForm.btnTable2Click(Sender: TObject);
 var
   lReportFileName: string;
 begin
   ResetFolder;
-  lReportFileName := Folder('output_html.zip');
-  GenerateReport(Folder(MODEL04), 'html', GetJSONDataMulti(dsCustomers), lReportFileName);
-  ShellExecute(0, PChar('open'), PChar(Folder('output_html\0.html')), nil, nil, SW_SHOWMAXIMIZED);
+  lReportFileName := Folder('output_' + OutputFormat + '.zip');
+  GenerateReport(Folder(MODEL04), OutputFormat, GetJSONDataMulti(dsCustomers), lReportFileName);
+  RefreshList;
 end;
 
 procedure TMainForm.BuildReportAsync;
@@ -316,7 +326,11 @@ begin
           raise;
 
         end;
-        lJData := GetJSONDataMulti(dsCustomers);
+        TThread.Synchronize(nil,
+          procedure
+          begin
+            lJData := GetJSONDataMulti(dsCustomers);
+          end);
         lJData.O['meta'].S['title'] := 'Customer List ' + DateTimeToStr(now);
         lJResp := fProxy.GenerateMultipleReportAsync(fToken,
           TPath.GetFileNameWithoutExtension(lModelFileName) + '_' +
@@ -340,19 +354,24 @@ end;
 
 procedure TMainForm.Button1Click(Sender: TObject);
 begin
-  BuildReportAsync();
-
+  OutputFormat := 'pdf';
+  BuildReportAsync;
 end;
 
 procedure TMainForm.Button2Click(Sender: TObject);
 var
   I: Integer;
 begin
+  OutputFormat := 'pdf';
   for I := 1 to 10 do
   begin
-    BuildReportAsync();
+    BuildReportAsync;
   end;
+end;
 
+procedure TMainForm.cbFormatChange(Sender: TObject);
+begin
+  OutputFormat := String(cbFormat.Text).ToLower;
 end;
 
 function SortDesc(List: TStringList; Index1, Index2: Integer): Integer;
@@ -437,7 +456,7 @@ var
   I: Integer;
 begin
   ResetFolder;
-  lReportFileName := Folder('output_pdf.zip');
+  lReportFileName := Folder('output_' + OutputFormat + 'pdf.zip');
 
   dsCustomers.DisableControls;
   try
@@ -451,11 +470,11 @@ begin
     dsCustomers.EnableControls;
   end;
 
-  GenerateReport(Folder(MODEL07), 'pdf', GetJSONDataMulti(dsCustomersBig), lReportFileName);
+  GenerateReport(Folder(MODEL07), OutputFormat, GetJSONDataMulti(dsCustomersBig), lReportFileName);
   lArchive := CreateInArchive(CLSID_CFormatZip);
   lArchive.OpenFile(lReportFileName);
-  TDirectory.CreateDirectory(Folder('output_pdf'));
-  lArchive.ExtractTo(Folder('output_pdf'));
+  TDirectory.CreateDirectory(Folder('output_' + OutputFormat));
+  lArchive.ExtractTo(Folder('output_' + OutputFormat));
   RefreshList;
 end;
 
@@ -464,8 +483,8 @@ var
   lReportFileName: string;
 begin
   ResetFolder;
-  lReportFileName := Folder('output_pdf.zip');
-  GenerateReport(Folder(MODEL06), 'pdf', GetJSONDataMulti(dsCustomers), lReportFileName);
+  lReportFileName := Folder('output_' + OutputFormat + '.zip');
+  GenerateReport(Folder(MODEL06), OutputFormat, GetJSONDataMulti(dsCustomers), lReportFileName);
   RefreshList;
 end;
 
@@ -475,14 +494,14 @@ begin
   UpdateGUI;
 end;
 
-procedure TMainForm.btnHTMLCustomersClick(Sender: TObject);
+procedure TMainForm.btnCustomersClick(Sender: TObject);
 var
   lReportFileName: string;
 begin
   ResetFolder;
-  lReportFileName := Folder('output_html.zip');
-  GenerateReport(Folder(MODEL05), 'html', GetJSONDataMulti(dsCustomers), lReportFileName);
-  ShellExecute(0, PChar('open'), PChar(Folder('output_html\0.html')), nil, nil, SW_SHOWMAXIMIZED);
+  lReportFileName := Folder('output_' + OutputFormat + '.zip');
+  GenerateReport(Folder(MODEL05), OutputFormat, GetJSONDataMulti(dsCustomers), lReportFileName);
+  RefreshList;
 end;
 
 procedure TMainForm.btnInvocesClick(Sender: TObject);
@@ -494,7 +513,7 @@ var
   lInvoceRows: TJsonArray;
 begin
   ResetFolder;
-  lReportFileName := Folder('output_pdf.zip');
+  lReportFileName := Folder('output_' + OutputFormat + '.zip');
   lJSON := GetJSONDataMulti(dsCustomers);
   lCustomerList := lJSON.A['items'].Items[0].ArrayValue;
 
@@ -517,7 +536,31 @@ begin
       lInvoceRows.Add(TJsonObject.Parse(Format('{"product":"Tiramisù","price":5.00,"quantity":%d}',
         [1 + Random(4)])) as TJsonObject);
   end;
-  GenerateReport(Folder(MODEL08), 'pdf', lJSON, lReportFileName);
+  GenerateReport(Folder(MODEL08), OutputFormat, lJSON, lReportFileName);
+  RefreshList;
+end;
+
+procedure TMainForm.btnInvoice1Click(Sender: TObject);
+var
+  lJSON: TJDOJSONObject;
+  lReportFileName: string;
+begin
+  ResetFolder;
+  lReportFileName := Folder('output_' + OutputFormat + '.zip');
+  lJSON := TJDOJSONObject.ParseFromFile(Folder('invoice1.json')) as TJsonObject;
+  GenerateReport(Folder(MODEL11), OutputFormat, lJSON, lReportFileName);
+  RefreshList;
+end;
+
+procedure TMainForm.btnInvoiceClick(Sender: TObject);
+var
+  lJSON: TJDOJSONObject;
+  lReportFileName: string;
+begin
+  ResetFolder;
+  lReportFileName := Folder('output_' + OutputFormat + '.zip');
+  lJSON := TJDOJSONObject.ParseFromFile(Folder('invoice2.json')) as TJsonObject;
+  GenerateReport(Folder(MODEL10), OutputFormat, lJSON, lReportFileName);
   RefreshList;
 end;
 
@@ -540,14 +583,14 @@ var
   lMemDataSet: TFDMemTable;
 begin
   ResetFolder;
-  lReportFileName := Folder('output_pdf.zip');
+  lReportFileName := Folder('output_' + OutputFormat + '.zip');
   lMemDataSet := TFDMemTable.Create(self);
   try
     lMemDataSet.LoadFromFile(Folder('invoice_offline_data.json'));
     lJSON := TJDOJSONObject.Create;
     lJSON.O['meta'].S['title'] := 'Offline Invoices';
     lJSON.A['items'].Add(lMemDataSet.AsJDOJSONArray());
-    GenerateReport(Folder(MODEL09), 'pdf', lJSON, lReportFileName);
+    GenerateReport(Folder(MODEL09), OutputFormat, lJSON, lReportFileName);
     RefreshList;
   finally
     lMemDataSet.Free;
@@ -601,17 +644,18 @@ begin
   finally
     lJSON.Free;
   end;
-  RefreshList;
+  cbFormatChange(cbFormat);
+  RefreshList(false);
   btnFirst.Caption := fa_arrow_left;
   btnLast.Caption := fa_arrow_right;
   btnPrev.Caption := fa_arrow_circle_left;
   btnNext.Caption := fa_arrow_circle_right;
-  btnTable.Caption := fa_table + ' ' + btnTable.Caption;
+  btnTable1.Caption := fa_table + ' ' + btnTable1.Caption;
   btnPrint.Caption := fa_print;
   btnReport1.Caption := fa_files_o + ' ' + btnReport1.Caption;
   btnReport2.Caption := fa_file + ' ' + btnReport2.Caption;
-  btnTableHTML.Caption := fa_table + ' ' + btnTableHTML.Caption;
-  btnHTMLCustomers.Caption := fa_html5 + ' ' + btnHTMLCustomers.Caption;
+  btnTable2.Caption := fa_table + ' ' + btnTable2.Caption;
+  btnCustomers.Caption := fa_html5 + ' ' + btnCustomers.Caption;
 
   RestartAsync(LastMgsID);
 
@@ -623,23 +667,15 @@ begin
   FAsyncReports.Free;
 end;
 
-procedure TMainForm.GenerateReport(
-  const
-  aModelFileName:
-  string;
-const
-  aFormat:
-  string;
-aJSONData:
-  TJDOJSONObject;
-const
-  aOutputFileName:
-  string);
+procedure TMainForm.GenerateReport(const aModelFileName: string; const aFormat: string;
+  aJSONData: TJDOJSONObject; const aOutputFileName: string);
 var
   lJTemplateData: TJDOJSONObject;
   lJResp: TJsonObject;
   lArchive: I7zInArchive;
 begin
+  StatusBar1.Panels[1].Text := 'Using report template ' + TPath.GetFileName(aModelFileName);
+  StatusBar1.Update;
   lJTemplateData := TJDOJSONObject.Create;
   lJTemplateData.S['template_data'] := FileToBase64String(aModelFileName);
 
@@ -810,11 +846,21 @@ end;
 
 procedure TMainForm.ListBox1DblClick(Sender: TObject);
 begin
-  fPDFViewer.LoadFromFile(TPath.Combine(Folder('output_pdf'), ListBox1.Items[ListBox1.ItemIndex]),
-    '', dloNormal);
-  fPDFViewer.ZoomPercentage := 100;
-  UpdateGUI;
-  RzPageControl1.ActivePage := tsPDFViewer;
+  if OutputFormat.ToLower = 'pdf' then
+  begin
+    fPDFViewer.LoadFromFile(TPath.Combine(Folder('output_pdf'), ListBox1.Items[ListBox1.ItemIndex]),
+      '', dloNormal);
+    fPDFViewer.ZoomPercentage := 100;
+    UpdateGUI;
+    RzPageControl1.ActivePage := tsPDFViewer;
+  end
+  else
+  begin
+    ShellExecute(0, PChar('open'),
+      PChar(
+        Folder(TPath.Combine('output_' + OutputFormat, ListBox1.Items[ListBox1.ItemIndex]))
+      ), nil, nil, SW_SHOWMAXIMIZED);
+  end;
 end;
 
 procedure TMainForm.OnValidateCert(
@@ -870,18 +916,24 @@ begin
 
 end;
 
-procedure TMainForm.RefreshList;
+procedure TMainForm.RefreshList(const LoadFirstDocument: Boolean);
 var
   lFiles: TArray<string>;
   lFile: string;
 begin
   ListBox1.Items.Clear;
-  lFiles := TDirectory.GetFiles(Folder('output_pdf'), '*.pdf');
+  lFiles := TDirectory.GetFiles(Folder('output_' + OutputFormat), '*.' + OutputFormat);
   for lFile in lFiles do
   begin
     ListBox1.Items.Add(TPath.GetFileName(lFile));
   end;
-  if ListBox1.Items.Count > 0 then
+  if OutputFormat <> 'pdf' then
+      fPDFViewer.Close;
+  if not LoadFirstDocument then
+    Exit;
+
+  if ((ListBox1.Items.Count > 0) and (OutputFormat = 'pdf')) or
+     ((ListBox1.Items.Count = 1) and (OutputFormat <> 'pdf')) then
   begin
     ListBox1.ItemIndex := 0;
     ListBox1DblClick(ListBox1);
@@ -894,8 +946,8 @@ var
   lFile: string;
 begin
   fPDFViewer.Close;
-  TDirectory.CreateDirectory(Folder('output_pdf'));
-  lFiles := TDirectory.GetFiles(Folder('output_pdf'), '*.pdf');
+  TDirectory.CreateDirectory(Folder('output_' + OutputFormat));
+  lFiles := TDirectory.GetFiles(Folder('output_' + OutputFormat), '*.*');
   for lFile in lFiles do
   begin
     DeleteFile(lFile);
@@ -1007,6 +1059,13 @@ begin
     System.TMonitor.exit(self);
   end;
 
+end;
+
+procedure TMainForm.SetOutputFormat(const Value: String);
+begin
+  fOutputFormat := Value;
+  cbFormat.ItemIndex := cbFormat.Items.IndexOf(Value);
+  ListBox1.Clear;
 end;
 
 procedure TMainForm.SetQueueName(value: string);

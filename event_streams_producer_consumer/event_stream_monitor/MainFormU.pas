@@ -141,9 +141,13 @@ begin
   var lText := sg.Cells[ACol, ARow];
   var lMsgCount := lText.Substring(0, lText.IndexOf('|'));
   lText := lText.Substring(lText.Length - 7);
-  sg.Canvas.Brush.Color := Brighten(TColor(StrToIntDef(lText, 0)), 20);
+  if ((ARow + aCol mod 2) mod 2) = 0 then
+    sg.Canvas.Brush.Color := clBlack
+  else
+    sg.Canvas.Brush.Color := clWhite;
+//  sg.Canvas.Brush.Color := Brighten(TColor(StrToIntDef(lText, 0)), 20);
   var lRect: TRect := Rect;
-  lRect.Inflate(-1, -1);
+  //lRect.Inflate(-1, -1);
   sg.Canvas.FillRect(lRect);
   lRect.Inflate(-3, -3);
 

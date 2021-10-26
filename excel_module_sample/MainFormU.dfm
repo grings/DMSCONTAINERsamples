@@ -10,7 +10,6 @@ object MainForm: TMainForm
   Font.Height = -19
   Font.Name = 'FontAwesome'
   Font.Style = []
-  OldCreateOrder = False
   OnClose = FormClose
   OnCreate = FormCreate
   PixelsPerInch = 96
@@ -21,6 +20,7 @@ object MainForm: TMainForm
     Width = 1240
     Height = 19
     Panels = <>
+    ExplicitTop = 549
   end
   object Panel1: TPanel
     Left = 0
@@ -30,6 +30,7 @@ object MainForm: TMainForm
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitHeight = 422
     object RzPageControl1: TPageControl
       Left = 0
       Top = 0
@@ -45,6 +46,7 @@ object MainForm: TMainForm
       ParentFont = False
       TabOrder = 0
       TabWidth = 320
+      ExplicitHeight = 422
       object tsData: TTabSheet
         Caption = 'Simple Data'
         object DBGrid1: TDBGrid

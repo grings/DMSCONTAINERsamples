@@ -1,0 +1,25 @@
+{
+	"meta": {},
+	"items": [
+		{
+			"ref": "6587/21",
+			"customer_name":"ACME Inc.",
+			"is_paid": false,
+			"in_europe": true,
+			"total_price": 1586.50,
+			"company_name":"bit Time Professionals",
+			"rows": [
+				{
+					"description": "Rockets Starter Pack",
+					"qty": 1,
+					"price": 1234.00
+				},
+				{
+					"description": "Food for ostriches",
+					"qty": 10,
+					"price": 352.50
+				}
+			]
+		}
+	]
+}
