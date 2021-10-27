@@ -3,19 +3,18 @@ object MainForm: TMainForm
   Top = 0
   Caption = 'Event Stream Module Tutorial'
   ClientHeight = 564
-  ClientWidth = 975
+  ClientWidth = 778
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   OnCreate = FormCreate
-  DesignSize = (
-    975
-    564)
   PixelsPerInch = 96
+  DesignSize = (
+    778
+    564)
   TextHeight = 13
   object Label1: TLabel
     Left = 8
@@ -32,7 +31,7 @@ object MainForm: TMainForm
     Caption = 'Last Known ID'
   end
   object Label4: TLabel
-    Left = 854
+    Left = 657
     Top = 4
     Width = 111
     Height = 13
@@ -85,7 +84,7 @@ object MainForm: TMainForm
   object Memo1: TMemo
     Left = 8
     Top = 144
-    Width = 959
+    Width = 762
     Height = 258
     Anchors = [akLeft, akTop, akRight, akBottom]
     Font.Charset = ANSI_CHARSET
@@ -96,6 +95,7 @@ object MainForm: TMainForm
     ParentFont = False
     ReadOnly = True
     TabOrder = 4
+    WordWrap = False
   end
   object EditLastKnownID: TEdit
     Left = 8
@@ -105,7 +105,7 @@ object MainForm: TMainForm
     TabOrder = 5
   end
   object btnDelQueue: TButton
-    Left = 854
+    Left = 657
     Top = 82
     Width = 113
     Height = 25
@@ -113,16 +113,18 @@ object MainForm: TMainForm
     Caption = 'Delete Queue'
     TabOrder = 6
     OnClick = btnDelQueueClick
+    ExplicitLeft = 854
   end
   object Panel1: TPanel
     Left = 0
     Top = 408
-    Width = 975
+    Width = 778
     Height = 156
     Align = alBottom
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 7
+    ExplicitWidth = 975
     object GroupBox1: TGroupBox
       Left = 8
       Top = 16
@@ -217,7 +219,7 @@ object MainForm: TMainForm
     end
   end
   object EditTimeout: TEdit
-    Left = 854
+    Left = 657
     Top = 23
     Width = 113
     Height = 21
@@ -226,9 +228,10 @@ object MainForm: TMainForm
     NumbersOnly = True
     TabOrder = 8
     Text = '10'
+    ExplicitLeft = 854
   end
   object btnCount: TButton
-    Left = 854
+    Left = 657
     Top = 113
     Width = 113
     Height = 25
@@ -236,6 +239,7 @@ object MainForm: TMainForm
     Caption = 'Queue Size'
     TabOrder = 9
     OnClick = btnCountClick
+    ExplicitLeft = 854
   end
   object chkUpdateKID: TCheckBox
     Left = 398

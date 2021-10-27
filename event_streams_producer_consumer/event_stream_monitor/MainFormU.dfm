@@ -45,6 +45,12 @@ object MainForm: TMainForm
     Height = 41
     Align = alTop
     BevelOuter = bvNone
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -19
+    Font.Name = 'Segoe UI Light'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 1
     object Label1: TLabel
       Left = 0
@@ -52,17 +58,12 @@ object MainForm: TMainForm
       Width = 706
       Height = 41
       Align = alClient
-      Alignment = taCenter
-      Caption = 'Click to start consuming queue -->'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -24
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
+      Alignment = taRightJustify
+      Caption = 'Click to start consuming queue '#9654
       Layout = tlCenter
-      ExplicitWidth = 369
-      ExplicitHeight = 29
+      ExplicitLeft = 439
+      ExplicitWidth = 267
+      ExplicitHeight = 25
     end
     object btnStart: TButton
       AlignWithMargins = True

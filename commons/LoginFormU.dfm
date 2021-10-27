@@ -13,7 +13,6 @@ object LoginForm: TLoginForm
   Font.Style = []
   KeyPreview = True
   Position = poScreenCenter
-  OnCreate = FormCreate
   OnKeyUp = FormKeyUp
   PixelsPerInch = 96
   TextHeight = 21
@@ -580,7 +579,6 @@ object LoginForm: TLoginForm
       Default = True
       ModalResult = 1
       TabOrder = 0
-      ExplicitHeight = 36
     end
     object CancelBtn: TButton
       AlignWithMargins = True
@@ -594,7 +592,6 @@ object LoginForm: TLoginForm
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 1
-      ExplicitHeight = 36
     end
   end
 end

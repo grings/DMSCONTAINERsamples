@@ -47,7 +47,6 @@ object MainForm: TMainForm
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 62
     object btnReport1: TButton
       AlignWithMargins = True
       Left = 3
@@ -83,7 +82,6 @@ object MainForm: TMainForm
       TabOrder = 2
       WordWrap = True
       OnClick = btnTable2Click
-      ExplicitLeft = 471
     end
     object btnTable1: TButton
       AlignWithMargins = True
@@ -96,7 +94,6 @@ object MainForm: TMainForm
       TabOrder = 3
       WordWrap = True
       OnClick = btnTable1Click
-      ExplicitLeft = 315
     end
     object btnCustomers: TButton
       AlignWithMargins = True
@@ -133,7 +130,6 @@ object MainForm: TMainForm
       TabOrder = 6
       WordWrap = True
       OnClick = btnFiltersClick
-      ExplicitLeft = 1031
     end
     object btnInvoces: TButton
       AlignWithMargins = True
@@ -158,7 +154,6 @@ object MainForm: TMainForm
       TabOrder = 8
       WordWrap = True
       OnClick = btnOffLineInvoceClick
-      ExplicitLeft = 1019
     end
     object Panel2: TPanel
       Left = 0
@@ -201,7 +196,6 @@ object MainForm: TMainForm
       TabOrder = 10
       WordWrap = True
       OnClick = btnInvoiceClick
-      ExplicitLeft = 1131
     end
     object btnInvoice1: TButton
       AlignWithMargins = True
@@ -214,7 +208,6 @@ object MainForm: TMainForm
       TabOrder = 11
       WordWrap = True
       OnClick = btnInvoice1Click
-      ExplicitLeft = 1131
     end
   end
   object Panel6: TPanel

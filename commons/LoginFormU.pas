@@ -28,7 +28,6 @@ type
     CancelBtn: TButton;
     Label2: TLabel;
     Label3: TLabel;
-    procedure FormCreate(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
@@ -71,15 +70,6 @@ begin
 {$ENDIF}
 end;
 
-procedure TLoginForm.FormCreate(Sender: TObject);
-begin
-  inherited;
-  // InstallFont(Self);
-  // OKBtn.Caption := fa_check_square + ' ' + OKBtn.Caption;
-  // CancelBtn.Caption := fa_chevron_left + ' ' + CancelBtn.Caption;
-  // Shape1.Pen.Color := StyleServices.GetStyleColor(scButtonPressed);
-end;
-
 procedure TLoginForm.FormKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
@@ -87,8 +77,8 @@ begin
   begin
     edtUsername.Text := 'user_admin';
     edtPassword.Text := 'pwd1';
+    ModalResult := mrOk;
   end;
-  ModalResult := mrOk;
 end;
 
 end.

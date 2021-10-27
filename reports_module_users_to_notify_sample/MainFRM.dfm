@@ -10,7 +10,6 @@ object frmMain: TfrmMain
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   PixelsPerInch = 96
@@ -98,99 +97,92 @@ object frmMain: TfrmMain
     Width = 871
     Height = 428
     Align = alClient
+    BevelOuter = bvNone
     TabOrder = 1
     object Panel2: TPanel
-      Left = 1
-      Top = 1
-      Width = 869
-      Height = 426
+      Left = 0
+      Top = 0
+      Width = 871
+      Height = 428
       Align = alClient
+      BevelOuter = bvNone
+      Ctl3D = True
+      ParentCtl3D = False
       TabOrder = 0
+      ExplicitLeft = 1
+      ExplicitTop = 1
+      ExplicitWidth = 869
+      ExplicitHeight = 426
       object Splitter1: TSplitter
-        Left = 637
-        Top = 1
-        Height = 424
+        Left = 640
+        Top = 0
+        Height = 428
         Align = alRight
         ExplicitLeft = 689
         ExplicitTop = 19
+        ExplicitHeight = 424
       end
       inline framePDF1: TframePDF
-        Left = 1
-        Top = 1
-        Width = 636
-        Height = 424
+        Left = 0
+        Top = 0
+        Width = 640
+        Height = 428
         Align = alClient
         TabOrder = 0
         ExplicitLeft = 1
         ExplicitTop = 1
-        ExplicitWidth = 386
+        ExplicitWidth = 636
         ExplicitHeight = 424
         inherited StatusBar1: TStatusBar
-          Top = 405
-          Width = 636
+          Top = 409
+          Width = 640
           ExplicitTop = 405
-          ExplicitWidth = 386
+          ExplicitWidth = 636
         end
         inherited pnlGenReports: TPanel
-          Top = 125
-          Height = 280
-          ExplicitTop = 125
-          ExplicitHeight = 280
+          Top = 84
+          Height = 325
+          ExplicitTop = 84
+          ExplicitHeight = 321
           inherited Label2: TLabel
             Font.Color = clBlack
             Transparent = True
           end
           inherited ListBox1: TListBox
-            Height = 259
-            ExplicitHeight = 259
+            Height = 304
+            ExplicitHeight = 300
           end
         end
         inherited FlowPanel1: TFlowPanel
-          Width = 636
-          Height = 125
-          ExplicitWidth = 386
-          ExplicitHeight = 125
-          inherited btnScale: TButton
-            Left = 4
-            Top = 45
-            ExplicitLeft = 4
-            ExplicitTop = 45
-          end
-          inherited btnLast: TButton
-            Left = 180
-            Top = 45
-            ExplicitLeft = 180
-            ExplicitTop = 45
-          end
-          inherited btnPrev: TButton
-            Left = 261
-            Top = 45
-            ExplicitLeft = 261
-            ExplicitTop = 45
-          end
+          Width = 640
+          Height = 84
+          ExplicitWidth = 636
+          ExplicitHeight = 84
           inherited btnNext: TButton
             Left = 4
-            Top = 86
+            Top = 45
             ExplicitLeft = 4
-            ExplicitTop = 86
+            ExplicitTop = 45
           end
           inherited btnFirst: TButton
             Left = 85
-            Top = 86
+            Top = 45
             ExplicitLeft = 85
-            ExplicitTop = 86
+            ExplicitTop = 45
           end
         end
       end
       object Panel4: TPanel
-        Left = 640
-        Top = 1
+        Left = 643
+        Top = 0
         Width = 228
-        Height = 424
+        Height = 428
         Align = alRight
         Caption = 'Panel4'
         TabOrder = 1
-        ExplicitLeft = 390
+        ExplicitLeft = 640
+        ExplicitTop = 1
+        ExplicitHeight = 424
         object Label3: TLabel
           Left = 1
           Top = 65
@@ -211,7 +203,7 @@ object frmMain: TfrmMain
           Left = 1
           Top = 88
           Width = 226
-          Height = 335
+          Height = 339
           Align = alClient
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
@@ -222,6 +214,7 @@ object frmMain: TfrmMain
           ParentFont = False
           TabOrder = 0
           OnDblClick = ListBox1DblClick
+          ExplicitHeight = 335
         end
         object Panel3: TPanel
           Left = 1
@@ -229,6 +222,7 @@ object frmMain: TfrmMain
           Width = 226
           Height = 64
           Align = alTop
+          BevelOuter = bvNone
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -16
@@ -236,8 +230,6 @@ object frmMain: TfrmMain
           Font.Style = []
           ParentFont = False
           TabOrder = 1
-          ExplicitLeft = -3
-          ExplicitTop = 3
           object Label5: TLabel
             Left = 312
             Top = 8
@@ -246,10 +238,10 @@ object frmMain: TfrmMain
             AutoSize = False
           end
           object Button1: TButton
-            Left = 1
-            Top = 1
+            Left = 0
+            Top = 0
             Width = 100
-            Height = 62
+            Height = 64
             Action = actGenAsyncReport
             Align = alLeft
             Font.Charset = ANSI_CHARSET
@@ -260,8 +252,9 @@ object frmMain: TfrmMain
             ParentFont = False
             TabOrder = 0
             WordWrap = True
-            ExplicitLeft = 2
-            ExplicitTop = 2
+            ExplicitLeft = 1
+            ExplicitTop = 1
+            ExplicitHeight = 62
           end
           object chkNotifyUsers: TCheckBox
             Left = 120

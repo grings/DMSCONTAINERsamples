@@ -10,7 +10,6 @@ object MainForm: TMainForm
   Font.Height = -16
   Font.Name = 'FontAwesome'
   Font.Style = []
-  OldCreateOrder = False
   OnClose = FormClose
   OnCreate = FormCreate
   PixelsPerInch = 96
@@ -34,6 +33,7 @@ object MainForm: TMainForm
     BevelOuter = bvNone
     ReadOnly = True
     TabOrder = 0
+    ExplicitTop = 805
   end
   object RzDBGrid1: TDBGrid
     Left = 372
@@ -629,6 +629,7 @@ object MainForm: TMainForm
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 4
+    ExplicitHeight = 695
     object Label1: TLabel
       AlignWithMargins = True
       Left = 10
