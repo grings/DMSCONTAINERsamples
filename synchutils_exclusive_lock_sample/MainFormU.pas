@@ -268,7 +268,7 @@ end;
 
 procedure TMainForm.btnReleaseLockClick(Sender: TObject);
 begin
-  var lLockReleased := fProxy.ReleaseLock(fToken, GetLockIdentifier);
+  var lLockReleased := fProxy.ReleaseLock(fToken, fLockHandle);
   try
     Log.Info('ReleaseLock: ' + lLockReleased.ToString
       (TUseBoolStrs.True), 'locks');

@@ -87,7 +87,6 @@ object MainForm: TMainForm
       Caption = 'ReleaseLock'
       TabOrder = 1
       OnClick = btnReleaseLockClick
-      ExplicitLeft = 551
     end
     object btnTTL: TButton
       AlignWithMargins = True
@@ -99,7 +98,6 @@ object MainForm: TMainForm
       Caption = 'GetLockExpiration'
       TabOrder = 2
       OnClick = btnTTLClick
-      ExplicitLeft = 313
     end
     object btnGetLockData: TButton
       AlignWithMargins = True
@@ -111,7 +109,6 @@ object MainForm: TMainForm
       Caption = 'GetLockData'
       TabOrder = 3
       OnClick = btnGetLockDataClick
-      ExplicitLeft = 432
     end
     object btnManyLocks: TButton
       AlignWithMargins = True

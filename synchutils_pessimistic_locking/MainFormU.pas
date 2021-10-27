@@ -113,7 +113,7 @@ var
 begin
   var lJSON := TJSONObject.Create;
   lJSON.S['username'] := fUserName;
-  fLockHandle := fProxy.TryAcquireLock(fToken, GetLockName, 8, lJSON);
+  fLockHandle := fProxy.TryAcquireLock(fToken, GetLockName, 40, lJSON);
   if fLockHandle = 'error' then
   begin
     fLockHandle := '';

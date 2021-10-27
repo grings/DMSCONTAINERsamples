@@ -24,7 +24,7 @@ try:
                 lockhandle = proxy.try_acquire_lock(token, lock_identifier, 20, {})    
                 if lockhandle == 'error': 
                     print("Cannot acquire the lock... let's wait...")
-                    time.sleep(1 + random.random() * 2)
+                    time.sleep(1 + random.random() * 2)                    
                     continue
                 print("Lock acquired, writing the file...")
                 with open("file.log","a") as f:
