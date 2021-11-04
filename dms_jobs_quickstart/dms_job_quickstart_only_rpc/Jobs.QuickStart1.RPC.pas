@@ -16,7 +16,7 @@ uses DMSCustomRPC;
 //  }
 
 type
-  TJobQuickStart1RPC = class(TCustomRPC)
+  TJobQuickStart1RPC = class(TCustomAuthRPC)
   public
     function Echo(const value: string): string;
   end;

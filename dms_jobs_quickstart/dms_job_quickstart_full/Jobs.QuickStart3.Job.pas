@@ -7,8 +7,9 @@ uses DMSCommonsU, DMSCustomJob, DMSLoggingU;
 
 type
   TJobQuickStart3Job = class(TCustomJob)
-  protected
+    protected
     procedure DoExecute; override;
+    function GetConfigKeys: TArray<string>; override;
   end;
 
 implementation
@@ -21,6 +22,11 @@ begin
   { write your own job code here }
   Log.Info('Hello! I''m going to play something amazing!!', JobName);
 
+end;
+
+function TJobQuickStart3Job.GetConfigKeys: TArray<string>;
+begin
+  Result := [];
 end;
 
 initialization

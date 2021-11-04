@@ -29,13 +29,13 @@ type
     Label3: TLabel;
     EditValue: TEdit;
     btnSend: TButton;
-    GroupBox2: TGroupBox;
-    btnHugeMessage: TButton;
     GroupBox3: TGroupBox;
     EditTTL: TEdit;
     Label6: TLabel;
     btnSendWithTTL: TButton;
     btnMultipleWithTTL: TButton;
+    btnHugeMessage: TButton;
+    btnSendMultipleMessages: TButton;
     procedure btnDequeueClick(Sender: TObject);
     procedure btnFirstClick(Sender: TObject);
     procedure btnLastClick(Sender: TObject);
@@ -46,6 +46,7 @@ type
     procedure btnHugeMessageClick(Sender: TObject);
     procedure btnSendWithTTLClick(Sender: TObject);
     procedure btnMultipleWithTTLClick(Sender: TObject);
+    procedure btnSendMultipleMessagesClick(Sender: TObject);
   private
     fPID: Cardinal;
     fStart: TDateTime;
@@ -171,6 +172,44 @@ begin
       EditValue.Text := (lJObj.I['value'] + 1).ToString;
     finally
       lJObj.Free;
+    end;
+  finally
+    LogEnd;
+  end;
+end;
+
+procedure TMainForm.btnSendMultipleMessagesClick(Sender: TObject);
+var
+  lJObj: TJsonObject;
+  I, lStart: Integer;
+  lMessages: TJsonArray;
+  lRes: TJsonObject;
+const
+  MESSAGES_COUNT = 10;
+begin
+  LogStart('send multiple message');
+  try
+    EnsureLogin;
+    lMessages := TJsonArray.Create;
+    try
+      lStart := StrToInt(EditValue.Text);
+      for I := lStart to lStart + MESSAGES_COUNT do
+      begin
+        lJObj := lMessages.AddObject;
+        lJObj.S['queue'] := 'queue.sample' + IntToStr(I - lStart);
+        lJObj.O['message'].S['timestamp'] := TimeToStr(now);
+        lJObj.O['message'].I['sender_pid'] := fPID;
+        lJObj.O['message'].I['value'] := I;
+      end;
+      EditValue.Text := IntToStr(lStart + MESSAGES_COUNT + 1);
+      lRes := fProxy.EnqueueMultipleMessages(fToken, lMessages.Clone);
+      try
+        Log(lRes.ToJSON);
+      finally
+        lRes.Free;
+      end;
+    finally
+      lMessages.Free;
     end;
   finally
     LogEnd;

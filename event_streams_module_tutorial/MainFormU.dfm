@@ -113,7 +113,6 @@ object MainForm: TMainForm
     Caption = 'Delete Queue'
     TabOrder = 6
     OnClick = btnDelQueueClick
-    ExplicitLeft = 854
   end
   object Panel1: TPanel
     Left = 0
@@ -124,11 +123,10 @@ object MainForm: TMainForm
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 7
-    ExplicitWidth = 975
     object GroupBox1: TGroupBox
       Left = 8
       Top = 16
-      Width = 177
+      Width = 358
       Height = 113
       Caption = 'Single Message'
       TabOrder = 0
@@ -157,22 +155,23 @@ object MainForm: TMainForm
         TabOrder = 1
         OnClick = btnSendClick
       end
-    end
-    object GroupBox2: TGroupBox
-      Left = 191
-      Top = 16
-      Width = 170
-      Height = 113
-      Caption = 'Single Huge Message'
-      TabOrder = 1
       object btnHugeMessage: TButton
-        Left = 16
-        Top = 72
+        Left = 195
+        Top = 32
         Width = 138
         Height = 25
         Caption = 'Send Huge Message'
-        TabOrder = 0
+        TabOrder = 2
         OnClick = btnHugeMessageClick
+      end
+      object btnSendMultipleMessages: TButton
+        Left = 195
+        Top = 72
+        Width = 138
+        Height = 25
+        Caption = 'Send Multiple Messages'
+        TabOrder = 3
+        OnClick = btnSendMultipleMessagesClick
       end
     end
     object GroupBox3: TGroupBox
@@ -181,7 +180,7 @@ object MainForm: TMainForm
       Width = 285
       Height = 113
       Caption = 'Messages with TTL'
-      TabOrder = 2
+      TabOrder = 1
       object Label6: TLabel
         Left = 13
         Top = 26
@@ -228,7 +227,6 @@ object MainForm: TMainForm
     NumbersOnly = True
     TabOrder = 8
     Text = '10'
-    ExplicitLeft = 854
   end
   object btnCount: TButton
     Left = 657
@@ -239,7 +237,6 @@ object MainForm: TMainForm
     Caption = 'Queue Size'
     TabOrder = 9
     OnClick = btnCountClick
-    ExplicitLeft = 854
   end
   object chkUpdateKID: TCheckBox
     Left = 398
