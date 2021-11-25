@@ -56,7 +56,11 @@ begin
   // The RPC class and the JOB class can share the same config file
   // but can read different set of properties
   var lJobConfiguration: String := '';
-  var lConfig := GetJobConfig(); {this reads only the keys returnes by "GetConfigKeys"}
+  //The following line reads job specific configuration. Considering the name of the job
+  //it search a file named job.jobquickstart3full.config.json in the "conf" folder.
+  //In that file it search for all the property names returned by method "GetConfigKeys" of this class.
+  //If you don't need job specific configuration you can also ignore the GetJobConfig API function.
+  var lConfig := GetJobConfig();
   try
     lJobConfiguration := lConfig.ToString;
   finally
