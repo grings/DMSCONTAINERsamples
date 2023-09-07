@@ -10,11 +10,10 @@ object MainForm: TMainForm
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
+  OnCreate = FormCreate
   DesignSize = (
     576
     498)
-  PixelsPerInch = 96
   TextHeight = 13
   object btnSendSimpleEmail: TButton
     Left = 16
@@ -74,5 +73,7 @@ object MainForm: TMainForm
     ParentFont = False
     ReadOnly = True
     TabOrder = 5
+    ExplicitWidth = 541
+    ExplicitHeight = 217
   end
 end

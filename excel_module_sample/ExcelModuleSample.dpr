@@ -9,7 +9,8 @@ uses
   MainFormU in 'MainFormU.pas' {MainForm},
   Vcl.Themes,
   Vcl.Styles,
-  ExcelRPCProxy in '..\commons\ExcelRPCProxy.pas';
+  ExcelRPCProxy in '..\commons\ExcelRPCProxy.pas',
+  UtilsU in '..\commons\UtilsU.pas';
 
 {$R *.res}
 

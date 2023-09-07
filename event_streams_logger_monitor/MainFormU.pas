@@ -62,7 +62,6 @@ type
       const Certificate: TCertificate; var Accepted: Boolean);
     function MakeConsumer(const Token, QueueName: String): TProc;
     procedure Log(const Msg: String);
-    procedure DequeueMessage(const QueueName, LastKnownID: String);
     procedure AddProcessItem(const info: TJsonObject);
     procedure PopulateDataSet(const Msg: TJsonObject);
     function BuildUniqueKey(const info: TJsonObject): string;
@@ -193,37 +192,6 @@ begin
     lCanvas.Font.Color := clWhite; // RGB($ff,$c0,$c0);
   end;
   DBGridAll.DefaultDrawColumnCell(Rect, DataCol, Column, State);
-end;
-
-procedure TMainForm.DequeueMessage(const QueueName, LastKnownID: String);
-var
-  lLastMgsID: string;
-  lJMessage: TJsonObject;
-begin
-  lLastMgsID := LastKnownID;
-  try
-    lJMessage := fProxy.DequeueMultipleMessage(fToken, QueueName, lLastMgsID, 1, 10);
-    try
-      if lJMessage.B['timeout'] then
-      begin
-        Log('Timeout');
-      end
-      else
-      begin
-        begin
-          // EditLastKnownID.Text := lJMessage.A['data'][0].S['messageid'];
-        end;
-        Log(lJMessage.ToJSON());
-      end;
-    finally
-      lJMessage.Free;
-    end;
-  except
-    on E: Exception do
-    begin
-      Log(E.Message);
-    end;
-  end;
 end;
 
 procedure TMainForm.Log(const Msg: String);

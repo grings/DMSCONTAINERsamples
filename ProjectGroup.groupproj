@@ -3,7 +3,31 @@
         <ProjectGuid>{9D19CE98-DA6E-4970-AFB5-139E8D3D4D66}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="event_streams_sample_worker\EventStreamsWorker.dproj">
+        <Projects Include="api_key_sample\APIKeySample.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="email_module_sample\EmailModuleSample.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="email_module_tutorial\EmailModuleTutorial.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="reports_module_sample\ReportsModuleSample.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="excel_module_sample\ExcelModuleSample.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="event_streams_module_tutorial\event_streams_module_tutorial.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="synchutils_exclusive_lock_sample\synchutils_exclusive_lock_sample.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="methods_invocation_without_proxies\delphi\login\raw_login.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="sso_configuration_provider\delphi_desktop_app\sso_configuration_provider_sample.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -14,23 +38,95 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="EventStreamsWorker">
-        <MSBuild Projects="event_streams_sample_worker\EventStreamsWorker.dproj"/>
+    <Target Name="APIKeySample">
+        <MSBuild Projects="api_key_sample\APIKeySample.dproj"/>
     </Target>
-    <Target Name="EventStreamsWorker:Clean">
-        <MSBuild Projects="event_streams_sample_worker\EventStreamsWorker.dproj" Targets="Clean"/>
+    <Target Name="APIKeySample:Clean">
+        <MSBuild Projects="api_key_sample\APIKeySample.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="EventStreamsWorker:Make">
-        <MSBuild Projects="event_streams_sample_worker\EventStreamsWorker.dproj" Targets="Make"/>
+    <Target Name="APIKeySample:Make">
+        <MSBuild Projects="api_key_sample\APIKeySample.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="EmailModuleSample">
+        <MSBuild Projects="email_module_sample\EmailModuleSample.dproj"/>
+    </Target>
+    <Target Name="EmailModuleSample:Clean">
+        <MSBuild Projects="email_module_sample\EmailModuleSample.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="EmailModuleSample:Make">
+        <MSBuild Projects="email_module_sample\EmailModuleSample.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="EmailModuleTutorial">
+        <MSBuild Projects="email_module_tutorial\EmailModuleTutorial.dproj"/>
+    </Target>
+    <Target Name="EmailModuleTutorial:Clean">
+        <MSBuild Projects="email_module_tutorial\EmailModuleTutorial.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="EmailModuleTutorial:Make">
+        <MSBuild Projects="email_module_tutorial\EmailModuleTutorial.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ReportsModuleSample">
+        <MSBuild Projects="reports_module_sample\ReportsModuleSample.dproj"/>
+    </Target>
+    <Target Name="ReportsModuleSample:Clean">
+        <MSBuild Projects="reports_module_sample\ReportsModuleSample.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ReportsModuleSample:Make">
+        <MSBuild Projects="reports_module_sample\ReportsModuleSample.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ExcelModuleSample">
+        <MSBuild Projects="excel_module_sample\ExcelModuleSample.dproj"/>
+    </Target>
+    <Target Name="ExcelModuleSample:Clean">
+        <MSBuild Projects="excel_module_sample\ExcelModuleSample.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ExcelModuleSample:Make">
+        <MSBuild Projects="excel_module_sample\ExcelModuleSample.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="event_streams_module_tutorial">
+        <MSBuild Projects="event_streams_module_tutorial\event_streams_module_tutorial.dproj"/>
+    </Target>
+    <Target Name="event_streams_module_tutorial:Clean">
+        <MSBuild Projects="event_streams_module_tutorial\event_streams_module_tutorial.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="event_streams_module_tutorial:Make">
+        <MSBuild Projects="event_streams_module_tutorial\event_streams_module_tutorial.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="synchutils_exclusive_lock_sample">
+        <MSBuild Projects="synchutils_exclusive_lock_sample\synchutils_exclusive_lock_sample.dproj"/>
+    </Target>
+    <Target Name="synchutils_exclusive_lock_sample:Clean">
+        <MSBuild Projects="synchutils_exclusive_lock_sample\synchutils_exclusive_lock_sample.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="synchutils_exclusive_lock_sample:Make">
+        <MSBuild Projects="synchutils_exclusive_lock_sample\synchutils_exclusive_lock_sample.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="raw_login">
+        <MSBuild Projects="methods_invocation_without_proxies\delphi\login\raw_login.dproj"/>
+    </Target>
+    <Target Name="raw_login:Clean">
+        <MSBuild Projects="methods_invocation_without_proxies\delphi\login\raw_login.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="raw_login:Make">
+        <MSBuild Projects="methods_invocation_without_proxies\delphi\login\raw_login.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="sso_configuration_provider_sample">
+        <MSBuild Projects="sso_configuration_provider\delphi_desktop_app\sso_configuration_provider_sample.dproj"/>
+    </Target>
+    <Target Name="sso_configuration_provider_sample:Clean">
+        <MSBuild Projects="sso_configuration_provider\delphi_desktop_app\sso_configuration_provider_sample.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="sso_configuration_provider_sample:Make">
+        <MSBuild Projects="sso_configuration_provider\delphi_desktop_app\sso_configuration_provider_sample.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="EventStreamsWorker"/>
+        <CallTarget Targets="APIKeySample;EmailModuleSample;EmailModuleTutorial;ReportsModuleSample;ExcelModuleSample;event_streams_module_tutorial;synchutils_exclusive_lock_sample;raw_login;sso_configuration_provider_sample"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="EventStreamsWorker:Clean"/>
+        <CallTarget Targets="APIKeySample:Clean;EmailModuleSample:Clean;EmailModuleTutorial:Clean;ReportsModuleSample:Clean;ExcelModuleSample:Clean;event_streams_module_tutorial:Clean;synchutils_exclusive_lock_sample:Clean;raw_login:Clean;sso_configuration_provider_sample:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="EventStreamsWorker:Make"/>
+        <CallTarget Targets="APIKeySample:Make;EmailModuleSample:Make;EmailModuleTutorial:Make;ReportsModuleSample:Make;ExcelModuleSample:Make;event_streams_module_tutorial:Make;synchutils_exclusive_lock_sample:Make;raw_login:Make;sso_configuration_provider_sample:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

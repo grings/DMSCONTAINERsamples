@@ -15,35 +15,15 @@ uses
 
 const
   DMSCONTAINER_API_KEY =
-    'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJETVNDb250YWluZXIiLCJleHAiOjQ3OD' +
-    'g5MzM2MjksIm5iZiI6MTYzNTMzMzMyOSwiaWF0IjoxNjM1MzMzMzI5LCJpc2FweWtleSI6IjEiLCJ1c' +
-    '2VyaWQiOiIxNzciLCJyb2xlcyI6ImV2ZW50X3JlYWRlcixldmVudF93cml0ZXIiLCJ1c2VybmFtZSI6' +
-    'InVzZXJfZXZlbnQiLCJjb250ZXh0cyI6IiJ9.cg-VTq83-2EUExwpZ_nVcuekpFaR3aLCqqHfHixQH_' +
-    'Vny3AtAxUd_o9rt66NXMig0bJTSnQwaYRfjSmTYqJAYg';
+    'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJETVNDb250YWluZXIiLCJleHAiOj'+'Q4MjQ1MTc1NDYsIm5iZiI6MTY3MDkxNzI0NiwiaWF0IjoxNjcwOTE3MjQ2LCJpc2FweWtleSI6IjEiLCJ1c2VyaWQiOiIxNzY'+'iLCJyb2xlcyI6ImV2ZW50X3dyaXRlciIsInVzZXJuYW1lIjoidXNlcl9ldmVudF93cml0ZXIiLCJjb250ZXh0cyI6IiJ9._PO6HZNgW0Rv'+'PeJjxSX--GHXPlbInZTX5wk0c-J_YoLYPQhjuQgqEKYl9fR4getBnF9xFXNzVNYSB5KytT0gAA';
 
 var
   _Log: ILogWriter;
   DMSProxy: TEventStreamsRPCProxy;
 
-type
-  TAllowSelfSignedCertificates = class
-  public
-    class procedure OnValidateCertificate(const Sender: TObject; const ARequest: TURLRequest;
-      const Certificate: TCertificate; var Accepted: Boolean);
-  end;
-
 function Log: ILogWriter;
 begin
   Result := _Log;
-end;
-
-{ TAllowSelfSignedCertificates }
-
-class procedure TAllowSelfSignedCertificates.OnValidateCertificate(
-  const Sender: TObject; const ARequest: TURLRequest;
-  const Certificate: TCertificate; var Accepted: Boolean);
-begin
-  Accepted := True; // just for demo! Check your certificates in production!
 end;
 
 initialization
@@ -51,7 +31,7 @@ initialization
 DefaultLoggerProAppenderQueueSize := 10;
 
 DMSProxy := TEventStreamsRPCProxy.Create('https://localhost/eventstreamsrpc');
-DMSProxy.RPCExecutor.SetOnValidateServerCertificate(TAllowSelfSignedCertificates.OnValidateCertificate);
+DMSProxy.IgnoreInvalidCert;
 
 _Log := BuildLogWriter([TLoggerProDMSContainerAppender.Create(DMSProxy, DMSCONTAINER_API_KEY,
   'logs.' + TLoggerProDMSContainerAppender.GetModuleBaseName,

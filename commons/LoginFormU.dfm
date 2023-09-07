@@ -14,7 +14,6 @@ object LoginForm: TLoginForm
   KeyPreview = True
   Position = poScreenCenter
   OnKeyUp = FormKeyUp
-  PixelsPerInch = 96
   TextHeight = 21
   object Shape1: TShape
     Left = 0

@@ -3,7 +3,7 @@ object MainForm: TMainForm
   Top = 0
   Caption = 'Report Module'
   ClientHeight = 706
-  ClientWidth = 1282
+  ClientWidth = 1274
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,10 +14,9 @@ object MainForm: TMainForm
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 16
   object Splitter2: TSplitter
-    Left = 1053
+    Left = 1045
     Top = 158
     Height = 529
     Align = alRight
@@ -28,7 +27,7 @@ object MainForm: TMainForm
   object StatusBar1: TStatusBar
     Left = 0
     Top = 687
-    Width = 1282
+    Width = 1274
     Height = 19
     Panels = <
       item
@@ -42,7 +41,7 @@ object MainForm: TMainForm
   object pnlTool: TPanel
     Left = 0
     Top = 65
-    Width = 1282
+    Width = 1274
     Height = 93
     Align = alTop
     BevelOuter = bvNone
@@ -158,7 +157,7 @@ object MainForm: TMainForm
     object Panel2: TPanel
       Left = 0
       Top = 52
-      Width = 1282
+      Width = 1274
       Height = 41
       Align = alBottom
       TabOrder = 9
@@ -170,19 +169,41 @@ object MainForm: TMainForm
         Caption = 'Output format'
       end
       object cbFormat: TComboBox
-        Left = 159
+        Left = 91
         Top = 9
-        Width = 150
+        Width = 230
         Height = 24
         Style = csDropDownList
-        ItemIndex = 0
         TabOrder = 0
-        Text = 'pdf'
         OnChange = cbFormatChange
         Items.Strings = (
-          'pdf'
-          'docx'
-          'html')
+          'pdf (pdf 1.7 by default)'
+          'pdf15 (pdf 1.5)'
+          'pdf16 (pdf 1.6)'
+          'pdf17 (pdf 1.7)'
+          'pdfa1 PDF/A-1 (ISO 19005-1:2005)'
+          'pdfa2 PDF/A-2 (ISO 19005-2:2011)'
+          'docx (MS Word document)'
+          'html (HTML document)')
+      end
+      object chkStoredReport: TCheckBox
+        Left = 336
+        Top = 13
+        Width = 209
+        Height = 17
+        Caption = 'Use Stored Report Templates'
+        TabOrder = 1
+      end
+      object btnShowStoredReports: TButton
+        AlignWithMargins = True
+        Left = 1103
+        Top = 4
+        Width = 167
+        Height = 33
+        Align = alRight
+        Caption = #55357#56516' Stored Report Names'
+        TabOrder = 2
+        OnClick = btnShowStoredReportsClick
       end
     end
     object btnInvoice: TButton
@@ -213,13 +234,13 @@ object MainForm: TMainForm
   object Panel6: TPanel
     Left = 0
     Top = 0
-    Width = 1282
+    Width = 1274
     Height = 65
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
     object Image1: TImage
-      Left = 953
+      Left = 945
       Top = 0
       Width = 329
       Height = 65
@@ -713,7 +734,7 @@ object MainForm: TMainForm
       AlignWithMargins = True
       Left = 10
       Top = 3
-      Width = 940
+      Width = 932
       Height = 59
       Margins.Left = 10
       Align = alClient
@@ -730,7 +751,7 @@ object MainForm: TMainForm
     end
   end
   object pnlAsync: TPanel
-    Left = 1056
+    Left = 1048
     Top = 158
     Width = 226
     Height = 529
@@ -898,7 +919,7 @@ object MainForm: TMainForm
   object pnlCenter: TPanel
     Left = 0
     Top = 158
-    Width = 1053
+    Width = 1045
     Height = 529
     Align = alClient
     BevelOuter = bvNone
@@ -970,7 +991,7 @@ object MainForm: TMainForm
     object pnlDati: TPanel
       Left = 188
       Top = 0
-      Width = 865
+      Width = 857
       Height = 529
       Align = alClient
       BevelOuter = bvNone
@@ -979,7 +1000,7 @@ object MainForm: TMainForm
       object RzPageControl1: TPageControl
         Left = 0
         Top = 0
-        Width = 865
+        Width = 857
         Height = 529
         ActivePage = tsData
         Align = alClient
@@ -991,7 +1012,7 @@ object MainForm: TMainForm
           object DBGrid1: TDBGrid
             Left = 0
             Top = 0
-            Width = 857
+            Width = 849
             Height = 497
             Align = alClient
             DataSource = DataSource1
@@ -1008,7 +1029,7 @@ object MainForm: TMainForm
           object Panel4: TPanel
             Left = 0
             Top = 41
-            Width = 857
+            Width = 849
             Height = 456
             Align = alClient
             BevelOuter = bvNone
@@ -1018,14 +1039,14 @@ object MainForm: TMainForm
           object Panel5: TPanel
             Left = 0
             Top = 0
-            Width = 857
+            Width = 849
             Height = 41
             Align = alTop
             BevelOuter = bvNone
             TabOrder = 1
             object btnNext: TButton
               AlignWithMargins = True
-              Left = 698
+              Left = 690
               Top = 3
               Width = 75
               Height = 35
@@ -1036,7 +1057,7 @@ object MainForm: TMainForm
             end
             object btnPrev: TButton
               AlignWithMargins = True
-              Left = 617
+              Left = 609
               Top = 3
               Width = 75
               Height = 35
@@ -1047,7 +1068,7 @@ object MainForm: TMainForm
             end
             object btnScale: TButton
               AlignWithMargins = True
-              Left = 360
+              Left = 352
               Top = 3
               Width = 170
               Height = 35
@@ -1058,7 +1079,7 @@ object MainForm: TMainForm
             end
             object btnPrint: TButton
               AlignWithMargins = True
-              Left = 312
+              Left = 304
               Top = 3
               Width = 42
               Height = 35
@@ -1071,7 +1092,7 @@ object MainForm: TMainForm
               AlignWithMargins = True
               Left = 3
               Top = 10
-              Width = 256
+              Width = 248
               Height = 21
               Margins.Top = 10
               Margins.Right = 50
@@ -1086,7 +1107,7 @@ object MainForm: TMainForm
             end
             object btnLast: TButton
               AlignWithMargins = True
-              Left = 779
+              Left = 771
               Top = 3
               Width = 75
               Height = 35
@@ -1097,7 +1118,7 @@ object MainForm: TMainForm
             end
             object btnFirst: TButton
               AlignWithMargins = True
-              Left = 536
+              Left = 528
               Top = 3
               Width = 75
               Height = 35
@@ -1213,7 +1234,7 @@ object MainForm: TMainForm
     Left = 280
     Top = 224
     Content = {
-      414442530F000000A10E0000FF00010001FF02FF03040016000000460044004D
+      4144425310000000A10E0000FF00010001FF02FF03040016000000460044004D
       0065006D005400610062006C006500310005000A0000005400610062006C0065
       00060000000000070000080032000000090000FF0AFF0B04000E000000430055
       00530054005F004E004F0005000E00000043005500530054005F004E004F000C
@@ -1441,7 +1462,7 @@ object MainForm: TMainForm
     Left = 280
     Top = 280
     Content = {
-      414442530F000000FF050000FF00010001FF02FF0304001C0000006400730043
+      4144425310000000FF050000FF00010001FF02FF0304001C0000006400730043
       007500730074006F006D0065007200730042006900670005000A000000540061
       0062006C006500060000000000070000080032000000090000FF0AFF0B04000E
       00000043005500530054005F004E004F0005000E00000043005500530054005F

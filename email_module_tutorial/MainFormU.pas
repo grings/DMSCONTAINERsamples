@@ -28,6 +28,7 @@ type
     procedure btnSendEmailWithAttachmentsClick(Sender: TObject);
     procedure btnSendBulkMessagesClick(Sender: TObject);
     procedure btnSearchForMessageClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     procedure ValidateCertificateEvent(const Sender: TObject; const ARequest: TURLRequest;
       const Certificate: TCertificate; var Accepted: Boolean);
@@ -38,8 +39,8 @@ type
   end;
 
 const
-  SERVERNAME = 'localhost';
-  // SERVERNAME = '172.31.3.225';
+  SERVERURL = 'https://localhost';
+  USERNAME = 'user_sender';
 
 var
   MainForm: TMainForm;
@@ -55,22 +56,18 @@ uses
 
 procedure TMainForm.btnSearchForMessageClick(Sender: TObject);
 var
-  lMetaMessage: TJSONObject;
-  lMessageData: TJSONObject;
-  lRecipient: TJSONObject;
-  lItem: TJSONObject;
   lDMS: IEmailRPCProxy;
   lJObj: TJSONObject;
   lToken: string;
   lJResp: TJSONObject;
   lJSON: TJSONObject;
 begin
-  lDMS := TEmailRPCProxy.Create('https://' + SERVERNAME + '/emailrpc');
+  lDMS := TEmailRPCProxy.Create(SERVERURL + '/emailrpc');
 
   // by default the https certificate is self signed... let's igore the CA
   lDMS.RPCExecutor.SetOnValidateServerCertificate(ValidateCertificateEvent);
 
-  lJObj := lDMS.Login('user_admin', 'pwd1');
+  lJObj := lDMS.Login(USERNAME, 'pwd1');
   try
     lToken := lJObj.S['token'];
   finally
@@ -100,13 +97,13 @@ var
   lToken: string;
   lJResp: TJSONObject;
 begin
-  lDMS := TEmailRPCProxy.Create('https://' + SERVERNAME + '/emailrpc');
+  lDMS := TEmailRPCProxy.Create(SERVERURL + '/emailrpc');
 
   // by default the https certificate is self signed... let's igore the CA
   lDMS.RPCExecutor.SetOnValidateServerCertificate(ValidateCertificateEvent);
 
   // login with default username/pwd for a user with a "sender" role
-  lJObj := lDMS.Login('user_sender', 'pwd1');
+  lJObj := lDMS.Login(USERNAME, 'pwd1');
   try
     lToken := lJObj.S['token'];
   finally
@@ -191,13 +188,13 @@ var
   lAttachment: string;
   lJAttachment: TJSONObject;
 begin
-  lDMS := TEmailRPCProxy.Create('https://' + SERVERNAME + '/emailrpc');
+  lDMS := TEmailRPCProxy.Create(SERVERURL + '/emailrpc');
 
   // by default the https certificate is self signed... let's igore the CA
   lDMS.RPCExecutor.SetOnValidateServerCertificate(ValidateCertificateEvent);
 
   // login with default username/pwd for a user with a "sender" role
-  lJObj := lDMS.Login('user_sender', 'pwd1');
+  lJObj := lDMS.Login(USERNAME, 'pwd1');
   try
     lToken := lJObj.S['token'];
   finally
@@ -263,13 +260,13 @@ var
   lJResp: TJSONObject;
   lMessageID: Integer;
 begin
-  lDMS := TEmailRPCProxy.Create('https://' + SERVERNAME + '/emailrpc');
+  lDMS := TEmailRPCProxy.Create(SERVERURL + '/emailrpc');
 
   // by default the https certificate is self signed... let's igore the CA
   lDMS.RPCExecutor.SetOnValidateServerCertificate(ValidateCertificateEvent);
 
   // login with default username/pwd for a user with a "sender" role
-  lJObj := lDMS.Login('user_sender', 'pwd1');
+  lJObj := lDMS.Login(USERNAME, 'pwd1');
   try
     lToken := lJObj.S['token'];
   finally
@@ -318,6 +315,11 @@ begin
   lJSON.S['filename'] := 'Plain attachment.pdf';
   lJSON.S['filedata'] := FileToBase64String('plain_pdf_attachment.pdf');
   lJSON.B['istemplate'] := false;
+end;
+
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+  Caption := Caption + ' --> ServerName: ' + SERVERURL + ' - UserName: ' + USERNAME;
 end;
 
 procedure TMainForm.ValidateCertificateEvent(const Sender: TObject; const ARequest: TURLRequest;

@@ -11,7 +11,6 @@ object MainForm: TMainForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OnCreate = FormCreate
-  PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
@@ -27,6 +26,7 @@ object MainForm: TMainForm
     Font.Style = []
     ParentFont = False
     TabOrder = 0
+    ExplicitWidth = 813
   end
   object DBGrid1: TDBGrid
     Left = 0
@@ -114,6 +114,8 @@ object MainForm: TMainForm
     Height = 254
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 266
+    ExplicitWidth = 813
     DesignSize = (
       817
       254)
@@ -330,7 +332,7 @@ object MainForm: TMainForm
       TabOrder = 12
     end
     object Panel3: TPanel
-      Left = 544
+      Left = 540
       Top = 16
       Width = 257
       Height = 225
@@ -343,6 +345,7 @@ object MainForm: TMainForm
       Font.Style = []
       ParentFont = False
       TabOrder = 13
+      ExplicitLeft = 536
       object lbLockTTL: TLabel
         AlignWithMargins = True
         Left = 4

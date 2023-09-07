@@ -127,3 +127,8 @@ sso_configuration_provider/delphi_desktop_app/bin/contexts.contextdata.json
 sso_configuration_provider/delphi_desktop_app/bin/contexts.systemdata.json
 sso_configuration_provider/delphi_desktop_app/bin/contexts.userdata.json
 event_streams_module_tutorial/__history/
+synchutils_exclusive_lock_sample/bin/logs/
+*.exe
+*.log
+reports_module_sample/bin/output_htmlpdf.zip
+custom_job_examples/calculator_rpc/.vscode/launch.json

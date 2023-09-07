@@ -17,7 +17,8 @@ uses
   PdfiumCore in 'lib\PdfiumCore.pas',
   PdfiumCtrl in 'lib\PdfiumCtrl.pas',
   PdfiumLib in 'lib\PdfiumLib.pas',
-  EventStreamsRPCProxy in '..\commons\EventStreamsRPCProxy.pas';
+  EventStreamsRPCProxy in '..\commons\EventStreamsRPCProxy.pas',
+  StoredReportNamesFormU in 'StoredReportNamesFormU.pas' {StoredReportNamesForm};
 
 {$R *.res}
 

@@ -11,7 +11,6 @@ object MainForm: TMainForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OnCreate = FormCreate
-  PixelsPerInch = 96
   DesignSize = (
     778
     564)
@@ -31,7 +30,7 @@ object MainForm: TMainForm
     Caption = 'Last Known ID'
   end
   object Label4: TLabel
-    Left = 657
+    Left = 653
     Top = 4
     Width = 111
     Height = 13
@@ -84,7 +83,7 @@ object MainForm: TMainForm
   object Memo1: TMemo
     Left = 8
     Top = 144
-    Width = 762
+    Width = 758
     Height = 258
     Anchors = [akLeft, akTop, akRight, akBottom]
     Font.Charset = ANSI_CHARSET
@@ -96,6 +95,8 @@ object MainForm: TMainForm
     ReadOnly = True
     TabOrder = 4
     WordWrap = False
+    ExplicitWidth = 754
+    ExplicitHeight = 257
   end
   object EditLastKnownID: TEdit
     Left = 8
@@ -105,7 +106,7 @@ object MainForm: TMainForm
     TabOrder = 5
   end
   object btnDelQueue: TButton
-    Left = 657
+    Left = 653
     Top = 82
     Width = 113
     Height = 25
@@ -113,6 +114,7 @@ object MainForm: TMainForm
     Caption = 'Delete Queue'
     TabOrder = 6
     OnClick = btnDelQueueClick
+    ExplicitLeft = 649
   end
   object Panel1: TPanel
     Left = 0
@@ -123,6 +125,8 @@ object MainForm: TMainForm
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 7
+    ExplicitTop = 407
+    ExplicitWidth = 774
     object GroupBox1: TGroupBox
       Left = 8
       Top = 16
@@ -218,7 +222,7 @@ object MainForm: TMainForm
     end
   end
   object EditTimeout: TEdit
-    Left = 657
+    Left = 653
     Top = 23
     Width = 113
     Height = 21
@@ -227,9 +231,10 @@ object MainForm: TMainForm
     NumbersOnly = True
     TabOrder = 8
     Text = '10'
+    ExplicitLeft = 649
   end
   object btnCount: TButton
-    Left = 657
+    Left = 653
     Top = 113
     Width = 113
     Height = 25
@@ -237,6 +242,7 @@ object MainForm: TMainForm
     Caption = 'Queue Size'
     TabOrder = 9
     OnClick = btnCountClick
+    ExplicitLeft = 649
   end
   object chkUpdateKID: TCheckBox
     Left = 398

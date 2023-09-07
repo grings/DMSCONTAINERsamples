@@ -38,11 +38,6 @@ type
 implementation
 
 {$R *.dfm}
-
-// uses
-// FontAwesomeU,
-// FontAwesomeCodes;
-
 { TLoginForm }
 
 class function TLoginForm.Execute(out UserName, Password: String): Boolean;
@@ -70,10 +65,9 @@ begin
 {$ENDIF}
 end;
 
-procedure TLoginForm.FormKeyUp(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TLoginForm.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  if key = VK_F9 then
+  if Key = VK_F9 then
   begin
     edtUsername.Text := 'user_admin';
     edtPassword.Text := 'pwd1';

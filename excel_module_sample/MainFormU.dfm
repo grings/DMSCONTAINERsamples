@@ -12,7 +12,6 @@ object MainForm: TMainForm
   Font.Style = []
   OnClose = FormClose
   OnCreate = FormCreate
-  PixelsPerInch = 96
   TextHeight = 19
   object StatusBar1: TStatusBar
     Left = 0
@@ -35,7 +34,7 @@ object MainForm: TMainForm
       Left = 0
       Top = 0
       Width = 1240
-      Height = 425
+      Height = 352
       ActivePage = tsData
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
@@ -46,14 +45,14 @@ object MainForm: TMainForm
       ParentFont = False
       TabOrder = 0
       TabWidth = 320
-      ExplicitHeight = 422
+      ExplicitHeight = 349
       object tsData: TTabSheet
         Caption = 'Simple Data'
         object DBGrid1: TDBGrid
           Left = 0
           Top = 0
           Width = 1232
-          Height = 390
+          Height = 317
           Align = alClient
           DataSource = DataSource1
           TabOrder = 0
@@ -70,7 +69,7 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 1232
-          Height = 390
+          Height = 317
           Align = alClient
           DataSource = DataSource2
           TabOrder = 0
@@ -138,7 +137,7 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 1232
-          Height = 390
+          Height = 317
           Align = alClient
           DataSource = DataSource3
           TabOrder = 0
@@ -200,6 +199,22 @@ object MainForm: TMainForm
             end>
         end
       end
+    end
+    object MemoLog: TMemo
+      Left = 0
+      Top = 352
+      Width = 1240
+      Height = 73
+      Align = alBottom
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Consolas'
+      Font.Style = []
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 1
+      ExplicitTop = 349
     end
   end
   object Panel2: TPanel
@@ -952,7 +967,7 @@ object MainForm: TMainForm
     Left = 56
     Top = 264
     Content = {
-      414442530F000000A10E0000FF00010001FF02FF03040016000000460044004D
+      4144425310000000A10E0000FF00010001FF02FF03040016000000460044004D
       0065006D005400610062006C006500310005000A0000005400610062006C0065
       00060000000000070000080032000000090000FF0AFF0B04000E000000430055
       00530054005F004E004F0005000E00000043005500530054005F004E004F000C
@@ -1161,7 +1176,7 @@ object MainForm: TMainForm
     Left = 144
     Top = 264
     Content = {
-      414442530F000000C3040000FF00010001FF02FF030400140000006400730041
+      4144425310000000C3040000FF00010001FF02FF030400140000006400730041
       006C006C005400790070006500730005000A0000005400610062006C00650006
       0000000000070000080032000000090000FF0AFF0B04001200000046005F0049
       004E005400450047004500520005001200000046005F0049004E005400450047
@@ -1340,7 +1355,7 @@ object MainForm: TMainForm
     Left = 232
     Top = 264
     Content = {
-      414442530F000000C3040000FF00010001FF02FF030400140000006400730041
+      4144425310000000C3040000FF00010001FF02FF030400140000006400730041
       006C006C005400790070006500730005000A0000005400610062006C00650006
       0000000000070000080032000000090000FF0AFF0B04001200000046005F0049
       004E005400450047004500520005001200000046005F0049004E005400450047

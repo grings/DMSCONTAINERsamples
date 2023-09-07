@@ -1,0 +1,54 @@
+<! doctype html>
+    <html>
+
+    <head>
+        <title>DMSContainer || JavaScript Proxy Sample</title>
+        <meta name="description" content="Our first page">
+        <meta name="keywords" content="html tutorial template">
+        <style>
+            body {
+                font-family: "Segoe UI Light";
+            }
+            .block {
+                width: 20rem;
+                margin: 1rem;
+               
+            }
+
+            .block > input {
+                float: right;
+                width: 10rem;
+                text-align: right;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>DMSContainer :: Javascript Proxy Sample</h1>
+        <form>
+            <div class="block">
+                <label for="op1">Operator 1</label>
+                <input type="number" class="right" id="op1" name="op1">
+            </div>
+            <div class="block">
+                <label for="op2">Operator 2</label>
+                <input type="number" id="op2" name="op2">
+            </div>
+            <div class="block">
+                <button type="button" id="btnCalculate">Calculate Sum</button>
+            </div>                        
+            <div class="block">
+                <label for="res">Result</label>
+                <input id="res" name="res" readonly>
+            </div>
+        </form>
+        <script type="module" src="./calculator_proxy.js"></script>
+        <script type="module" src="./main.js"></script>        
+        <script type="module">
+            import {init} from "./main.js"
+            window.onload = init;
+        </script>        
+
+    </body>
+
+    </html>

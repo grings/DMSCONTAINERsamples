@@ -45,7 +45,7 @@ uses
   Vcl.Imaging.pngimage,
   FireDAC.Stan.StorageBin,
   FireDAC.Stan.StorageJSON,
-  ExcelRPCProxy;
+  ExcelRPCProxy, LoggerPro;
 
 type
   TMainForm = class(TForm)
@@ -102,6 +102,7 @@ type
     btnRawWithFormulas: TButton;
     btnRawWithFormatting: TButton;
     btnShowcase: TButton;
+    MemoLog: TMemo;
     procedure btnSimpleWorksheetClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -115,6 +116,7 @@ type
     procedure btnRawWithFormattingClick(Sender: TObject);
     procedure btnShowcaseClick(Sender: TObject);
   private
+    fLog: ILogWriter;
     procedure LoadAllTypes;
     function DelphiDataTypeToExcel(const DataType: TFieldType): string;
     procedure ResetFolder;
@@ -141,6 +143,7 @@ implementation
 
 uses
   LoggerPro.GlobalLogger,
+  LoggerPro.VCLMemoAppender,
   Winapi.ShellAPI,
   System.IOUtils,
   MVCFramework.Commons,
@@ -150,7 +153,7 @@ uses
   System.TypInfo,
   FontAwesomeU,
   FontAwesomeCodes,
-  System.DateUtils;
+  System.DateUtils, UtilsU;
 
 {$R *.dfm}
 
@@ -183,6 +186,8 @@ begin
   finally
     lJResp.Free;
   end;
+
+  fLog.Info('Sending request...', 'main');
   lJResp := lProxy.ConvertToXLSX(lToken, GetWorkbookJSONData(['Customers', 'All Types',
     'All Types with Formatting'], [dsCustomers, dsAllTypes, dsAllFormattedFields]));
   try
@@ -190,6 +195,7 @@ begin
   finally
     lJResp.Free;
   end;
+  fLog.Info('File generated, lauching Excel', 'main');
   ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
 
@@ -218,12 +224,14 @@ begin
     lJResp.Free;
   end;
 
+  fLog.Info('Sending request...', 'main');
   lJResp := lProxy.ConvertToXLSX(lToken, GetJSONData('All Types', dsAllTypes));
   try
     Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
   finally
     lJResp.Free;
   end;
+  fLog.Info('File generated, lauching Excel', 'main');
   ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
 
@@ -250,6 +258,8 @@ begin
   finally
     lJResp.Free;
   end;
+
+  fLog.Info('Sending request...', 'main');
   lJResp := lProxy.ConvertToXLSX(lToken, GetWorkbookJSONData(['Customers0', 'All Types0',
     'All Types with Formatting0', 'Customers1', 'All Types1', 'All Types with Formatting1',
     'Customers2', 'All Types2', 'All Types with Formatting2', 'Customers3', 'All Types3',
@@ -262,6 +272,7 @@ begin
   finally
     lJResp.Free;
   end;
+  fLog.Info('File generated, lauching Excel', 'main');
   ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
 
@@ -313,13 +324,16 @@ begin
   finally
     lJResp.Free;
   end;
+  fLog.Info('Sending request...', 'main');
   lJResp := lProxy.ConvertToXLSX(lToken, GetJSONData('Customers', dsCustomers));
   try
     Base64StringToFile(lJResp.S['xlsx'], lOutputFileName);
   finally
     lJResp.Free;
   end;
-  ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
+  fLog.Info('File generated, lauching Excel', 'main');
+  ShellOpenFile(0, lOutputFileName, '', '');
+  fLog.Info('Excel launched', 'main');
 end;
 
 procedure TMainForm.btnSparklineClick(Sender: TObject);
@@ -373,8 +387,9 @@ begin
     lJResp.Free;
   end;
   lOutputFileName := 'sparkline_json.xlsx';
-  TFile.WriteAllText(TPath.ChangeExtension(lOutputFileName, '.json'), JSON);
+  //TFile.WriteAllText(TPath.ChangeExtension(lOutputFileName, '.json'), JSON);
   lJSONData := TJSONObject.Parse(JSON) as TJSONObject;
+  fLog.Info('Sending request...', 'main');
   lJResp := lProxy.ConvertToXLSX(lToken, lJSONData);
   try
     { Base64StringToFile is declared in MVCFramework.Commons.pas }
@@ -382,6 +397,7 @@ begin
   finally
     lJResp.Free;
   end;
+  fLog.Info('File generated, lauching Excel', 'main');
   ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
 
@@ -409,6 +425,8 @@ begin
   finally
     lJResp.Free;
   end;
+
+  fLog.Info('Sending request...', 'main');
   lJResp := lProxy.ConvertToXLSX(lToken, GetJSONData('All Types with Formatting',
     dsAllFormattedFields));
   try
@@ -416,6 +434,7 @@ begin
   finally
     lJResp.Free;
   end;
+  fLog.Info('File generated, lauching Excel', 'main');
   ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
 
@@ -465,6 +484,8 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
+  // Let's create the local loggers for this form
+  fLog := BuildLogWriter([TVCLMemoLogAppender.Create(MemoLog)]);
   dsCustomers.LoadFromFile(TPath.Combine(TPath.GetDirectoryName(ParamStr(0)),
     'customers.json'), sfJSON);
   LoadAllTypes;
@@ -481,6 +502,7 @@ begin
   btnSparkline.Caption := fa_area_chart + ' ' + btnSparkline.Caption;
   btnShowcase.Caption := fa_bomb + ' ' + btnShowcase.Caption;
   RzPageControl1.ActivePageIndex := 0;
+  fLog.Info('DMSContainer Excel Sample Ready', 'main')
 end;
 
 procedure TMainForm.GenerateExcelFileFromRawJSONFile(const FileName: String);
@@ -507,6 +529,8 @@ begin
   end;
   lOutputFileName := TPath.ChangeExtension(FileName, '.xlsx');
   lJSONData := TJSONObject.ParseFromFile(TPath.ChangeExtension(FileName, '.json')) as TJSONObject;
+
+  fLog.Info('Sending request...', 'main');
   lJResp := lProxy.ConvertToXLSX(lToken, lJSONData);
   try
     { Base64StringToFile is declared in MVCFramework.Commons.pas }
@@ -514,6 +538,7 @@ begin
   finally
     lJResp.Free;
   end;
+  fLog.Info('File generated, lauching Excel', 'main');
   ShellExecute(0, PChar('open'), PChar(lOutputFileName), nil, nil, SW_SHOW);
 end;
 
@@ -595,7 +620,7 @@ begin
       InternalGetJSONData(Result, WorkSheetsName[I], lDS);
       inc(I);
     end;
-    Result.SaveToFile('workbook.json', False);
+    //Result.SaveToFile('workbook.json', False);
   except
     Result.Free;
     raise;

@@ -58,8 +58,6 @@ type
     procedure LogStart(const Text: String);
     procedure LogEnd;
     procedure DequeueMessage(const QueueName, LastKnownID: String);
-    procedure OnValidateCert(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;
-      var Accepted: Boolean);
   public
     { Public declarations }
   end;
@@ -330,7 +328,7 @@ begin
   if not Assigned(fProxy) then
   begin
     fProxy := TEventStreamsRPCProxy.Create(DMS_SERVER_URL + '/eventstreamsrpc');
-    fProxy.RPCExecutor.SetOnValidateServerCertificate(OnValidateCert);
+    fProxy.IgnoreInvalidCert;
   end;
 
   if MinutesBetween(now, fLastLogin) > 10 then
@@ -351,6 +349,7 @@ begin
   fToken := '';
   fPID := GetCurrentProcessId;
   Caption := 'EventStreams Module :: Tutorial (PID ' + fPID.ToString + ')';
+  Caption := Caption + ' | ' + Format('%s / %s @ %s',[DMS_USERNAME, DMS_PWD, DMS_SERVER_URL]);
 end;
 
 procedure TMainForm.Log(const Text: String);
@@ -367,12 +366,6 @@ procedure TMainForm.LogStart(const Text: String);
 begin
   fStart := now;
   Log(TimeToStr(fStart) + ': START -> ' + Text);
-end;
-
-procedure TMainForm.OnValidateCert(const Sender: TObject; const ARequest: TURLRequest; const Certificate: TCertificate;
-  var Accepted: Boolean);
-begin
-  Accepted := True;
 end;
 
 end.

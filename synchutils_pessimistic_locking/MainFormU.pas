@@ -87,7 +87,7 @@ var
 implementation
 
 uses
-  Redis.Values, LoginFormU, JsonDataObjects;
+  LoginFormU, JsonDataObjects;
 
 {$R *.dfm}
 
